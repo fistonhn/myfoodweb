@@ -1,0 +1,106 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum ROLE {
+  bookingclerk
+  seniorclerk
+  wageclerk
+  operationclerk
+  admin
+}
+
+model User {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  email    String
+  password String
+  role     ROLE   @default(bookingclerk)
+}
+
+enum FUNCTION {
+  breakfast
+  dinner
+  hightea
+  lunch
+}
+
+model Menue {
+  id                 String       @id @default(auto()) @map("_id") @db.ObjectId
+  bookingId          String
+  function           FUNCTION
+  name               String
+  functionDate       DateTime
+  mobile             String
+  serviceTime        DateTime
+  venue              String
+  departureDate      DateTime
+  departureTime      DateTime
+  PAX                String
+  specialInstruction String
+  headName           String
+  headMobileNumber   String
+  driverName         String
+  vehicleNumber      String
+  words              String
+  cleaner            String
+  bookedBy           String
+  bookerMobileNumber String
+  Categories         Categories[]
+  updatedAt          DateTime?    @updatedAt
+  createdAt          DateTime?    @default(now())
+  onion              Boolean?
+  garlic             Boolean?
+}
+
+model Categories {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  menueId      String      @db.ObjectId
+  menue        Menue       @relation(fields: [menueId], references: [id])
+  contractorId String?     @db.ObjectId
+  contractor   Contractor? @relation(fields: [contractorId], references: [id])
+  itemName     String
+  comment      String
+  finalWage    String?     @default("0")
+  minus        String?     @default("0")
+  plus         String?     @default("0")
+  placevalue   String?     @default("0")
+}
+
+model Contractor {
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  item           String
+  age            Int
+  wage           Int
+  group          String
+  Categories     Categories[]
+  // TODO: remove it in future 
+  assignTillDate DateTime?
+  area           String
+  phone          String?
+  address        String?
+  identitynumber String?
+  documents      ContractorDocs[]
+}
+
+model ContractorDocs {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  Contractor   Contractor? @relation(fields: [contractorId], references: [id])
+  contractorId String?     @db.ObjectId
+  name         String
+  url          String
+}
+
+model Places {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  name  String
+  value String
+}
