@@ -8,16 +8,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         const { data } = req.body as UpdateContractorDTO
         const { id, address, age, area, group, identitynumber, item, name, phone, wage,
-            cleaner, cleanerWage,
-            headname, headnameWage
 
         } = data
         await prisma.contractor.update({
             where: { id: id },
             data: {
                 address, age, area, group, identitynumber, item, name, phone, wage,
-                cleaner, cleanerWage: Number(cleanerWage),
-                headname, headnameWage: Number(headnameWage)
             }
         })
         return SuccessResponse({

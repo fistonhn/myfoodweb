@@ -67,6 +67,7 @@ const Order = () => {
   const [formData, setformData] = useState(intitialData)
   const [searchedItemsResult, setsearchedItemsResult] = useState<{ title: string, item: string }[]>([])
   const [selectedItems, setselectedItems] = useState<{ item: string, counter: string, comment: string }[]>([])
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setformData({
@@ -101,23 +102,23 @@ const Order = () => {
         <Input required label='Booked By' name='bookedBy' onChange={handleChange} value={formData.bookedBy} type="text" />
 
         <Input required label='Booker Mobile Number' name='bookerMobileNumber' onChange={handleChange} value={formData.bookerMobileNumber} type="text" />
-        <Input required label='Cleaner' name='cleaner' onChange={handleChange} value={formData.cleaner} type="text" />
+        {/* <Input required label='Cleaner' name='cleaner' onChange={handleChange} value={formData.cleaner} type="text" /> */}
         <Input required label='Departure Date' name='departureDate' onChange={handleChange} value={formData.departureDate} type="date" />
         <Input required label='Departure Time' name='departureTime' onChange={handleChange} value={formData.departureTime} type="time" />
-        <Input required label='Driver Name' name='driverName' onChange={handleChange} value={formData.driverName} type="text" />
+        {/* <Input required label='Driver Name' name='driverName' onChange={handleChange} value={formData.driverName} type="text" /> */}
         <Select required label='Function' name='function' onChange={handleChange} value={formData.function} options={functionOptions} />
 
-        <Input required label='Head Mobile Number' name='headMobileNumber' onChange={handleChange} value={formData.headMobileNumber} type="text" />
-        <Input required label='Head Name' name='headName' onChange={handleChange} value={formData.headName} type="text" />
-        <Input required label='Mobile' name='mobile' onChange={handleChange} value={formData.mobile} type="text" />
-        <Input required label='Name' name='name' onChange={handleChange} value={formData.name} type="text" />
+        {/* <Input required label='Head Mobile Number' name='headMobileNumber' onChange={handleChange} value={formData.headMobileNumber} type="text" /> */}
+        {/* <Input required label='Head Name' name='headName' onChange={handleChange} value={formData.headName} type="text" /> */}
+        <Input required label='Guest mobile' name='mobile' onChange={handleChange} value={formData.mobile} type="text" />
+        <Input required label='Guest name' name='name' onChange={handleChange} value={formData.name} type="text" />
         <Input required label='Service Time' name='serviceTime' onChange={handleChange} value={formData.serviceTime} type="time" />
-        <Input required label='Special Instruction' name='specialInstruction' onChange={handleChange} value={formData.specialInstruction} type="text" />
+        <Input label='Special Instruction' name='specialInstruction' onChange={handleChange} value={formData.specialInstruction} type="text" />
         <Input required label='Vehicle Number' name='vehicleNumber' onChange={handleChange} value={formData.vehicleNumber} type="text" />
         <Input required label='Venue' name='venue' onChange={handleChange} value={formData.venue} type="text" />
-        <Input required label='Words' name='words' onChange={handleChange} value={formData.words} type="text" />
-        <Select required label='Onion' onChange={(e) => { setformData((prev) => ({ ...prev, onion: e.target.value === "true" ? true : false })) }} value={String(formData.onion)} options={[{ content: "false", value: "false" }, { content: "true", value: "true" }]} />
-        <Select required label='Garlic' onChange={(e) => { setformData((prev) => ({ ...prev, garlic: e.target.value === "true" ? true : false })) }} value={String(formData.garlic)} options={[{ content: "false", value: "false" }, { content: "true", value: "true" }]} />
+        <Input label='Words' name='words' onChange={handleChange} value={formData.words} type="text" />
+        <Select required label='Onion' onChange={(e) => { setformData((prev) => ({ ...prev, onion: e.target.value === "yes" ? true : false })) }} options={[{ content: "no", value: "no" }, { content: "yes", value: "yes" }]} />
+        <Select required label='Garlic' onChange={(e) => { setformData((prev) => ({ ...prev, garlic: e.target.value === "yes" ? true : false })) }} options={[{ content: "no", value: "no" }, { content: "yes", value: "yes" }]} />
       </div>
     )
   }
@@ -156,9 +157,10 @@ const Order = () => {
           }} onChange={handleSearchItem} />
         {
           (searchedItemsResult.length !== 0) &&
-          <div className='bg-white p-2 mt-2 rounded h-[300px] overflow-auto'>
+          <div className='bg-white p-2 mt-2 rounded h-[300px] overflow-auto w-[50%]'>
             {
               searchedItemsResult.map((val, index) => (
+                // eslint-disable-next-line react/jsx-key
                 <div className='flex items-center'>
                   <h1 className='border p-1 flex-1 bg-white rounded-md'>{val.item}</h1>
                   <IconButton onClick={() => {
@@ -257,9 +259,9 @@ const Order = () => {
     let isOkay = true
     let isGreaterThanFive = false
     selectedItems.forEach(v => {
-      if (!v.counter || (Number(v.counter) <= 0 || Number(v.counter) > 5)) {
+      if (!v.counter || (Number(v.counter) < 0 || Number(v.counter) > 5)) {
         isOkay = false
-      }
+      }      
     })
     if (!isOkay) {
       return alert("kindly select number of counters for all items and maximum of 5.")

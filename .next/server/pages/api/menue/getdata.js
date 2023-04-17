@@ -1,185 +1,55 @@
 "use strict";
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
 (() => {
 var exports = {};
-exports.id = 487;
-exports.ids = [487];
+exports.id = "pages/api/menue/getdata";
+exports.ids = ["pages/api/menue/getdata"];
 exports.modules = {
 
-/***/ 6407:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ "@prisma/client":
+/*!*********************************!*\
+  !*** external "@prisma/client" ***!
+  \*********************************/
+/***/ ((module) => {
 
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, {
-  "Z": () => (/* binding */ prismaclient)
-});
-
-;// CONCATENATED MODULE: external "@prisma/client"
-const client_namespaceObject = require("@prisma/client");
-;// CONCATENATED MODULE: ./lib/prismaclient.ts
-// lib/prisma.ts
-
-let prisma;
-if (true) {
-    prisma = new client_namespaceObject.PrismaClient();
-} else {}
-/* harmony default export */ const prismaclient = (prisma);
-
+module.exports = require("@prisma/client");
 
 /***/ }),
 
-/***/ 5791:
+/***/ "(api)/./lib/prismaclient.ts":
+/*!*****************************!*\
+  !*** ./lib/prismaclient.ts ***!
+  \*****************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _lib_prismaclient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6407);
-/* harmony import */ var _utils_customeresponses__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(854);
-
-
-const handler = async (req, res)=>{
-    try {
-        const { search , endDate , startDate , departureDate , contractorName  } = req.body;
-        let searchQuery = {
-            AND: [],
-            OR: []
-        };
-        if (search) {
-            searchQuery.OR.push({
-                bookingId: {
-                    startsWith: search,
-                    mode: "insensitive"
-                }
-            }, {
-                name: {
-                    startsWith: search,
-                    mode: "insensitive"
-                }
-            }, {
-                mobile: {
-                    startsWith: search,
-                    mode: "insensitive"
-                }
-            }, {
-                mobile: {
-                    startsWith: search,
-                    mode: "insensitive"
-                }
-            }, {
-                headMobileNumber: {
-                    startsWith: search,
-                    mode: "insensitive"
-                }
-            }, {
-                bookerMobileNumber: {
-                    startsWith: search,
-                    mode: "insensitive"
-                }
-            });
-        }
-        if (endDate && startDate) {
-            searchQuery.AND.push({
-                functionDate: {
-                    gte: new Date(startDate)
-                }
-            }, {
-                functionDate: {
-                    lte: new Date(endDate)
-                }
-            });
-        }
-        if (departureDate) {
-            searchQuery.AND.push({
-                departureDate: new Date(departureDate)
-            });
-        }
-        if (contractorName) {
-            searchQuery.AND.push({
-                Categories: {
-                    every: {
-                        contractor: {
-                            name: {
-                                startsWith: contractorName
-                            }
-                        }
-                    }
-                }
-            });
-        }
-        // remove the arrays if they are empty
-        if (searchQuery?.AND?.length === 0) {
-            // @ts-ignore
-            delete searchQuery.AND;
-        }
-        if (searchQuery?.OR?.length === 0) {
-            // @ts-ignore
-            delete searchQuery.OR;
-        }
-        console.log(JSON.stringify({
-            searchQuery
-        }));
-        const menues = await _lib_prismaclient__WEBPACK_IMPORTED_MODULE_0__/* ["default"].menue.findMany */ .Z.menue.findMany({
-            where: searchQuery,
-            include: {
-                Categories: {
-                    include: {
-                        contractor: {}
-                    }
-                }
-            }
-        });
-        return (0,_utils_customeresponses__WEBPACK_IMPORTED_MODULE_1__/* .SuccessResponse */ .w)({
-            msg: {
-                menues
-            },
-            res,
-            statusCode: 200
-        });
-    } catch (error) {
-        return (0,_utils_customeresponses__WEBPACK_IMPORTED_MODULE_1__/* .ErrorResponse */ .i)({
-            msg: error.message,
-            res,
-            statusCode: 500
-        });
-    }
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (handler);
-
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _prisma_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @prisma/client */ \"@prisma/client\");\n/* harmony import */ var _prisma_client__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_prisma_client__WEBPACK_IMPORTED_MODULE_0__);\n// lib/prisma.ts\n\nlet prisma;\nif (false) {} else {\n    // @ts-ignore\n    if (!global.prisma) {\n        // @ts-ignore\n        global.prisma = new _prisma_client__WEBPACK_IMPORTED_MODULE_0__.PrismaClient();\n    }\n    // @ts-ignore\n    prisma = global.prisma;\n}\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (prisma);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9saWIvcHJpc21hY2xpZW50LnRzLmpzIiwibWFwcGluZ3MiOiI7Ozs7OztBQUFBLGdCQUFnQjtBQUM4QjtBQUU5QyxJQUFJQztBQUVKLElBQUlDLEtBQXlCLEVBQWMsRUFFMUMsTUFBTTtJQUNMLGFBQWE7SUFDYixJQUFJLENBQUNDLE9BQU9GLE1BQU0sRUFBRTtRQUNsQixhQUFhO1FBQ2JFLE9BQU9GLE1BQU0sR0FBRyxJQUFJRCx3REFBWUE7SUFDbEMsQ0FBQztJQUNELGFBQWE7SUFDYkMsU0FBU0UsT0FBT0YsTUFBTTtBQUN4QixDQUFDO0FBRUQsaUVBQWVBLE1BQU1BLEVBQUMiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9mb29kcy13ZWIvLi9saWIvcHJpc21hY2xpZW50LnRzPzZjNGIiXSwic291cmNlc0NvbnRlbnQiOlsiLy8gbGliL3ByaXNtYS50c1xyXG5pbXBvcnQgeyBQcmlzbWFDbGllbnQgfSBmcm9tICdAcHJpc21hL2NsaWVudCc7XHJcblxyXG5sZXQgcHJpc21hOiBQcmlzbWFDbGllbnQ7XHJcblxyXG5pZiAocHJvY2Vzcy5lbnYuTk9ERV9FTlYgPT09ICdwcm9kdWN0aW9uJykge1xyXG4gIHByaXNtYSA9IG5ldyBQcmlzbWFDbGllbnQoKTtcclxufSBlbHNlIHtcclxuICAvLyBAdHMtaWdub3JlXHJcbiAgaWYgKCFnbG9iYWwucHJpc21hKSB7XHJcbiAgICAvLyBAdHMtaWdub3JlXHJcbiAgICBnbG9iYWwucHJpc21hID0gbmV3IFByaXNtYUNsaWVudCgpO1xyXG4gIH1cclxuICAvLyBAdHMtaWdub3JlXHJcbiAgcHJpc21hID0gZ2xvYmFsLnByaXNtYTtcclxufVxyXG5cclxuZXhwb3J0IGRlZmF1bHQgcHJpc21hOyJdLCJuYW1lcyI6WyJQcmlzbWFDbGllbnQiLCJwcmlzbWEiLCJwcm9jZXNzIiwiZ2xvYmFsIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(api)/./lib/prismaclient.ts\n");
 
 /***/ }),
 
-/***/ 854:
+/***/ "(api)/./pages/api/menue/getdata.ts":
+/*!************************************!*\
+  !*** ./pages/api/menue/getdata.ts ***!
+  \************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "i": () => (/* binding */ ErrorResponse),
-/* harmony export */   "w": () => (/* binding */ SuccessResponse)
-/* harmony export */ });
-const ErrorResponse = ({ msg , statusCode , res  })=>{
-    let response = {};
-    if (typeof msg === "object") {
-        response = msg;
-    } else {
-        response = {
-            msg
-        };
-    }
-    return res.status(statusCode).json(response);
-};
-const SuccessResponse = ({ msg , res , statusCode =200  })=>{
-    let response = {};
-    if (typeof msg === "object") {
-        response = msg;
-    } else {
-        response = {
-            msg
-        };
-    }
-    return res.status(statusCode).json(response);
-};
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _lib_prismaclient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/lib/prismaclient */ \"(api)/./lib/prismaclient.ts\");\n/* harmony import */ var _utils_customeresponses__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/utils/customeresponses */ \"(api)/./utils/customeresponses.ts\");\n\n\nconst handler = async (req, res)=>{\n    try {\n        const { search , endDate , startDate , departureDate , contractorName  } = req.body;\n        let searchQuery = {\n            AND: [],\n            OR: []\n        };\n        if (search) {\n            searchQuery.OR.push({\n                bookingId: {\n                    startsWith: search,\n                    mode: \"insensitive\"\n                }\n            }, {\n                name: {\n                    startsWith: search,\n                    mode: \"insensitive\"\n                }\n            }, {\n                mobile: {\n                    startsWith: search,\n                    mode: \"insensitive\"\n                }\n            }, {\n                mobile: {\n                    startsWith: search,\n                    mode: \"insensitive\"\n                }\n            }, {\n                headMobileNumber: {\n                    startsWith: search,\n                    mode: \"insensitive\"\n                }\n            }, {\n                bookerMobileNumber: {\n                    startsWith: search,\n                    mode: \"insensitive\"\n                }\n            });\n        }\n        if (endDate && startDate) {\n            searchQuery.AND.push({\n                functionDate: {\n                    gte: new Date(startDate)\n                }\n            }, {\n                functionDate: {\n                    lte: new Date(endDate)\n                }\n            });\n        }\n        if (departureDate) {\n            searchQuery.AND.push({\n                departureDate: new Date(departureDate)\n            });\n        }\n        if (contractorName) {\n            searchQuery.AND.push({\n                Categories: {\n                    every: {\n                        contractor: {\n                            name: {\n                                startsWith: contractorName\n                            }\n                        }\n                    }\n                }\n            });\n        }\n        // remove the arrays if they are empty\n        if (searchQuery?.AND?.length === 0) {\n            // @ts-ignore\n            delete searchQuery.AND;\n        }\n        if (searchQuery?.OR?.length === 0) {\n            // @ts-ignore\n            delete searchQuery.OR;\n        }\n        console.log(JSON.stringify({\n            searchQuery\n        }));\n        const menues = await _lib_prismaclient__WEBPACK_IMPORTED_MODULE_0__[\"default\"].menue.findMany({\n            where: searchQuery,\n            include: {\n                Categories: {\n                    include: {\n                        contractor: {}\n                    }\n                }\n            }\n        });\n        return (0,_utils_customeresponses__WEBPACK_IMPORTED_MODULE_1__.SuccessResponse)({\n            msg: {\n                menues\n            },\n            res,\n            statusCode: 200\n        });\n    } catch (error) {\n        return (0,_utils_customeresponses__WEBPACK_IMPORTED_MODULE_1__.ErrorResponse)({\n            msg: error.message,\n            res,\n            statusCode: 500\n        });\n    }\n};\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (handler);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9wYWdlcy9hcGkvbWVudWUvZ2V0ZGF0YS50cy5qcyIsIm1hcHBpbmdzIjoiOzs7Ozs7QUFBd0M7QUFFa0M7QUFHMUUsTUFBTUcsVUFBVSxPQUFPQyxLQUFxQkMsTUFBeUI7SUFDakUsSUFBSTtRQUNBLE1BQU0sRUFBRUMsT0FBTSxFQUFFQyxRQUFPLEVBQUVDLFVBQVMsRUFBRUMsY0FBYSxFQUFFQyxlQUFjLEVBQUUsR0FBR04sSUFBSU8sSUFBSTtRQUM5RSxJQUFJQyxjQUFjO1lBQ2RDLEtBQUssRUFBRTtZQUNQQyxJQUFJLEVBQUU7UUFDVjtRQUlBLElBQUlSLFFBQVE7WUFDUk0sWUFBWUUsRUFBRSxDQUFDQyxJQUFJLENBQ2Y7Z0JBQ0lDLFdBQVc7b0JBQ1BDLFlBQVlYO29CQUNaWSxNQUFNO2dCQUNWO1lBQ0osR0FDQTtnQkFDSUMsTUFBTTtvQkFDRkYsWUFBWVg7b0JBQ1pZLE1BQU07Z0JBQ1Y7WUFDSixHQUNBO2dCQUNJRSxRQUFRO29CQUNKSCxZQUFZWDtvQkFDWlksTUFBTTtnQkFDVjtZQUNKLEdBQ0E7Z0JBQ0lFLFFBQVE7b0JBQ0pILFlBQVlYO29CQUNaWSxNQUFNO2dCQUNWO1lBQ0osR0FDQTtnQkFDSUcsa0JBQWtCO29CQUNkSixZQUFZWDtvQkFDWlksTUFBTTtnQkFDVjtZQUNKLEdBQ0E7Z0JBQ0lJLG9CQUFvQjtvQkFDaEJMLFlBQVlYO29CQUNaWSxNQUFNO2dCQUNWO1lBQ0o7UUFFUixDQUFDO1FBQ0QsSUFBSVgsV0FBV0MsV0FBVztZQUN0QkksWUFBWUMsR0FBRyxDQUFDRSxJQUFJLENBQ2hCO2dCQUNJUSxjQUFjO29CQUNWQyxLQUFLLElBQUlDLEtBQUtqQjtnQkFDbEI7WUFDSixHQUNBO2dCQUNJZSxjQUFjO29CQUNWRyxLQUFLLElBQUlELEtBQUtsQjtnQkFDbEI7WUFDSjtRQUVSLENBQUM7UUFDRCxJQUFJRSxlQUFlO1lBQ2ZHLFlBQVlDLEdBQUcsQ0FBQ0UsSUFBSSxDQUNoQjtnQkFDSU4sZUFBZSxJQUFJZ0IsS0FBS2hCO1lBQzVCO1FBRVIsQ0FBQztRQUNELElBQUlDLGdCQUFnQjtZQUNoQkUsWUFBWUMsR0FBRyxDQUFDRSxJQUFJLENBQ2hCO2dCQUNJWSxZQUFZO29CQUNSQyxPQUFPO3dCQUNIQyxZQUFZOzRCQUNSVixNQUFNO2dDQUNGRixZQUFZUDs0QkFDaEI7d0JBQ0o7b0JBQ0o7Z0JBQ0o7WUFDSjtRQUVSLENBQUM7UUFDRCxzQ0FBc0M7UUFDdEMsSUFBSUUsYUFBYUMsS0FBS2lCLFdBQVcsR0FBRztZQUNoQyxhQUFhO1lBQ2IsT0FBT2xCLFlBQVlDLEdBQUc7UUFDMUIsQ0FBQztRQUNELElBQUlELGFBQWFFLElBQUlnQixXQUFXLEdBQUc7WUFDL0IsYUFBYTtZQUNiLE9BQU9sQixZQUFZRSxFQUFFO1FBQ3pCLENBQUM7UUFDRGlCLFFBQVFDLEdBQUcsQ0FBQ0MsS0FBS0MsU0FBUyxDQUFDO1lBQUV0QjtRQUFZO1FBRXpDLE1BQU11QixTQUFTLE1BQU1uQyx3RUFBcUIsQ0FBQztZQUN2Q3NDLE9BQU8xQjtZQUNQMkIsU0FBUztnQkFDTFosWUFBWTtvQkFDUlksU0FBUzt3QkFDTFYsWUFBWSxDQUNaO29CQUNKO2dCQUNKO1lBQ0o7UUFDSjtRQUNBLE9BQU8zQix3RUFBZUEsQ0FBQztZQUNuQnNDLEtBQUs7Z0JBQUVMO1lBQU87WUFDZDlCO1lBQ0FvQyxZQUFZO1FBQ2hCO0lBQ0osRUFBRSxPQUFPQyxPQUFZO1FBQ2pCLE9BQU96QyxzRUFBYUEsQ0FBQztZQUNqQnVDLEtBQUtFLE1BQU1DLE9BQU87WUFDbEJ0QztZQUNBb0MsWUFBWTtRQUNoQjtJQUNKO0FBQ0o7QUFDQSxpRUFBZXRDLE9BQU9BLEVBQUMiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9mb29kcy13ZWIvLi9wYWdlcy9hcGkvbWVudWUvZ2V0ZGF0YS50cz80MTJiIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBwcmlzbWEgZnJvbSBcIkAvbGliL3ByaXNtYWNsaWVudFwiO1xyXG5pbXBvcnQgeyBJR2V0TWVudWVBcGkgfSBmcm9tIFwiQC9wcm92aWRlcnMvYXBpc1wiO1xyXG5pbXBvcnQgeyBFcnJvclJlc3BvbnNlLCBTdWNjZXNzUmVzcG9uc2UgfSBmcm9tIFwiQC91dGlscy9jdXN0b21lcmVzcG9uc2VzXCI7XHJcbmltcG9ydCB7IE5leHRBcGlSZXF1ZXN0LCBOZXh0QXBpUmVzcG9uc2UgfSBmcm9tIFwibmV4dFwiO1xyXG5cclxuY29uc3QgaGFuZGxlciA9IGFzeW5jIChyZXE6IE5leHRBcGlSZXF1ZXN0LCByZXM6IE5leHRBcGlSZXNwb25zZSkgPT4ge1xyXG4gICAgdHJ5IHtcclxuICAgICAgICBjb25zdCB7IHNlYXJjaCwgZW5kRGF0ZSwgc3RhcnREYXRlLCBkZXBhcnR1cmVEYXRlLCBjb250cmFjdG9yTmFtZSB9ID0gcmVxLmJvZHkgYXMgSUdldE1lbnVlQXBpXHJcbiAgICAgICAgbGV0IHNlYXJjaFF1ZXJ5ID0ge1xyXG4gICAgICAgICAgICBBTkQ6IFtdLFxyXG4gICAgICAgICAgICBPUjogW11cclxuICAgICAgICB9IGFzIHtcclxuICAgICAgICAgICAgQU5EOiBhbnlbXSxcclxuICAgICAgICAgICAgT1I6IGFueVtdXHJcbiAgICAgICAgfVxyXG4gICAgICAgIGlmIChzZWFyY2gpIHtcclxuICAgICAgICAgICAgc2VhcmNoUXVlcnkuT1IucHVzaChcclxuICAgICAgICAgICAgICAgIHtcclxuICAgICAgICAgICAgICAgICAgICBib29raW5nSWQ6IHtcclxuICAgICAgICAgICAgICAgICAgICAgICAgc3RhcnRzV2l0aDogc2VhcmNoLFxyXG4gICAgICAgICAgICAgICAgICAgICAgICBtb2RlOiAnaW5zZW5zaXRpdmUnLFxyXG4gICAgICAgICAgICAgICAgICAgIH1cclxuICAgICAgICAgICAgICAgIH0sXHJcbiAgICAgICAgICAgICAgICB7XHJcbiAgICAgICAgICAgICAgICAgICAgbmFtZToge1xyXG4gICAgICAgICAgICAgICAgICAgICAgICBzdGFydHNXaXRoOiBzZWFyY2gsXHJcbiAgICAgICAgICAgICAgICAgICAgICAgIG1vZGU6ICdpbnNlbnNpdGl2ZScsXHJcbiAgICAgICAgICAgICAgICAgICAgfVxyXG4gICAgICAgICAgICAgICAgfSxcclxuICAgICAgICAgICAgICAgIHtcclxuICAgICAgICAgICAgICAgICAgICBtb2JpbGU6IHtcclxuICAgICAgICAgICAgICAgICAgICAgICAgc3RhcnRzV2l0aDogc2VhcmNoLFxyXG4gICAgICAgICAgICAgICAgICAgICAgICBtb2RlOiAnaW5zZW5zaXRpdmUnLFxyXG4gICAgICAgICAgICAgICAgICAgIH1cclxuICAgICAgICAgICAgICAgIH0sXHJcbiAgICAgICAgICAgICAgICB7XHJcbiAgICAgICAgICAgICAgICAgICAgbW9iaWxlOiB7XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIHN0YXJ0c1dpdGg6IHNlYXJjaCxcclxuICAgICAgICAgICAgICAgICAgICAgICAgbW9kZTogJ2luc2Vuc2l0aXZlJyxcclxuICAgICAgICAgICAgICAgICAgICB9XHJcbiAgICAgICAgICAgICAgICB9LFxyXG4gICAgICAgICAgICAgICAge1xyXG4gICAgICAgICAgICAgICAgICAgIGhlYWRNb2JpbGVOdW1iZXI6IHtcclxuICAgICAgICAgICAgICAgICAgICAgICAgc3RhcnRzV2l0aDogc2VhcmNoLFxyXG4gICAgICAgICAgICAgICAgICAgICAgICBtb2RlOiAnaW5zZW5zaXRpdmUnLFxyXG4gICAgICAgICAgICAgICAgICAgIH1cclxuICAgICAgICAgICAgICAgIH0sXHJcbiAgICAgICAgICAgICAgICB7XHJcbiAgICAgICAgICAgICAgICAgICAgYm9va2VyTW9iaWxlTnVtYmVyOiB7XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIHN0YXJ0c1dpdGg6IHNlYXJjaCxcclxuICAgICAgICAgICAgICAgICAgICAgICAgbW9kZTogJ2luc2Vuc2l0aXZlJyxcclxuICAgICAgICAgICAgICAgICAgICB9XHJcbiAgICAgICAgICAgICAgICB9XHJcbiAgICAgICAgICAgIClcclxuICAgICAgICB9XHJcbiAgICAgICAgaWYgKGVuZERhdGUgJiYgc3RhcnREYXRlKSB7XHJcbiAgICAgICAgICAgIHNlYXJjaFF1ZXJ5LkFORC5wdXNoKFxyXG4gICAgICAgICAgICAgICAge1xyXG4gICAgICAgICAgICAgICAgICAgIGZ1bmN0aW9uRGF0ZToge1xyXG4gICAgICAgICAgICAgICAgICAgICAgICBndGU6IG5ldyBEYXRlKHN0YXJ0RGF0ZSlcclxuICAgICAgICAgICAgICAgICAgICB9XHJcbiAgICAgICAgICAgICAgICB9LFxyXG4gICAgICAgICAgICAgICAge1xyXG4gICAgICAgICAgICAgICAgICAgIGZ1bmN0aW9uRGF0ZToge1xyXG4gICAgICAgICAgICAgICAgICAgICAgICBsdGU6IG5ldyBEYXRlKGVuZERhdGUpXHJcbiAgICAgICAgICAgICAgICAgICAgfVxyXG4gICAgICAgICAgICAgICAgfVxyXG4gICAgICAgICAgICApXHJcbiAgICAgICAgfVxyXG4gICAgICAgIGlmIChkZXBhcnR1cmVEYXRlKSB7XHJcbiAgICAgICAgICAgIHNlYXJjaFF1ZXJ5LkFORC5wdXNoKFxyXG4gICAgICAgICAgICAgICAge1xyXG4gICAgICAgICAgICAgICAgICAgIGRlcGFydHVyZURhdGU6IG5ldyBEYXRlKGRlcGFydHVyZURhdGUpXHJcbiAgICAgICAgICAgICAgICB9LFxyXG4gICAgICAgICAgICApXHJcbiAgICAgICAgfVxyXG4gICAgICAgIGlmIChjb250cmFjdG9yTmFtZSkge1xyXG4gICAgICAgICAgICBzZWFyY2hRdWVyeS5BTkQucHVzaChcclxuICAgICAgICAgICAgICAgIHtcclxuICAgICAgICAgICAgICAgICAgICBDYXRlZ29yaWVzOiB7XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIGV2ZXJ5OiB7XHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb250cmFjdG9yOiB7XHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbmFtZToge1xyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdGFydHNXaXRoOiBjb250cmFjdG9yTmFtZVxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIH1cclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIH1cclxuICAgICAgICAgICAgICAgICAgICAgICAgfVxyXG4gICAgICAgICAgICAgICAgICAgIH1cclxuICAgICAgICAgICAgICAgIH1cclxuICAgICAgICAgICAgKVxyXG4gICAgICAgIH1cclxuICAgICAgICAvLyByZW1vdmUgdGhlIGFycmF5cyBpZiB0aGV5IGFyZSBlbXB0eVxyXG4gICAgICAgIGlmIChzZWFyY2hRdWVyeT8uQU5EPy5sZW5ndGggPT09IDApIHtcclxuICAgICAgICAgICAgLy8gQHRzLWlnbm9yZVxyXG4gICAgICAgICAgICBkZWxldGUgc2VhcmNoUXVlcnkuQU5EXHJcbiAgICAgICAgfVxyXG4gICAgICAgIGlmIChzZWFyY2hRdWVyeT8uT1I/Lmxlbmd0aCA9PT0gMCkge1xyXG4gICAgICAgICAgICAvLyBAdHMtaWdub3JlXHJcbiAgICAgICAgICAgIGRlbGV0ZSBzZWFyY2hRdWVyeS5PUlxyXG4gICAgICAgIH1cclxuICAgICAgICBjb25zb2xlLmxvZyhKU09OLnN0cmluZ2lmeSh7IHNlYXJjaFF1ZXJ5IH0pKVxyXG5cclxuICAgICAgICBjb25zdCBtZW51ZXMgPSBhd2FpdCBwcmlzbWEubWVudWUuZmluZE1hbnkoe1xyXG4gICAgICAgICAgICB3aGVyZTogc2VhcmNoUXVlcnksXHJcbiAgICAgICAgICAgIGluY2x1ZGU6IHtcclxuICAgICAgICAgICAgICAgIENhdGVnb3JpZXM6IHtcclxuICAgICAgICAgICAgICAgICAgICBpbmNsdWRlOiB7XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRyYWN0b3I6IHtcclxuICAgICAgICAgICAgICAgICAgICAgICAgfSxcclxuICAgICAgICAgICAgICAgICAgICB9XHJcbiAgICAgICAgICAgICAgICB9XHJcbiAgICAgICAgICAgIH1cclxuICAgICAgICB9KVxyXG4gICAgICAgIHJldHVybiBTdWNjZXNzUmVzcG9uc2Uoe1xyXG4gICAgICAgICAgICBtc2c6IHsgbWVudWVzIH0sXHJcbiAgICAgICAgICAgIHJlcyxcclxuICAgICAgICAgICAgc3RhdHVzQ29kZTogMjAwXHJcbiAgICAgICAgfSlcclxuICAgIH0gY2F0Y2ggKGVycm9yOiBhbnkpIHtcclxuICAgICAgICByZXR1cm4gRXJyb3JSZXNwb25zZSh7XHJcbiAgICAgICAgICAgIG1zZzogZXJyb3IubWVzc2FnZSxcclxuICAgICAgICAgICAgcmVzLFxyXG4gICAgICAgICAgICBzdGF0dXNDb2RlOiA1MDBcclxuICAgICAgICB9KVxyXG4gICAgfVxyXG59XHJcbmV4cG9ydCBkZWZhdWx0IGhhbmRsZXI7Il0sIm5hbWVzIjpbInByaXNtYSIsIkVycm9yUmVzcG9uc2UiLCJTdWNjZXNzUmVzcG9uc2UiLCJoYW5kbGVyIiwicmVxIiwicmVzIiwic2VhcmNoIiwiZW5kRGF0ZSIsInN0YXJ0RGF0ZSIsImRlcGFydHVyZURhdGUiLCJjb250cmFjdG9yTmFtZSIsImJvZHkiLCJzZWFyY2hRdWVyeSIsIkFORCIsIk9SIiwicHVzaCIsImJvb2tpbmdJZCIsInN0YXJ0c1dpdGgiLCJtb2RlIiwibmFtZSIsIm1vYmlsZSIsImhlYWRNb2JpbGVOdW1iZXIiLCJib29rZXJNb2JpbGVOdW1iZXIiLCJmdW5jdGlvbkRhdGUiLCJndGUiLCJEYXRlIiwibHRlIiwiQ2F0ZWdvcmllcyIsImV2ZXJ5IiwiY29udHJhY3RvciIsImxlbmd0aCIsImNvbnNvbGUiLCJsb2ciLCJKU09OIiwic3RyaW5naWZ5IiwibWVudWVzIiwibWVudWUiLCJmaW5kTWFueSIsIndoZXJlIiwiaW5jbHVkZSIsIm1zZyIsInN0YXR1c0NvZGUiLCJlcnJvciIsIm1lc3NhZ2UiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(api)/./pages/api/menue/getdata.ts\n");
 
+/***/ }),
+
+/***/ "(api)/./utils/customeresponses.ts":
+/*!***********************************!*\
+  !*** ./utils/customeresponses.ts ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"ErrorResponse\": () => (/* binding */ ErrorResponse),\n/* harmony export */   \"SuccessResponse\": () => (/* binding */ SuccessResponse)\n/* harmony export */ });\nconst ErrorResponse = ({ msg , statusCode , res  })=>{\n    let response = {};\n    if (typeof msg === \"object\") {\n        response = msg;\n    } else {\n        response = {\n            msg\n        };\n    }\n    return res.status(statusCode).json(response);\n};\nconst SuccessResponse = ({ msg , res , statusCode =200  })=>{\n    let response = {};\n    if (typeof msg === \"object\") {\n        response = msg;\n    } else {\n        response = {\n            msg\n        };\n    }\n    return res.status(statusCode).json(response);\n};\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi91dGlscy9jdXN0b21lcmVzcG9uc2VzLnRzLmpzIiwibWFwcGluZ3MiOiI7Ozs7O0FBTU8sTUFBTUEsZ0JBQWdCLENBQUMsRUFBRUMsSUFBRyxFQUFFQyxXQUFVLEVBQUVDLElBQUcsRUFBaUIsR0FBSztJQUN0RSxJQUFJQyxXQUFXLENBQUM7SUFDaEIsSUFBSSxPQUFPSCxRQUFRLFVBQVU7UUFDekJHLFdBQVdIO0lBQ2YsT0FBTztRQUNIRyxXQUFXO1lBQUVIO1FBQUk7SUFDckIsQ0FBQztJQUNELE9BQU9FLElBQUlFLE1BQU0sQ0FBQ0gsWUFBWUksSUFBSSxDQUFDRjtBQUN2QyxFQUFDO0FBTU0sTUFBTUcsa0JBQWtCLENBQUMsRUFBRU4sSUFBRyxFQUFFRSxJQUFHLEVBQUVELFlBQWEsSUFBRyxFQUFvQixHQUFLO0lBQ2pGLElBQUlFLFdBQVcsQ0FBQztJQUNoQixJQUFJLE9BQU9ILFFBQVEsVUFBVTtRQUN6QkcsV0FBV0g7SUFDZixPQUFPO1FBQ0hHLFdBQVc7WUFBRUg7UUFBSTtJQUNyQixDQUFDO0lBQ0QsT0FBT0UsSUFBSUUsTUFBTSxDQUFDSCxZQUFZSSxJQUFJLENBQUNGO0FBQ3ZDLEVBQUMiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9mb29kcy13ZWIvLi91dGlscy9jdXN0b21lcmVzcG9uc2VzLnRzPzUzZmEiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgTmV4dEFwaVJlc3BvbnNlIH0gZnJvbSAnbmV4dCdcclxuaW50ZXJmYWNlIElIYW5kbGVyRXJyb3Mge1xyXG4gICAgc3RhdHVzQ29kZTogNDAwIHwgNTAwXHJcbiAgICBtc2c6IHN0cmluZyB8IHt9LFxyXG4gICAgcmVzOiBOZXh0QXBpUmVzcG9uc2VcclxufVxyXG5leHBvcnQgY29uc3QgRXJyb3JSZXNwb25zZSA9ICh7IG1zZywgc3RhdHVzQ29kZSwgcmVzIH06IElIYW5kbGVyRXJyb3MpID0+IHtcclxuICAgIGxldCByZXNwb25zZSA9IHt9XHJcbiAgICBpZiAodHlwZW9mIG1zZyA9PT0gXCJvYmplY3RcIikge1xyXG4gICAgICAgIHJlc3BvbnNlID0gbXNnXHJcbiAgICB9IGVsc2Uge1xyXG4gICAgICAgIHJlc3BvbnNlID0geyBtc2cgfVxyXG4gICAgfVxyXG4gICAgcmV0dXJuIHJlcy5zdGF0dXMoc3RhdHVzQ29kZSkuanNvbihyZXNwb25zZSlcclxufVxyXG5pbnRlcmZhY2UgSVN1Y2Nlc3NSZXNwb25zZSB7XHJcbiAgICBzdGF0dXNDb2RlOiBudW1iZXJcclxuICAgIG1zZzogc3RyaW5nIHwge30sXHJcbiAgICByZXM6IE5leHRBcGlSZXNwb25zZVxyXG59XHJcbmV4cG9ydCBjb25zdCBTdWNjZXNzUmVzcG9uc2UgPSAoeyBtc2csIHJlcywgc3RhdHVzQ29kZSA9IDIwMCB9OiBJU3VjY2Vzc1Jlc3BvbnNlKSA9PiB7XHJcbiAgICBsZXQgcmVzcG9uc2UgPSB7fVxyXG4gICAgaWYgKHR5cGVvZiBtc2cgPT09IFwib2JqZWN0XCIpIHtcclxuICAgICAgICByZXNwb25zZSA9IG1zZ1xyXG4gICAgfSBlbHNlIHtcclxuICAgICAgICByZXNwb25zZSA9IHsgbXNnIH1cclxuICAgIH1cclxuICAgIHJldHVybiByZXMuc3RhdHVzKHN0YXR1c0NvZGUpLmpzb24ocmVzcG9uc2UpXHJcbn0iXSwibmFtZXMiOlsiRXJyb3JSZXNwb25zZSIsIm1zZyIsInN0YXR1c0NvZGUiLCJyZXMiLCJyZXNwb25zZSIsInN0YXR1cyIsImpzb24iLCJTdWNjZXNzUmVzcG9uc2UiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(api)/./utils/customeresponses.ts\n");
 
 /***/ })
 
@@ -190,7 +60,7 @@ const SuccessResponse = ({ msg , res , statusCode =200  })=>{
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = (__webpack_exec__(5791));
+var __webpack_exports__ = (__webpack_exec__("(api)/./pages/api/menue/getdata.ts"));
 module.exports = __webpack_exports__;
 
 })();
