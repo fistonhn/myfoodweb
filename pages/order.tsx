@@ -135,65 +135,6 @@ const Order = () => {
     })
     setselectedItems(newData)
   }
-  // const itemSearchComponent = () => {
-  //   return (
-  //     <div className='relative'>
-  //       <Input
-  //         className='w-[30%]'
-  //         endIcon={
-  //           <div className='flex items-center space-x-3'>
-  //             <ExpandMoreIcon />
-  //             {
-  //               searchedItemsResult.length > 0 &&
-  //               <IconButton onClick={() => {
-  //                 setsearchedItemsResult([])
-  //               }}>
-  //                 <CloseIcon />
-  //               </IconButton>
-  //             }
-  //           </div>
-  //         }
-  //         label='Search Items' onFocus={(e) => {
-  //           const toReturn = [] as { title: string, item: string }[]
-  //           if (e.target.value) {
-  //             return;
-  //           }
-  //           itemsData.forEach(v => {
-  //             v.sub.forEach(item => {
-  //               toReturn.push({
-  //                 item: item.title,
-  //                 title: v.title
-  //               })
-  //             })
-  //           })
-  //           setsearchedItemsResult(toReturn)
-  //         }} onChange={handleSearchItem} />
-  //       {
-  //         (searchedItemsResult.length !== 0) &&
-  //         <div className='bg-white p-2 mt-2 rounded h-[300px] overflow-auto w-[50%]'>
-  //           {
-  //             searchedItemsResult.map((val, index) => (
-  //               // eslint-disable-next-line react/jsx-key
-  //               <div className='flex items-center'>
-  //                 <h1 className='border p-1 flex-1 bg-white rounded-md'>{val.item}</h1>
-  //                 <IconButton onClick={() => {
-  //                   const obj = {
-  //                     item: val.item,
-  //                     counter: "0",
-  //                     comment: "",
-  //                   }
-  //                   setselectedItems([...selectedItems, obj])
-  //                 }}>
-  //                   <AddCircleOutlineIcon />
-  //                 </IconButton>
-  //               </div>
-  //             ))
-  //           }
-  //         </div>
-  //       }
-  //     </div>
-  //   )
-  // }
   const itemSearchComponent = () => {
     return (
       <div className='relative'>
@@ -296,7 +237,7 @@ const Order = () => {
                       }} className="w-[100px] outline-none border p-1" />
                     </td>
                     <td className="px-4 py-3 border">
-                      <textarea name='comment' className='outline-none border p-1' onChange={(e) => { handleChangeFormData(index, e) }} placeholder='Enter Comments...' value={item.comment} required/>
+                      <textarea name='comment' className='outline-none border p-1' onChange={(e) => { handleChangeFormData(index, e) }} placeholder='Enter Comments...' value={item.comment}/>
                     </td>
                     <td className="px-4 py-3 border">
                       <IconButton onClick={() => { handleDeleteSelectedItems(index) }}>
