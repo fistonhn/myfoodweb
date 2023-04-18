@@ -46,19 +46,19 @@ const intitialData = {
 } as IMenueForm
 const functionOptions = [
   {
-    value: "breakfast",
-    content: "breakfast"
+    value: " Breakfast",
+    content: " Breakfast"
   },
   {
-    value: "dinner",
-    content: "dinner"
+    value: "Dinner",
+    content: "Dinner"
   },
   {
-    value: "hightea",
-    content: "hightea"
+    value: "Hightea",
+    content: "Hightea"
   }, {
-    value: "lunch",
-    content: "lunch"
+    value: "Lunch",
+    content: "Lunch"
   }
 ] as { value: Menue["function"], content: React.ReactNode }[]
 const Order = () => {
@@ -106,22 +106,94 @@ const Order = () => {
         <Input required label='Departure Date' name='departureDate' onChange={handleChange} value={formData.departureDate} type="date" />
         <Input required label='Departure Time' name='departureTime' onChange={handleChange} value={formData.departureTime} type="time" />
         {/* <Input required label='Driver Name' name='driverName' onChange={handleChange} value={formData.driverName} type="text" /> */}
-        <Select required label='Function' name='function' onChange={handleChange} value={formData.function} options={functionOptions} />
+        <Select required label='Function Prospectus' name='function' onChange={handleChange} value={formData.function} options={functionOptions} />
 
         {/* <Input required label='Head Mobile Number' name='headMobileNumber' onChange={handleChange} value={formData.headMobileNumber} type="text" /> */}
         {/* <Input required label='Head Name' name='headName' onChange={handleChange} value={formData.headName} type="text" /> */}
-        <Input required label='Guest mobile' name='mobile' onChange={handleChange} value={formData.mobile} type="text" />
-        <Input required label='Guest name' name='name' onChange={handleChange} value={formData.name} type="text" />
+        <Input required label='Guest Mobile' name='mobile' onChange={handleChange} value={formData.mobile} type="text" />
+        <Input required label='Guest Name' name='name' onChange={handleChange} value={formData.name} type="text" />
         <Input required label='Service Time' name='serviceTime' onChange={handleChange} value={formData.serviceTime} type="time" />
         <Input label='Special Instruction' name='specialInstruction' onChange={handleChange} value={formData.specialInstruction} type="text" />
-        <Input required label='Vehicle Number' name='vehicleNumber' onChange={handleChange} value={formData.vehicleNumber} type="text" />
+        {/* <Input required label='Vehicle Number' name='vehicleNumber' onChange={handleChange} value={formData.vehicleNumber} type="text" /> */}
         <Input required label='Venue' name='venue' onChange={handleChange} value={formData.venue} type="text" />
         <Input label='Words' name='words' onChange={handleChange} value={formData.words} type="text" />
-        <Select required label='Onion' onChange={(e) => { setformData((prev) => ({ ...prev, onion: e.target.value === "yes" ? true : false })) }} options={[{ content: "no", value: "no" }, { content: "yes", value: "yes" }]} />
-        <Select required label='Garlic' onChange={(e) => { setformData((prev) => ({ ...prev, garlic: e.target.value === "yes" ? true : false })) }} options={[{ content: "no", value: "no" }, { content: "yes", value: "yes" }]} />
+        <Select required label='Onion' onChange={(e) => { setformData((prev) => ({ ...prev, onion: e.target.value === "Yes" ? true : false })) }} options={[{ content: "No", value: "No" }, { content: "Yes", value: "Yes" }]} />
+        <Select required label='Garlic' onChange={(e) => { setformData((prev) => ({ ...prev, garlic: e.target.value === "Yes" ? true : false })) }} options={[{ content: "No", value: "No" }, { content: "Yes", value: "Yes" }]} />
       </div>
     )
   }
+  const handleChangeFormData = (index: number, e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    const { value, name } = e.target
+    const newData = [...selectedItems].map((v, i) => {
+      if (index === i) {
+        return {
+          ...v,
+          [name]: value
+        }
+      }
+      return v;
+    })
+    setselectedItems(newData)
+  }
+  // const itemSearchComponent = () => {
+  //   return (
+  //     <div className='relative'>
+  //       <Input
+  //         className='w-[30%]'
+  //         endIcon={
+  //           <div className='flex items-center space-x-3'>
+  //             <ExpandMoreIcon />
+  //             {
+  //               searchedItemsResult.length > 0 &&
+  //               <IconButton onClick={() => {
+  //                 setsearchedItemsResult([])
+  //               }}>
+  //                 <CloseIcon />
+  //               </IconButton>
+  //             }
+  //           </div>
+  //         }
+  //         label='Search Items' onFocus={(e) => {
+  //           const toReturn = [] as { title: string, item: string }[]
+  //           if (e.target.value) {
+  //             return;
+  //           }
+  //           itemsData.forEach(v => {
+  //             v.sub.forEach(item => {
+  //               toReturn.push({
+  //                 item: item.title,
+  //                 title: v.title
+  //               })
+  //             })
+  //           })
+  //           setsearchedItemsResult(toReturn)
+  //         }} onChange={handleSearchItem} />
+  //       {
+  //         (searchedItemsResult.length !== 0) &&
+  //         <div className='bg-white p-2 mt-2 rounded h-[300px] overflow-auto w-[50%]'>
+  //           {
+  //             searchedItemsResult.map((val, index) => (
+  //               // eslint-disable-next-line react/jsx-key
+  //               <div className='flex items-center'>
+  //                 <h1 className='border p-1 flex-1 bg-white rounded-md'>{val.item}</h1>
+  //                 <IconButton onClick={() => {
+  //                   const obj = {
+  //                     item: val.item,
+  //                     counter: "0",
+  //                     comment: "",
+  //                   }
+  //                   setselectedItems([...selectedItems, obj])
+  //                 }}>
+  //                   <AddCircleOutlineIcon />
+  //                 </IconButton>
+  //               </div>
+  //             ))
+  //           }
+  //         </div>
+  //       }
+  //     </div>
+  //   )
+  // }
   const itemSearchComponent = () => {
     return (
       <div className='relative'>
@@ -160,7 +232,6 @@ const Order = () => {
           <div className='bg-white p-2 mt-2 rounded h-[300px] overflow-auto w-[50%]'>
             {
               searchedItemsResult.map((val, index) => (
-                // eslint-disable-next-line react/jsx-key
                 <div className='flex items-center'>
                   <h1 className='border p-1 flex-1 bg-white rounded-md'>{val.item}</h1>
                   <IconButton onClick={() => {
@@ -180,19 +251,6 @@ const Order = () => {
         }
       </div>
     )
-  }
-  const handleChangeFormData = (index: number, e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    const { value, name } = e.target
-    const newData = [...selectedItems].map((v, i) => {
-      if (index === i) {
-        return {
-          ...v,
-          [name]: value
-        }
-      }
-      return v;
-    })
-    setselectedItems(newData)
   }
   const handleDeleteSelectedItems = (index: number) => {
     const updated = [] as {
@@ -238,7 +296,7 @@ const Order = () => {
                       }} className="w-[100px] outline-none border p-1" />
                     </td>
                     <td className="px-4 py-3 border">
-                      <textarea name='comment' className='outline-none border p-1' onChange={(e) => { handleChangeFormData(index, e) }} placeholder='Enter Comments...' value={item.comment} />
+                      <textarea name='comment' className='outline-none border p-1' onChange={(e) => { handleChangeFormData(index, e) }} placeholder='Enter Comments...' value={item.comment} required/>
                     </td>
                     <td className="px-4 py-3 border">
                       <IconButton onClick={() => { handleDeleteSelectedItems(index) }}>
@@ -306,10 +364,15 @@ const Order = () => {
         },
         selectedItems: selectedItems
       })
+
+      console.log('resp', res);
+      
       alert("created successfully!")
       window.location.href = `/admin/menueprint/${res.data.id}`
     } catch (error: any) {
       const err = handleApiErrors(error)
+      // console.log('selectedItems', error);
+
       alert(err)
     }
   }

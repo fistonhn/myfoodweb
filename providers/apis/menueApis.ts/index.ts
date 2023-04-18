@@ -7,7 +7,7 @@ export interface ICreateMenueApi {
     selectedItems: IItem[]
 }
 
-export const createMenueApi = async ({ formdata, selectedItems }: ICreateMenueApi) => {
+export const createMenueApi = async ({ formdata, selectedItems }: ICreateMenueApi) => {    
     return axios.post('/menue/create', { formdata, selectedItems })
 }
 

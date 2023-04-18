@@ -14,7 +14,7 @@ const TopPrintSection = ({ menue }: { menue: IMenue }) => {
   return (
     <>
       <div className='flex items-center justify-evenly border-b-2 border-b-black'>
-        <BoldText className='!text-xl' >Function</BoldText>
+        <BoldText className='!text-xl' >Function Prospectus</BoldText>
         <BoldText className='!text-xl'>{menue.function}</BoldText>
       </div>
       <div className='grid grid-cols-2 '>
@@ -68,11 +68,11 @@ const TopPrintSection = ({ menue }: { menue: IMenue }) => {
             <div className=''>
               {/*  */}
               <div className='flex '>
-                <div className='border-r-2    border-black h-[120px]'>
+                <div className='w-[45.4%] border-r-2 border-black h-[120px] '>
                   <BoldText>ONION:-</BoldText>
                   <BoldText>GARLIC:-</BoldText>
                 </div>
-                <div className=''>
+                <div className='px-1'>
                   <BoldText>{menue.onion === true ? "True" : "False"}</BoldText>
                   <BoldText>{menue.garlic === true ? "True" : "False"}</BoldText>
                 </div>

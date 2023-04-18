@@ -66,9 +66,9 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                                 className="text-md font-semibold tracking-wide text-left
                             text-gray-900 bg-gray-100 uppercase border-2 border-black"
                             >
-                                <th className="px-4 py-3 uppercase text-center">S.NO.</th>
-                                <th className="px-4 py-3 uppercase text-center">Item name</th>
-                                <th className="px-4 py-3 uppercase text-center">name of staff</th>
+                                <th className="px-4 py-3 uppercase text-left border-r-2 border-black">S.NO.</th>
+                                <th className="px-4 py-3 uppercase text-left border-r-2 border-black">Item name</th>
+                                <th className="px-4 py-3 uppercase text-left">name of staff</th>
                             </tr>
                         </thead>
                         <tbody className="bg-white font-semibold">
@@ -83,7 +83,7 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                                                 {c.itemName}({c.comment.length})-  <span className='text-sm'>{c.comment[0]} </span>
                                             </div>
                                         </td>
-                                        <td className="px-1 py-2 border-2 border-black">
+                                        <td className="px-1 py-2 border-2 border-black w-[50%]">
                                             CONTRACTORS: {c.contractors.map((cont, i) => `${cont} ${i < c.contractors.length - 1 ? "," : ""}`)}
 
                                         </td>
