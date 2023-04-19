@@ -74,10 +74,10 @@ const CreateUsers = () => {
                         onChange={(_, value) => { setformdata({ ...formdata, type: value }) }}
                         className="grid"
                     >
-                        <FormControlLabel value={usersType.bookingclerk} control={<Radio />} label="Booking Clerk" />
-                        <FormControlLabel value={usersType.operationclerk} control={<Radio />} label="Operation Clerk" />
-                        <FormControlLabel value={usersType.seniorclerk} control={<Radio />} label="Senior Clerk" />
-                        <FormControlLabel value={usersType.wageclerk} control={<Radio />} label="Wage Clerk" />
+                        <FormControlLabel value={usersType.bookingclerk} control={<Radio />} label="Booking Manager" />
+                        <FormControlLabel value={usersType.operationclerk} control={<Radio />} label="Operation Manager" />
+                        <FormControlLabel value={usersType.seniorclerk} control={<Radio />} label="Senior Manager" />
+                        <FormControlLabel value={usersType.wageclerk} control={<Radio />} label="Wage Manager" />
                     </RadioGroup>
                     <Button title='Submit' type='submit' />
                 </form>

@@ -8,7 +8,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         let { formdata, selectedItems } = req.body as ICreateMenueApi
 
-        const { id, ...restFormData } = formdata
+        const { id, ...restFormData } = formdata        
 
         const _menue = await prisma.menue.create({
             data: restFormData
@@ -194,6 +194,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             statusCode: 200
         })
     } catch (error: any) {
+        // console.log(error);
+        
         return ErrorResponse({
             msg: error.message,
             res,

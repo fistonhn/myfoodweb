@@ -25,15 +25,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/admin/menueprint/[menueid]": [
+    "/admin/createusers": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/admin/menueprint/[menueid].js"
-    ],
-    "/order": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/order.js"
+      "static/chunks/pages/admin/createusers.js"
     ]
   },
   "ampFirstPages": []
