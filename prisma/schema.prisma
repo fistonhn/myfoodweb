@@ -44,6 +44,7 @@ model Menue {
   departureDate      DateTime
   departureTime      DateTime
   PAX                String
+  PLATE              String
   specialInstruction String
   headName           String
   headMobileNumber   String
@@ -103,4 +104,9 @@ model Places {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
   name  String
   value String
+}
+
+model Item {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  itemName  String
 }

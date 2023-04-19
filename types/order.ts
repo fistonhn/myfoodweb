@@ -11,6 +11,7 @@ export interface IMenueForm {
     departureDate: string;
     departureTime: string;
     PAX: string;
+    PLATE: string;
     specialInstruction: string;
     headName: string;
     headMobileNumber: string;

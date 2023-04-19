@@ -53,7 +53,7 @@ const TopPrintSection = ({ menue }: { menue: IMenue }) => {
             </div>
             <div className='flex items-center space-x-4'>
               <BoldText>Departure Time:- </BoldText>
-              <BoldText>{new Date(menue.departureTime).toLocaleDateString()}</BoldText>
+              <BoldText>{new Date(menue.departureTime).toLocaleTimeString()}</BoldText>
             </div>
           </div>
         </div>

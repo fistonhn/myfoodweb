@@ -3,14 +3,14 @@ import React, { useState, useEffect } from 'react'
 import { Menue } from '@prisma/client'
 import Input from '@/components/Inputs/Input'
 import { Select } from '@/components/Select'
-import { itemsData } from '@/data/data'
+// import { itemsData } from '@/data/data'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import IconButton from '@mui/material/IconButton'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Button } from '@/components/Button/Button'
 import { IMenueForm } from '@/types/order'
 import { handleApiErrors } from '@/utils/handleapierrors'
-import { createMenueApi } from '@/providers/apis'
+import { createMenueApi, createItemApi, getItemsApi } from '@/providers/apis'
 import { updateDateWithHourAndMinute } from '@/utils/updateDateWithHoursAndMinutes'
 import { GetServerSideProps } from 'next'
 import { getSession, useSession } from 'next-auth/react'
@@ -36,6 +36,7 @@ const intitialData = {
   mobile: "",
   name: "",
   PAX: "",
+  PLATE: "",
   serviceTime: "",
   specialInstruction: "",
   vehicleNumber: "",
@@ -46,18 +47,18 @@ const intitialData = {
 } as IMenueForm
 const functionOptions = [
   {
-    value: " Breakfast",
+    value: " breakfast",
     content: " Breakfast"
   },
   {
-    value: "Dinner",
+    value: "dinner",
     content: "Dinner"
   },
   {
-    value: "Hightea",
+    value: "hightea",
     content: "Hightea"
   }, {
-    value: "Lunch",
+    value: "lunch",
     content: "Lunch"
   }
 ] as { value: Menue["function"], content: React.ReactNode }[]
@@ -65,8 +66,17 @@ const Order = () => {
   const { data: session } = useSession()
   const [itemsNameOnly, setitemsNameOnly] = useState<string[]>([])
   const [formData, setformData] = useState(intitialData)
+  const [newItem, setnewItem] = useState('')
+  const [itemsData, setitemsData] = useState([])
+
   const [searchedItemsResult, setsearchedItemsResult] = useState<{ title: string, item: string }[]>([])
   const [selectedItems, setselectedItems] = useState<{ item: string, counter: string, comment: string }[]>([])
+
+  const handleChangeAddItem = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const itemName = e.target.value
+    setnewItem(itemName);
+    
+  }
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -81,40 +91,35 @@ const Order = () => {
       setsearchedItemsResult([])
       return;
     }
-    itemsData.forEach(v => {
-      v.sub.forEach(item => {
-        if (item.title.toLowerCase().includes(e.target.value.toLowerCase())) {
-          toReturn.push({
-            item: item.title,
-            title: v.title
-          })
+    
+    itemsData?.forEach(v => {
+        if (v.itemName.toLowerCase().includes(e.target.value.toLowerCase())) {
+          
+          toReturn.push(v)
         }
-      })
     })
+
     setsearchedItemsResult(toReturn)
+    
   }
 
   const informationForm = () => {
     return (
       <div className='grid grid-cols-2 w-[60%] mx-auto gap-5'>
         <Input required label='Function Date' name='functionDate' onChange={handleChange} value={formData.functionDate} type="date" />
-        <Input required label='PAX' name='PAX' onChange={handleChange} value={formData.PAX} type="text" />
-        <Input required label='Booked By' name='bookedBy' onChange={handleChange} value={formData.bookedBy} type="text" />
+        <Input required label='Booked By' name='bookedBy' onChange={handleChange} value={formData.bookedBy} type="text"/>
 
+        <Input label='PAX' name='PAX' onChange={handleChange} value={formData.PAX} type="text" />
+        <Input label='PLATE' name='PLATE' onChange={handleChange} value={formData.PLATE} type="text" />
         <Input required label='Booker Mobile Number' name='bookerMobileNumber' onChange={handleChange} value={formData.bookerMobileNumber} type="text" />
-        {/* <Input required label='Cleaner' name='cleaner' onChange={handleChange} value={formData.cleaner} type="text" /> */}
         <Input required label='Departure Date' name='departureDate' onChange={handleChange} value={formData.departureDate} type="date" />
         <Input required label='Departure Time' name='departureTime' onChange={handleChange} value={formData.departureTime} type="time" />
-        {/* <Input required label='Driver Name' name='driverName' onChange={handleChange} value={formData.driverName} type="text" /> */}
         <Select required label='Function Prospectus' name='function' onChange={handleChange} value={formData.function} options={functionOptions} />
 
-        {/* <Input required label='Head Mobile Number' name='headMobileNumber' onChange={handleChange} value={formData.headMobileNumber} type="text" /> */}
-        {/* <Input required label='Head Name' name='headName' onChange={handleChange} value={formData.headName} type="text" /> */}
         <Input required label='Guest Mobile' name='mobile' onChange={handleChange} value={formData.mobile} type="text" />
         <Input required label='Guest Name' name='name' onChange={handleChange} value={formData.name} type="text" />
         <Input required label='Service Time' name='serviceTime' onChange={handleChange} value={formData.serviceTime} type="time" />
         <Input label='Special Instruction' name='specialInstruction' onChange={handleChange} value={formData.specialInstruction} type="text" />
-        {/* <Input required label='Vehicle Number' name='vehicleNumber' onChange={handleChange} value={formData.vehicleNumber} type="text" /> */}
         <Input required label='Venue' name='venue' onChange={handleChange} value={formData.venue} type="text" />
         <Input label='Words' name='words' onChange={handleChange} value={formData.words} type="text" />
         <Select required label='Onion' onChange={(e) => { setformData((prev) => ({ ...prev, onion: e.target.value === "Yes" ? true : false })) }} options={[{ content: "No", value: "No" }, { content: "Yes", value: "Yes" }]} />
@@ -158,14 +163,10 @@ const Order = () => {
             if (e.target.value) {
               return;
             }
-            itemsData.forEach(v => {
-              v.sub.forEach(item => {
-                toReturn.push({
-                  item: item.title,
-                  title: v.title
-                })
-              })
+            itemsData?.forEach(v => {
+                toReturn.push(v)
             })
+            
             setsearchedItemsResult(toReturn)
           }} onChange={handleSearchItem} />
         {
@@ -174,10 +175,10 @@ const Order = () => {
             {
               searchedItemsResult.map((val, index) => (
                 <div className='flex items-center'>
-                  <h1 className='border p-1 flex-1 bg-white rounded-md'>{val.item}</h1>
+                  <h1 className='border p-1 flex-1 bg-white rounded-md'>{val.itemName}</h1>
                   <IconButton onClick={() => {
                     const obj = {
-                      item: val.item,
+                      item: val.itemName,
                       counter: "0",
                       comment: "",
                     }
@@ -269,7 +270,6 @@ const Order = () => {
     if (selectedItems.length === 0) {
       return alert("Kindly Select Atleast One Item.")
     }
-    console.log({ selectedItems, formData })
     try {
       // _formDate.
       const _departureHourMinute = formData.departureTime.split(":")
@@ -294,6 +294,7 @@ const Order = () => {
           mobile: formData.mobile,
           name: formData.name,
           PAX: formData.PAX,
+          PLATE: formData.PLATE,
           serviceTime: _serviceTime,
           specialInstruction: formData.specialInstruction,
           vehicleNumber: formData.vehicleNumber,
@@ -305,8 +306,6 @@ const Order = () => {
         },
         selectedItems: selectedItems
       })
-
-      console.log('resp', res);
       
       alert("created successfully!")
       window.location.href = `/admin/menueprint/${res.data.id}`
@@ -317,14 +316,36 @@ const Order = () => {
       alert(err)
     }
   }
+  const submitCreateItem = async () => {
+    try {
+      if(!newItem) return alert('Please enter a new item')
+      
+      const res = await createItemApi({ itemName: newItem })
+
+      setnewItem('')
+      alert("Item added successfully!")
+    } catch (error: any) {
+      const err = handleApiErrors(error)
+      alert(err)
+    }
+    
+  }
+
+  const getItemDatas = async () => {
+    const res = await getItemsApi([])
+
+    const { items } = res.data
+    setitemsData(items)
+
+  }
   useEffect(() => {
     if (itemsData) {
       let _sub = [] as string[]
-      itemsData.forEach(it => {
-        it.sub.forEach(c => {
-          _sub.push(c.title)
-        })
+      itemsData?.forEach(it => {
+          _sub.push(it.itemName)
       })
+
+      getItemDatas()
       setitemsNameOnly(_sub)
     }
   }, [itemsData])
@@ -346,6 +367,11 @@ const Order = () => {
             <Button onClick={() => {
               window.open(`mailto:`);
             }} title='Email' type='button' />
+          </div>
+
+          <div className='space-x-3'>
+            <Input label='Create new item' name='itemName' onChange={handleChangeAddItem} value={newItem} type="text" />
+            <Button title='Add Item' className='mt-2' onClick={submitCreateItem}/>
           </div>
         </div>
       </form>
