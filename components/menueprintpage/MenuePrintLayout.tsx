@@ -11,6 +11,7 @@ type IMenue = (Menue & {
 })
 
 const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
+    const [hidePrintButton, sethidePrintButton] = React.useState('block')
     const [tableData, settableData] = React.useState<{
         comment: string[],
         contractors: string[],
@@ -75,12 +76,12 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                             {
                                 tableData.filter(f => (f.itemName !== HEAD_CONST && f.itemName !== CLEANER_CONST)).map((c, ci) => (
                                     <tr className="">
-                                        <td className="px-1 py-2 border-2 border-black">
+                                        <td className="px-1 py-2 border-2 border-black w-[22.5%]">
                                             {ci + 1}
                                         </td>
                                         <td className="px-1 py-2 border-2 border-black ">
                                             <div className=''>
-                                                {c.itemName} ({c.comment.length})-  <span className='text-sm'>{ c.comment[0]} </span>
+                                                {c.itemName} ({c.comment.length}){c.comment[0] ? '-' : ''} <span className='text-sm'>{ c.comment[0]} </span>
                                             </div>
                                         </td>
                                         <td className="px-1 py-2 border-2 border-black w-[50%]">
@@ -160,16 +161,18 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                     </table>
                 </div>
             </div>
-            <h1 className='text-xl text-center tracking-tight mb-10'>
+            <h1 className='text-xl text-center tracking-tight mb-5'>
                 Thank You 👏
             </h1>
-            <div className='w-full p-2'>
+            <div className='w-full p-2' style={{ display: hidePrintButton}}>
                 <Button className=' w-full m-auto' title='PRINT' onClick={() => {
-                    window.print()
+                    sethidePrintButton('none')
+                    setTimeout(()=>  (window.print(), sethidePrintButton('block')), 1000);
                 }} />
             </div>
         </div>
     )
 }
+
 
 export { MenuePrintLayout }

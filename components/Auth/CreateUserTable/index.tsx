@@ -102,7 +102,11 @@ const CreateUserTable = () => {
                                             {item.password}
                                         </td>
                                         <td className="px-4 py-3 border">
-                                            {item.role}
+                                            {item.role === 'bookingclerk' ? 'Booking Manager' : ''}
+                                            {item.role === 'operationclerk' ? 'Operation Manager' : ''}
+                                            {item.role === 'seniorclerk' ? 'Senior Manager' : ''}
+                                            {item.role === 'wageclerk' ? 'Wage Manager' : ''}
+
                                         </td>
                                         <td className="px-4 py-3 border">
                                             <IconButton onClick={() => { handleCopy(item) }}>

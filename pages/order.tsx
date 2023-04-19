@@ -369,9 +369,9 @@ const Order = () => {
             }} title='Email' type='button' />
           </div>
 
-          <div className='space-x-3'>
-            <Input label='Create new item' name='itemName' onChange={handleChangeAddItem} value={newItem} type="text" />
-            <Button title='Add Item' className='mt-2' onClick={submitCreateItem}/>
+          <div>
+            <Input label='Create new item' name='itemName' onChange={handleChangeAddItem} value={newItem} type="text" className='w-[50%]'/>
+            <Button title='Add Item' className='mt-3' onClick={submitCreateItem}/>
           </div>
         </div>
       </form>

@@ -15,7 +15,7 @@ const TopPrintSection = ({ menue }: { menue: IMenue }) => {
     <>
       <div className='flex items-center justify-evenly border-b-2 border-b-black'>
         <BoldText className='!text-xl' >Function Prospectus</BoldText>
-        <BoldText className='!text-xl'>{menue.function}</BoldText>
+        <BoldText className='!text-xl'>{`${(menue.function[0]).toUpperCase()}${(menue.function).slice(1)}`}</BoldText>
       </div>
       <div className='grid grid-cols-2 '>
         <div className='border-r-2 border-r-black border-l-2 border-l-black'>
@@ -34,10 +34,10 @@ const TopPrintSection = ({ menue }: { menue: IMenue }) => {
             </div>
           </div>
           <div className='flex items-center justify-end border-t-2 p-1  border-t-black '>
-            <BoldText>Pax:- {menue.PAX}</BoldText>
+          <BoldText>{menue.PLATE ? 'Plate:- ' + menue.PLATE : ''}</BoldText> <BoldText className='mx-3'>Pax:- {menue.PAX}</BoldText>
           </div>
         </div>
-        <div className='border-r-2  '>
+        <div className='border-r-2'>
           <div className='p-1  space-y-3'>
             <div className='flex items-center space-x-4'>
               <BoldText>Function Date:- </BoldText>
@@ -68,7 +68,7 @@ const TopPrintSection = ({ menue }: { menue: IMenue }) => {
             <div className=''>
               {/*  */}
               <div className='flex '>
-                <div className='w-[45.4%] border-r-2 border-black h-[120px] '>
+                <div className='w-[45.2%] border-r-2 border-black h-[120px] '>
                   <BoldText>ONION:-</BoldText>
                   <BoldText>GARLIC:-</BoldText>
                 </div>
