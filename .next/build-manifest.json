@@ -29,6 +29,16 @@
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/admin/createusers.js"
+    ],
+    "/admin/menueprint/[menueid]": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/admin/menueprint/[menueid].js"
+    ],
+    "/order": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/order.js"
     ]
   },
   "ampFirstPages": []
