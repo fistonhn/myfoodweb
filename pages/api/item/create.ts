@@ -7,10 +7,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         let newItem = req.body as ICreateItemApi
 
-        const itemName = newItem        
+        const { itemName } = newItem         
+                
+        const alreadyExist = await prisma.item.findFirst({
+            where: {
+                itemName: itemName
+            }
+        })
+        
+        if (alreadyExist) {
+            return ErrorResponse({
+                msg: `${itemName} Already Exists`,
+                res: res,
+                statusCode: 400
+            })
+        }
 
         const _item = await prisma.item.create({
-            data: itemName
+            data: newItem
         })        
 
         return SuccessResponse({

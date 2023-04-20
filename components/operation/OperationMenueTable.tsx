@@ -32,25 +32,37 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
         dispatch(selectContractorsUsingCategoryId({ cid: cid }))
         dispatch(fetchContractorsThunk(cid))
     }
+
+    // get all categories from the system
+
+    const categories = []
+
+    menues?.map((item)=> {
+        item.Categories?.map((it)=>{
+            categories.push(it)
+        })
+    })
+    
+
     return (
         <div className="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
             {
                 cstate.showUpdateContractorModal &&
                 <GetContractorModal />
             }
-            <div className="w-full overflow-x-auto">
+            <div className="w-full overflow-x-auto max-h-[650px]">
                 <table className="w-full">
-                    <thead>
+                    <thead className='sticky top-0'>
                         <tr className="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600 whitespace-nowrap">
                             <th className="px-4 py-3 uppercase">booking id</th>
                             <th className="px-4 py-3 uppercase">Categories</th>
                             {/* <th className="px-4 py-3 uppercase">function</th> */}
                             {/* <th className="px-4 py-3 uppercase whitespace-nowrap">name</th> */}
                             <th className="px-4 py-3 uppercase">function date</th>
-                            {/* <th className="px-4 py-3 uppercase">mobile</th> */}
-                            {/* <th className="px-4 py-3 uppercase">Service Time</th> */}
-                            {/* <th className="px-4 py-3 uppercase">venue</th> */}
-                            {/* <th className="px-4 py-3 uppercase">Departure Date</th> */}
+                            <th className="px-4 py-3 uppercase">service time</th>
+                            <th className="px-4 py-3 uppercase">departure date</th>
+                            <th className="px-4 py-3 uppercase">departure time</th>
+                            <th className="px-4 py-3 uppercase">guest mobile number</th>
                             {/* <th className="px-4 py-3 uppercase">Departure Time</th> */}
                             {/* <th className="px-4 py-3 uppercase">PAX</th> */}
                             {/* <th className="px-4 py-3 uppercase">Special Instruction</th> */}
@@ -70,18 +82,29 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
                             menues.map((val, index) => (
                                 <tr className="text-gray-700" key={index}>
                                     <td className="px-4 py-3 border">
-                                        {val.bookingId}
+                                        {val.name}
                                     </td>
                                     <td className="px-4 py-3 border space-y-4">
-                                        {
-                                            val.Categories?.map((c, ci) => {
+                                        { 
+                                                [...new Map(val.Categories?.map((item: any) => [item['itemName'], item])).values()]?.map((c: any, ci) => {
                                                 return (
-                                                    <div key={ci} className=" grid gap-y-2 bg-gray-100 p-[1px]">
-                                                        <span className='font-bold text-lg underline underline-offset-4'>{` `}Item: {c.itemName}</span>
-                                                        <span onClick={() => {
-                                                            handleShowModal(c.id)
-                                                        }} className='font-bold text-lg underline underline-offset-4 cursor-pointer hover:text-green-500'>Contractor: {c.contractor?.name}</span>
-                                                        <span className='font-bold text-lg underline underline-offset-4'>{` `}Comment: {c.comment}</span>
+                                                    <div key={ci} className=" bg-gray-100 p-[1px]">
+                                                        <span className='font-bold text-md underline underline-offset-4 mr-4 overflow-y-auto'>{` `}
+                                                            {c.itemName} 
+
+                                                            {((val.Categories.filter((it)=> it.menueId === val.id &&  it.itemName === c.itemName)).length) === 1 ? '' : ' ( ' }
+
+                                                            {((val.Categories.filter((it)=> it.menueId === val.id &&  it.itemName === c.itemName)).length) === 1 ? '' :
+                                                            ((val.Categories.filter((it)=> it.menueId === val.id &&  it.itemName === c.itemName)).length) }
+
+                                                            {((val.Categories.filter((it)=> it.menueId === val.id &&  it.itemName === c.itemName)).length) === 1 ? ' ' : ' ) ' }
+
+                                                        </span>
+                                                        <span onClick={() => { handleShowModal(c.id) }} className='font-bold text-lg underline underline-offset-4 cursor-pointer hover:text-green-500'>
+                                                            
+                                                            CT- {c.contractor?.name}
+    
+                                                        </span>
                                                     </div>
                                                 )
                                             }
@@ -90,6 +113,18 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
                                     </td>
                                     <td className="px-4 py-3 border">
                                         {new Date(val.functionDate).toLocaleDateString()}
+                                    </td>
+                                    <td className="px-4 py-3 border">
+                                        {new Date(val.serviceTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
+                                    </td>
+                                    <td className="px-4 py-3 border">
+                                        {new Date(val.departureDate).toLocaleDateString()}
+                                    </td>
+                                    <td className="px-4 py-3 border">
+                                        {new Date(val.departureTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
+                                    </td>
+                                    <td className="px-4 py-3 border">
+                                        {val.mobile}
                                     </td>
                                     <EditAbleColumns isWagePageRequest={isWagePageRequest} val={val} />
                                 </tr>

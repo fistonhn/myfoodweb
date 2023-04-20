@@ -34,7 +34,7 @@ const TopPrintSection = ({ menue }: { menue: IMenue }) => {
             </div>
           </div>
           <div className='flex items-center justify-end border-t-2 p-1  border-t-black '>
-          <BoldText>{menue.PLATE ? 'Plate:- ' + menue.PLATE : ''}</BoldText> <BoldText className='mx-3'>Pax:- {menue.PAX}</BoldText>
+          <BoldText>{menue.PLATE ? 'Plate:- ' + menue.PLATE : ''}</BoldText> <BoldText className='mx-3'>{menue.PAX ? 'Pax:- ' + menue.PAX : ''}</BoldText>
           </div>
         </div>
         <div className='border-r-2'>
@@ -45,7 +45,7 @@ const TopPrintSection = ({ menue }: { menue: IMenue }) => {
             </div>
             <div className='flex items-center space-x-4'>
               <BoldText>Service Time:- </BoldText>
-              <BoldText>{new Date(menue.serviceTime).toLocaleTimeString()}</BoldText>
+              <BoldText>{new Date(menue.serviceTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</BoldText>
             </div>
             <div className='flex items-center space-x-4'>
               <BoldText>Departure Date:- </BoldText>
@@ -53,7 +53,7 @@ const TopPrintSection = ({ menue }: { menue: IMenue }) => {
             </div>
             <div className='flex items-center space-x-4'>
               <BoldText>Departure Time:- </BoldText>
-              <BoldText>{new Date(menue.departureTime).toLocaleTimeString()}</BoldText>
+              <BoldText>{new Date(menue.departureTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</BoldText>
             </div>
           </div>
         </div>

@@ -18,6 +18,7 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
         itemName: string
     }[]>
         ([])
+    
     function convertCategoriesToResult(categories: (Categories & {
         contractor: Contractor | null;
     })[]) {
@@ -66,7 +67,7 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                             <tr
                                 className="text-md font-semibold tracking-wide text-left
                             text-gray-900 bg-gray-100 uppercase border-2 border-black"
-                            >
+                            > 
                                 <th className="px-4 py-3 uppercase text-center border-r-2 border-black">S.NO.</th>
                                 <th className="px-4 py-3 uppercase text-center border-r-2 border-black">Item name</th>
                                 <th className="px-4 py-3 uppercase text-center">name of staff</th>
@@ -81,7 +82,7 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                                         </td>
                                         <td className="px-1 py-2 border-2 border-black ">
                                             <div className=''>
-                                                {c.itemName} ({c.comment.length}){c.comment[0] ? '-' : ''} <span className='text-sm'>{ c.comment[0]} </span>
+                                                {c.itemName} {c.comment.length === 1 ? '' : '(' } {c.comment.length === 1 ? '' : c.comment.length} {c.comment.length === 1 ? '' : ')' } {c.comment[0] ? '-' : ''} <span className='text-sm'>{ c.comment[0]} </span>
                                             </div>
                                         </td>
                                         <td className="px-1 py-2 border-2 border-black w-[50%]">
@@ -155,6 +156,17 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                                 </td>
                                 <td className="px-1 py-3 border-2 border-black">
                                     CLEANER:-  {menue.cleaner}
+                                </td>
+                            </tr>
+                            <tr className="">
+                                <td className="px-1 py-3 border-2 border-black">
+                                    NOTE:
+                                </td>
+                                <td className="px-1 py-3 border-2 border-black">
+                                    {/* {menue.bookerMobileNumber} */}
+                                </td>
+                                <td className="px-1 py-3 border-2 border-black">
+                                    {/* CLEANER:-  {menue.cleaner} */}
                                 </td>
                             </tr>
                         </tbody>
