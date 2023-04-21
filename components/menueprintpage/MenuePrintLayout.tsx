@@ -68,7 +68,7 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                                 className="text-md font-semibold tracking-wide text-left
                             text-gray-900 bg-gray-100 uppercase border-2 border-black"
                             > 
-                                <th className="px-4 py-3 uppercase text-center border-r-2 border-black">S.NO.</th>
+                                <th className="px-4 py-3 uppercase text-center border-r-2 border-black w-[10%]">S.NO.</th>
                                 <th className="px-4 py-3 uppercase text-center border-r-2 border-black">Item name</th>
                                 <th className="px-4 py-3 uppercase text-center">name of staff</th>
                             </tr>
@@ -77,7 +77,7 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                             {
                                 tableData.filter(f => (f.itemName !== HEAD_CONST && f.itemName !== CLEANER_CONST)).map((c, ci) => (
                                     <tr className="">
-                                        <td className="px-1 py-2 border-2 border-black w-[22.5%]">
+                                        <td className="px-1 py-2 border-2 border-black w-[19%]">
                                             {ci + 1}
                                         </td>
                                         <td className="px-1 py-2 border-2 border-black ">
@@ -159,13 +159,13 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                                 </td>
                             </tr>
                             <tr className="">
-                                <td className="px-1 py-3 border-2 border-black">
+                                <td className="px-1 py-3 border-b-2 border-l-2 border-black font-bold">
                                     NOTE:
                                 </td>
-                                <td className="px-1 py-3 border-2 border-black">
+                                <td className="px-1 py-3 border-b-2 border-black">
                                     {/* {menue.bookerMobileNumber} */}
                                 </td>
-                                <td className="px-1 py-3 border-2 border-black">
+                                <td className="px-1 py-3 border-b-2 border-r-2 border-black">
                                     {/* CLEANER:-  {menue.cleaner} */}
                                 </td>
                             </tr>
