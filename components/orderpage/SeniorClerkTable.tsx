@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { Menue, Categories, Contractor } from '@prisma/client'
 import Dialoge from '@mui/material/Dialog'
+import { ContractorModel } from '@/components/ContractorModel/ContractorModel'
 import { handleApiErrors } from '@/utils/handleapierrors'
 import { getAvailableContractorsWithItem, updateCatgoryContractor } from '@/providers/apis'
 import DialogTitle from '@mui/material/DialogTitle'
@@ -9,13 +10,23 @@ import CheckBox from '@mui/material/Checkbox'
 import { DialogActions } from '@mui/material'
 import { Button } from '../Button/Button'
 import Input from '../Inputs/Input'
-import { updateOperationMenueApi } from '@/providers/apis/operation'
-import { updateSeniorClekMenueApi } from '@/providers/apis/order'
+import { getMenuesApi } from '@/providers/apis/menueApis.ts'
+import { updateSeniorClekMenueApi, cancelBooking } from '@/providers/apis/order'
 import { Select } from '../Select'
 import { functionsConstants } from '@/data/data'
 import { ISODateIntoLocalDate } from '@/utils/ISODateToLocalDate'
 import { ISODateIntoLocalTime } from '@/utils/ISODateToLocalTime'
 import { updateDateWithHourAndMinute } from '@/utils/updateDateWithHoursAndMinutes'
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import IconButton from '@mui/material/IconButton'
+import CloseIcon from '@mui/icons-material/Close';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { getItemsApi } from '@/providers/apis'
+import { createNewCategory } from '@/providers/apis/category'
 
 interface ICategories extends Categories {
     contractor?: Contractor
@@ -34,6 +45,7 @@ interface IModal {
 const UpdateContractorsModal = ({ onClose, open, category }: IModal) => {
     const [contractors, setcontractors] = useState<Contractor[]>([])
     const [selectedContractor, setselectedContractor] = useState<Contractor>()
+
     const getContractores = async () => {
         try {
             const res = await getAvailableContractorsWithItem({ item: category?.itemName! })
@@ -67,6 +79,7 @@ const UpdateContractorsModal = ({ onClose, open, category }: IModal) => {
             alert(err)
         }
     }
+
     return (
         <Dialoge open={open} maxWidth="md" fullWidth onClose={onClose}>
             <DialogTitle>
@@ -159,6 +172,75 @@ interface EditAbleColumnsProp {
 const EditAbleColumns = ({ val }: EditAbleColumnsProp) => {
     const [update, setupdate] = useState(false)
     const [data, setData] = useState(val)
+    const [open, setOpen] = useState(false);
+    const [menue, setmenue] = useState([]);
+    const [searchedItemsResult, setsearchedItemsResult] = useState<{ title: string, item: string }[]>([])
+    const [selectedItems, setselectedItems] = useState<{ item: string, counter: string, comment: string }[]>([])
+    const [itemsData, setitemsData] = useState([])
+
+    const getItemDatas = async () => {
+        const res = await getItemsApi([])
+    
+        const { items } = res.data
+        setitemsData(items)
+    
+      }
+      useEffect(() => {
+        if (itemsData) {
+          let _sub = [] as string[]
+          itemsData?.forEach(it => {
+              _sub.push(it.itemName)
+          })
+    
+          getItemDatas()
+        }
+      }, [itemsData])
+
+    const handleOpen = async (id) => {
+        setOpen(true)
+
+        const res = await getMenuesApi({})
+
+        const booking = res.data.menues.filter((it)=>it.id===id)
+        
+        setmenue(...booking)
+        
+    };
+    const handleClose = () => {
+        setOpen(false)
+        setselectedItems([])
+    };
+    
+    const handleSearchItem = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const toReturn = [] as { title: string, item: string }[]
+        if (!e.target.value) {
+          setsearchedItemsResult([])
+          return;
+        }
+        
+        itemsData?.forEach(v => {
+            if (v.itemName.toLowerCase().includes(e.target.value.toLowerCase())) {
+              
+              toReturn.push(v)
+            }
+        })
+    
+        setsearchedItemsResult(toReturn)
+        
+    }
+    const handleDeleteSelectedItems = (index: number) => {
+        const updated = [] as {
+          item: string;
+          counter: string;
+          comment: string;
+        }[]
+        selectedItems.forEach((v, i) => {
+          if (i !== index) {
+            updated.push(v)
+          }
+        })
+        setselectedItems(updated)
+    }
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target
         console.log(value)
@@ -216,8 +298,170 @@ const EditAbleColumns = ({ val }: EditAbleColumnsProp) => {
             alert(err)
         }
     }
+    const handleCancel = async () => {
+        try {
+            await cancelBooking({
+                data: {
+                    bookingId: data.id,
+                }
+            })
+            
+            alert("Cancel booking Successfully!")
+        } catch (error: any) {
+            const err = handleApiErrors(error)
+            alert(err)
+        }
+    }
+    const handleChangeFormData = (index: number, e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        const { value, name } = e.target
+        const newData = [...selectedItems].map((v, i) => {
+          if (index === i) {
+            return {
+              ...v,
+              [name]: value
+            }
+          }
+          return v;
+        })
+        setselectedItems(newData)
+      }
+
+    const handleAddCategory = async (e: React.FormEvent) => {
+        e.preventDefault()
+
+        let isOkay = true
+        selectedItems.forEach(v => {
+            if (!v.counter || (Number(v.counter) < 0 || Number(v.counter) > 5)) {
+              isOkay = false
+            }      
+          })
+          if (!isOkay) {
+            return alert("kindly select number of counters for all items and maximum of 5.")
+          }   
+          
+          if (selectedItems.length === 0) {
+            return alert("Kindly Select Atleast One Item.")
+          }
+
+          await createNewCategory({
+            menue: menue,
+            selectedItems: selectedItems
+          })
+          
+          alert("created successfully!")
+        
+          const res = await getMenuesApi({})
+          const booking = res.data.menues.filter((it)=>it.id === menue.id)
+          setmenue(...booking)
+          setselectedItems([])
+        
+    }
+    const renderSelectedItems = () => {
+        return (
+          <div className="w-full mb-8 overflow-hidden rounded-lg shadow-lg bg-white">
+            <div className="w-full overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
+                    <th className="px-4 py-3 uppercase">no.</th>
+                    <th className="px-4 py-3 uppercase">item</th>
+                    <th className="px-4 py-3 uppercase whitespace-nowrap">counter</th>
+                    <th className="px-4 py-3 uppercase">comment</th>
+                    <th className="px-4 py-3 uppercase">actions</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white">
+                  {
+                    selectedItems.map((item, index) => (
+                      <tr key={index} className="text-gray-700">
+                        <td className="px-4 py-3 border">
+                          {index + 1}
+                        </td>
+                        <td className="px-4 py-3 border">
+                          {item.item}
+                        </td>
+                        <td className="px-4 py-3 border">
+                          <input name='counter' type={"number"} value={item.counter} onChange={(e) => {
+    
+                            handleChangeFormData(index, e)
+                          }} className="w-[100px] outline-none border p-1" />
+                        </td>
+                        <td className="px-4 py-3 border">
+                          <textarea name='comment' className='outline-none border p-1' onChange={(e) => { handleChangeFormData(index, e) }} placeholder='Enter Comments...' value={item.comment}/>
+                        </td>
+                        <td className="px-4 py-3 border">
+                          <IconButton onClick={() => { handleDeleteSelectedItems(index) }}>
+                            <DeleteForeverIcon className='text-red-700' />
+                          </IconButton>
+                        </td>
+                      </tr>
+                    ))
+                  }
+                </tbody>
+              </table>
+            </div>
+
+            <Button title="Add items" onClick={handleAddCategory} className='mt-2'/>
+          </div>
+        )
+      }
+    const itemSearchComponent = () => {
+        return (
+          <div className='relative'>
+            <Input
+              className='w-[30%]'
+              endIcon={
+                <div className='flex items-center space-x-3'>
+                  <ExpandMoreIcon />
+                  {
+                    searchedItemsResult.length > 0 &&
+                    <IconButton onClick={() => {
+                      setsearchedItemsResult([])
+                    }}>
+                      <CloseIcon />
+                    </IconButton>
+                  }
+                </div>
+              }
+              label='Search Items' onFocus={(e) => {
+                const toReturn = [] as { title: string, item: string }[]
+                if (e.target.value) {
+                  return;
+                }
+                itemsData?.forEach(v => {
+                    toReturn.push(v)
+                })
+                
+                setsearchedItemsResult(toReturn)
+              }} onChange={handleSearchItem} />
+            {
+              (searchedItemsResult.length !== 0) &&
+              <div className='bg-white p-2 mt-2 rounded h-[300px] overflow-auto w-[50%]'>
+                {
+                  searchedItemsResult.map((val, index) => (
+                    <div className='flex items-center'>
+                      <h1 className='border p-1 flex-1 bg-white rounded-md'>{val.itemName}</h1>
+                      <IconButton onClick={() => {
+                        const obj = {
+                          item: val.itemName,
+                          counter: "0",
+                          comment: "",
+                        }
+                        setselectedItems([...selectedItems, obj])
+                      }}>
+                        <AddCircleOutlineIcon />
+                      </IconButton>
+                    </div>
+                  ))
+                }
+              </div>
+            }
+          </div>
+        )
+    }
     return (
         <>
+         <>
             <td className="px-4 py-3 border">
                 {
                     update ?
@@ -255,8 +499,6 @@ const EditAbleColumns = ({ val }: EditAbleColumnsProp) => {
                     data.cleaner
                 }
             </td>
-
-
             <td className="px-4 py-3 border">
                 {
                     data.driverName
@@ -355,8 +597,52 @@ const EditAbleColumns = ({ val }: EditAbleColumnsProp) => {
                     setupdate(!update)
                 }} title="Edit" />
                 <Button title="Update" onClick={handleUpdate} disabled={!update} />
+                <Button title='Cancel' onClick={handleCancel} />
+                <Button title='Manage' onClick={()=>handleOpen(data.id)} />
+
             </td>
+        </>
+
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+                >
+                <Box sx={style}>
+                    {itemSearchComponent()}
+                    {renderSelectedItems()}
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        {data.name}
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 4 }}>
+                    <div className='bg-white p-2 mt-2 rounded h-[300px] overflow-auto'>
+                        {
+                            menue?.Categories?.map((val, index) => (
+                                <div className='flex items-center'key={index}>
+                                    <h1 className='mr-1 mt-3'>{`${index + 1} `}</h1> <h1 className='border p-1 flex-1 bg-white rounded-md mr-3 mt-2'>{val.itemName}</h1>
+                                    <Button title="Remove" onClick={handleUpdate} disabled={!update} className='mt-2'/>
+                                </div>
+                            ))
+                        }
+                    </div>
+                    </Typography>
+                </Box>
+            </Modal>
         </>
     )
 }
 
+const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '60%',
+    overflow: 'scroll',
+    height: '500px',
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };

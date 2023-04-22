@@ -12,3 +12,7 @@ export interface IUpdateSeniorClerkMenue {
 export const updateSeniorClekMenueApi = async (data: IUpdateSeniorClerkMenue) => {
     return await axios.post("/menue/seniorclerkupdatemenue", data)
 }
+
+export const cancelBooking = async (data: IUpdateSeniorClerkMenue) => {
+    return await axios.post("/menue/cancelbooking", data)
+}

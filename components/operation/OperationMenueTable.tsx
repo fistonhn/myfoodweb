@@ -9,6 +9,8 @@ import { DialogActions } from '@mui/material'
 import { Button } from '../Button/Button'
 import Input from '../Inputs/Input'
 import { updateOperationMenueApi } from '@/providers/apis/operation'
+import { getAllMenuesApi } from '@/providers/apis/menueApis.ts'
+
 import Link from 'next/link'
 import { useAppDispatch, useAppSelector } from '@/store'
 import { fetchContractorsThunk, selectContractorsUsingCategoryId } from '@/slices/contractors.slice'
@@ -26,24 +28,30 @@ interface MenueTableProp {
 
 
 const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTableProp) => {
+
     const dispatch = useAppDispatch()
     const cstate = useAppSelector(s => s.contractor)
-    const handleShowModal = (cid: string) => {
+    const handleShowModal = async (cid: string) => {        
         dispatch(selectContractorsUsingCategoryId({ cid: cid }))
-        dispatch(fetchContractorsThunk(cid))
+        dispatch(fetchContractorsThunk(cid)).then(()=> {
+
+             getAllMenuesApi().then((res)=> console.log('tttttt', res));
+        })
     }
+
+console.log(menues);
+
 
     // get all categories from the system
 
     const categories = []
 
-    menues?.map((item)=> {
+    menues?.filter((it)=> it.cancel===false)?.map((item)=> {
         item.Categories?.map((it)=>{
             categories.push(it)
         })
     })
     
-
     return (
         <div className="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
             {
@@ -54,7 +62,7 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
                 <table className="w-full">
                     <thead className='sticky top-0'>
                         <tr className="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600 whitespace-nowrap">
-                            <th className="px-4 py-3 uppercase">booking id</th>
+                            <th className="px-4 py-3 uppercase">guest name</th>
                             <th className="px-4 py-3 uppercase">Categories</th>
                             {/* <th className="px-4 py-3 uppercase">function</th> */}
                             {/* <th className="px-4 py-3 uppercase whitespace-nowrap">name</th> */}
@@ -79,7 +87,7 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
                     </thead>
                     <tbody className="bg-white whitespace-nowrap">
                         {
-                            menues.map((val, index) => (
+                            menues.filter((it)=> it.cancel===false).map((val, index) => (
                                 <tr className="text-gray-700" key={index}>
                                     <td className="px-4 py-3 border">
                                         {val.name}
@@ -100,9 +108,18 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
                                                             {((val.Categories.filter((it)=> it.menueId === val.id &&  it.itemName === c.itemName)).length) === 1 ? ' ' : ' ) ' }
 
                                                         </span>
-                                                        <span onClick={() => { handleShowModal(c.id) }} className='font-bold text-lg underline underline-offset-4 cursor-pointer hover:text-green-500'>
+                                                        <span >
                                                             
-                                                            CT- {c.contractor?.name}
+                                                            {/* CT- {c.contractor?.name} */}
+
+                                                            {(val.Categories.filter((it)=> it.menueId === val.id &&  it.itemName === c.itemName))?.map((ct, index)=>{
+                                                                return(
+                                                                    <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2' 
+                                                                        onClick={() => { handleShowModal(ct.id) }} key={index}>
+                                                                        
+                                                                        {'Ct' + Number(index+1) + '-'} {ct.contractor?.name}</span>
+                                                                )
+                                                            })}
     
                                                         </span>
                                                     </div>

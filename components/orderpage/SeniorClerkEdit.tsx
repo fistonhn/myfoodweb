@@ -15,6 +15,8 @@ import { getSession } from 'next-auth/react'
 import { convertJSONintoExcelFile } from '@/utils/convertJSONintoExcelFile'
 import { OperationMenueTable } from '@/components/operation/OperationMenueTable'
 import { SeniorClerkTable } from './SeniorClerkTable'
+import { updateOperationMenueApi } from '@/providers/apis/operation'
+
 const SeniorClerkEdit = () => {
     const [disableContractorEdit, serdisableContractorEdit] = useState(true)
     const [menuesData, setmenuesData] = useState<Menue[]>([])

@@ -59,6 +59,7 @@ model Menue {
   createdAt          DateTime?    @default(now())
   onion              Boolean?
   garlic             Boolean?
+  cancel             Boolean?     @default(false)
 }
 
 model Categories {

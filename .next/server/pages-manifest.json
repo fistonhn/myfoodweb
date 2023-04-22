@@ -2,5 +2,9 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/admin/menueprint/[menueid]": "pages/admin/menueprint/[menueid].js"
+  "/api/item/getdata": "pages/api/item/getdata.js",
+  "/booking": "pages/booking.js",
+  "/api/menue/getdata": "pages/api/menue/getdata.js",
+  "/api/category/create": "pages/api/category/create.js",
+  "/api/menue/seniorclerksearch": "pages/api/menue/seniorclerksearch.js"
 }

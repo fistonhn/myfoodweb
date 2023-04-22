@@ -34,6 +34,11 @@ export const getItemsApi = async (data: IGetItemApi) => {
     return axios.get('/item/getdata', data)
 }
 
+
+export const getAllMenuesApi = async () => {
+    return axios.post(`/menue/getalldata`)
+}
+
 export const getMenuesApi = async ({ search = "", endDate = "", startDate = "", departureDate = "", contractorName = "" }: IGetMenueApi) => {
     return axios.post(`/menue/getdata`, {
         search,
