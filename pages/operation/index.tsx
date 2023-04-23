@@ -25,12 +25,13 @@ const OperationPage = () => {
     const [contractorDialogeState, setcontractorDialogeState] = useState(false)
     const getMenueData = async (search = "") => {
         try {
-            if (search || (startDate && endDate) || searchDepartureDate || contractorNameSearch) {
+            if (search || (startDate && endDate) || searchDepartureDate || contractorNameSearch) {                                
                 const menues = await getMenuesApi({
                     search: search, startDate: startDate, endDate: endDate,
                     departureDate: searchDepartureDate,
                     contractorName: contractorNameSearch
                 })
+                
                 setmenuesData(menues.data.menues)
             } else {
                 const menues = await getMenuesApi({})
@@ -113,6 +114,13 @@ const OperationPage = () => {
                 <div className='flex items-center space-x-4'>
                     <Input label='Start Date' onChange={(e) => { setstartDate(e.target.value) }} type='date' value={startDate} />
                     <Input label='End Date' onChange={(e) => { setendDate(e.target.value) }} type='date' value={endDate} />
+
+                    <div className='flex items-center space-x-4 mt-6'>
+                        <Input placeholder='Search...' value={menueSearch} onChange={(e) => { setmenueSearch(e.target.value) }} />
+                        <Button title='Search' onClick={() => {
+                            getMenueData(menueSearch)                            
+                        }} />
+                    </div>
                 </div>
 
                 <div className='flex items-center gap-2'>
@@ -127,7 +135,11 @@ const OperationPage = () => {
                         getMenueData()
                     }} />
                 </div>
-                <OperationMenueTable menues={menuesData} />
+                <OperationMenueTable menues={menuesData} search={menueSearch} 
+                searchDepartureDate={searchDepartureDate} 
+                contractorNameSearch={contractorNameSearch}
+                startDate={startDate}
+                endDate={endDate} />
             </div>
         )
     }

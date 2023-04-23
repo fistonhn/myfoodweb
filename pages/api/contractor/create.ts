@@ -8,8 +8,22 @@ import { NextApiRequest, NextApiResponse } from "next"
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         const { contractors } = req.body as IUploadContractorApi
-        await prisma.contractor.deleteMany()
+        // await prisma.contractor.deleteMany()
         for (const contractor of contractors) {
+
+            const alreadyExist = await prisma.contractor.findFirst({
+                where: {
+                    name: contractor.name
+                }
+            })
+            
+            if (alreadyExist) {
+                return ErrorResponse({
+                    msg: `${contractor.name} Contractor Already Exists`,
+                    res: res,
+                    statusCode: 400
+                })
+            }
             await prisma.contractor.create({
                 data: contractor
             })

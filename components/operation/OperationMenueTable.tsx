@@ -2,14 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { Menue, Categories, Contractor } from '@prisma/client'
 import Dialoge from '@mui/material/Dialog'
 import { handleApiErrors } from '@/utils/handleapierrors'
-import { getAvailableContractorsWithItem, updateCatgoryContractor } from '@/providers/apis'
+import { getMenuesApi } from '@/providers/apis'
 import DialogTitle from '@mui/material/DialogTitle'
 import CheckBox from '@mui/material/Checkbox'
 import { DialogActions } from '@mui/material'
 import { Button } from '../Button/Button'
 import Input from '../Inputs/Input'
 import { updateOperationMenueApi } from '@/providers/apis/operation'
-import { getAllMenuesApi } from '@/providers/apis/menueApis.ts'
 
 import Link from 'next/link'
 import { useAppDispatch, useAppSelector } from '@/store'
@@ -27,26 +26,58 @@ interface MenueTableProp {
 }
 
 
-const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTableProp) => {
+const OperationMenueTable = ({ menues, search, searchDepartureDate, contractorNameSearch, startDate, endDate, isWagePageRequest = false }: MenueTableProp) => {
+    const [menuesData, setmenuesData] = useState(menues)    
+
+    // const getMenueData = async () => {
+    //     const menuesUpdate = await getMenuesApi({})
+    //     setmenuesData(menuesUpdate.data.menues)
+    // }
+
+    const getMenueData = async (search = "") => {
+        try {
+            if (search ) {  
+                console.log('this ', search);
+                                              
+                const menues = await getMenuesApi({
+                    search: search, startDate: startDate, endDate: endDate,
+                    departureDate: searchDepartureDate,
+                    contractorName: contractorNameSearch
+                })
+
+                console.log('mmmm', menues);
+                
+                
+                setmenuesData(menues.data.menues)
+            } else {
+                const menues = await getMenuesApi({})
+                setmenuesData(menues.data.menues)
+            }
+        } catch (error: any) {
+            return handleApiErrors(error.message)
+        }
+    }
 
     const dispatch = useAppDispatch()
     const cstate = useAppSelector(s => s.contractor)
+
+    useEffect(() => {
+        getMenueData()        
+    }, [dispatch])
+    
     const handleShowModal = async (cid: string) => {        
         dispatch(selectContractorsUsingCategoryId({ cid: cid }))
-        dispatch(fetchContractorsThunk(cid)).then(()=> {
+        dispatch(fetchContractorsThunk(cid))
 
-             getAllMenuesApi().then((res)=> console.log('tttttt', res));
-        })
+        getMenueData()
     }
-
-console.log(menues);
 
 
     // get all categories from the system
 
     const categories = []
 
-    menues?.filter((it)=> it.cancel===false)?.map((item)=> {
+    menuesData?.filter((it)=> it.cancel===false)?.map((item)=> {
         item.Categories?.map((it)=>{
             categories.push(it)
         })
@@ -56,7 +87,7 @@ console.log(menues);
         <div className="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
             {
                 cstate.showUpdateContractorModal &&
-                <GetContractorModal />
+                <GetContractorModal {...getMenueData()}/>
             }
             <div className="w-full overflow-x-auto max-h-[650px]">
                 <table className="w-full">
@@ -87,8 +118,8 @@ console.log(menues);
                     </thead>
                     <tbody className="bg-white whitespace-nowrap">
                         {
-                            menues.filter((it)=> it.cancel===false).map((val, index) => (
-                                <tr className="text-gray-700" key={index}>
+                            menuesData.filter((it)=> it.cancel===false).map((val, index) => (
+                                <tr className="text-gray-700 even:bg-#D6EEEE odd:bg-blue-100" key={index}>
                                     <td className="px-4 py-3 border">
                                         {val.name}
                                     </td>

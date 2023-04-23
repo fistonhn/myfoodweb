@@ -29,9 +29,16 @@ export interface IGetMenueApi {
     contractorName?: string
 
 }
+export interface IDeleteMenueApi {
+    selId: any
+}
 
 export const getItemsApi = async (data: IGetItemApi) => {    
     return axios.get('/item/getdata', data)
+}
+
+export const deleteBookingApi = async ({selId}: IDeleteMenueApi) => { 
+    return axios.post('/menue/deletebooking', {selId})
 }
 
 

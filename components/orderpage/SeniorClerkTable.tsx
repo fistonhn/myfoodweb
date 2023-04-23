@@ -26,7 +26,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { getItemsApi } from '@/providers/apis'
-import { createNewCategory } from '@/providers/apis/category'
+import { createNewCategory, deleteCategory } from '@/providers/apis/category'
 
 interface ICategories extends Categories {
     contractor?: Contractor
@@ -348,7 +348,7 @@ const EditAbleColumns = ({ val }: EditAbleColumnsProp) => {
             selectedItems: selectedItems
           })
           
-          alert("created successfully!")
+          alert("added successfully!")
         
           const res = await getMenuesApi({})
           const booking = res.data.menues.filter((it)=>it.id === menue.id)
@@ -458,6 +458,19 @@ const EditAbleColumns = ({ val }: EditAbleColumnsProp) => {
             }
           </div>
         )
+    }
+    const handleDeleteItem = async (id) => {   
+        const selId = {
+            id: id
+        }     
+        await deleteCategory({ selId: selId })
+
+        alert("Item removed successfully!")
+        
+          const res = await getMenuesApi({})
+          const booking = res.data.menues.filter((it)=>it.id === menue.id)
+          setmenue(...booking)
+          setselectedItems([])
     }
     return (
         <>
@@ -601,8 +614,7 @@ const EditAbleColumns = ({ val }: EditAbleColumnsProp) => {
                 <Button title='Manage' onClick={()=>handleOpen(data.id)} />
 
             </td>
-        </>
-
+         </>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -618,10 +630,10 @@ const EditAbleColumns = ({ val }: EditAbleColumnsProp) => {
                     <Typography id="modal-modal-description" sx={{ mt: 4 }}>
                     <div className='bg-white p-2 mt-2 rounded h-[300px] overflow-auto'>
                         {
-                            menue?.Categories?.map((val, index) => (
+                            menue?.Categories?.map((val, index) => (    
                                 <div className='flex items-center'key={index}>
                                     <h1 className='mr-1 mt-3'>{`${index + 1} `}</h1> <h1 className='border p-1 flex-1 bg-white rounded-md mr-3 mt-2'>{val.itemName}</h1>
-                                    <Button title="Remove" onClick={handleUpdate} disabled={!update} className='mt-2'/>
+                                    <Button title="Remove" onClick={()=>handleDeleteItem(val.id)} className='mt-2'/>
                                 </div>
                             ))
                         }
@@ -630,6 +642,7 @@ const EditAbleColumns = ({ val }: EditAbleColumnsProp) => {
                 </Box>
             </Modal>
         </>
+        
     )
 }
 

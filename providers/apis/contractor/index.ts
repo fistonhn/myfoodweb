@@ -5,7 +5,7 @@ export interface IUploadContractorApi {
     contractors: Omit<Contractor, "id" | "documents">[],
     query?: string
 }
-export const uploadContractor = async ({ contractors }: IUploadContractorApi) => {
+export const uploadContractor = async ({ contractors }: IUploadContractorApi) => {    
     return await axios.post(`/contractor/create`, { contractors })
 }
 

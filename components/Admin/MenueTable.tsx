@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react'
+import { deleteBookingApi, getMenuesApi } from '@/providers/apis'
+
 import { Menue, Categories, Contractor } from '@prisma/client'
 import { useAppDispatch, useAppSelector } from '@/store'
 import { GetContractorModal } from './GetContractorsModal/GetContractorModal'
 import { fetchContractorsThunk, selectContractorsUsingCategoryId } from '@/slices/contractors.slice'
+import { Button } from '@/components/Button/Button'
+
 interface ICategories extends Categories {
     contractor?: Contractor
 }
 interface IMenue extends Menue {
+    menueId(id: string, menueId: any): void
     Categories?: ICategories[]
 }
 interface MenueTableProp {
@@ -19,10 +24,32 @@ interface IModal {
 }
 const MenueTable = ({ menues }: MenueTableProp) => {
     const dispatch = useAppDispatch()
+    const [menuesData, setmenuesData] = useState(menues)
+
     const cstate = useAppSelector(s => s.contractor)
     const handleShowModal = (cid: string) => {
         dispatch(selectContractorsUsingCategoryId({ cid: cid }))
         dispatch(fetchContractorsThunk(cid))
+    }
+
+    const getMenueData = async () => {
+        const menuesUpdate = await getMenuesApi({})
+        setmenuesData(menuesUpdate.data.menues)
+    } 
+
+    useEffect(() => {
+        getMenueData()
+    }, [])
+
+    const handleDeleteBooking = async (id: any, menueId: any) => {
+        const selId = {
+            id: id,
+            menueId: menueId
+        }
+        await deleteBookingApi({selId}) 
+        alert('Booking successfully deleted')
+        getMenueData()
+
     }
     return (
         <div className="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
@@ -55,12 +82,13 @@ const MenueTable = ({ menues }: MenueTableProp) => {
                             <th className="px-4 py-3 uppercase">cleaner</th>
                             <th className="px-4 py-3 uppercase">booked By</th>
                             <th className="px-4 py-3 uppercase">booker Mobile Number</th>
+                            <th className="px-4 py-3 uppercase">Action</th>
                         </tr>
                     </thead>
                     <tbody className="bg-white whitespace-nowrap">
                         {
-                            menues.map((val, index) => (
-                                <tr className="text-gray-700" key={index}>
+                            menuesData.map((val, index) => (
+                                <tr className="text-gray-700 even:bg-#D6EEEE odd:bg-blue-100" key={index}>
                                     <td className="px-4 py-3 border">
                                         {val.bookingId}
                                     </td>
@@ -140,6 +168,10 @@ const MenueTable = ({ menues }: MenueTableProp) => {
                                     </td>
                                     <td className="px-4 py-3 border">
                                         {val.bookerMobileNumber}
+                                    </td>
+                                    <td className="px-4 py-3 border">
+                                        <Button title='Delete' className=' relative' onClick={()=>handleDeleteBooking(val.id, val.menueId)}>
+                                        </Button>
                                     </td>
                                 </tr>
                             ))

@@ -7,7 +7,7 @@ import { Contractor } from '@prisma/client'
 import { handleApiErrors } from '@/utils/handleapierrors'
 import { removeContractorFromCategoryAPI } from '@/providers/apis'
 
-const GetContractorModal = () => {
+const GetContractorModal = (getMenueData) => {
     const dispatch = useAppDispatch()
     const contractorState = useAppSelector(s => s.contractor)
     const onClose = () => {
