@@ -34,7 +34,7 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
     const [searchDepartureDate, setsearchDepartureDate] = useState("")
     const [disableContractorEdit, serdisableContractorEdit] = useState(true)
     const [menuesData, setmenuesData] = useState<Menue[]>([])
-    const [menueSearch, setmenueSearch] = useState<string>("")
+    const [menueSearch, setmenueSearch] = useState<string>("")    
     
     const getMenueData = async (search: "") => {      
         try {
@@ -59,10 +59,10 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
     const cstate = useAppSelector(s => s.contractor)
 
     useEffect(() => {
-        getMenueData()
+        getMenueData(menueSearch)
     }, [])
     useEffect(() => {
-        getMenueData()
+        getMenueData(menueSearch)
     }, [menueState.refetchData])
     
     const handleShowModal = async (cid: string) => {                
