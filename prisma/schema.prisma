@@ -53,6 +53,7 @@ model Menue {
   words              String
   cleaner            String
   bookedBy           String
+  note               String
   bookerMobileNumber String
   Categories         Categories[]
   updatedAt          DateTime?    @updatedAt

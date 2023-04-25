@@ -20,6 +20,7 @@ export interface IMenueForm {
     words: string;
     cleaner: string;
     bookedBy: string;
+    note: string;
     bookerMobileNumber: string;
     onion?: boolean
     garlic?: boolean

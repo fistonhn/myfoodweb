@@ -98,8 +98,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             // @ts-ignore
             delete searchQuery.OR
         }
-        console.log(JSON.stringify({ searchQuery }))
-
         const menues = await prisma.menue.findMany({
             where: searchQuery,
             include: {
@@ -117,7 +115,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             statusCode: 200
         })
     } catch (error: any) {
-        return ErrorResponse({
+        console.log(error.message);
+
+        return ErrorResponse({            
             msg: error.message,
             res,
             statusCode: 500

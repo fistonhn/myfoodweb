@@ -8,14 +8,55 @@ export interface UpdateContractorBySelectedOneDTO {
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         const { categoryID, contractorID } = req.body as UpdateContractorBySelectedOneDTO
-        await prisma.categories.update({
+
+        const categoryData = await prisma.categories.findFirst({
             where: {
                 id: categoryID
-            },
-            data: {
-                contractorId: contractorID
             }
-        })
+        })        
+
+        if(categoryData?.contractorId === null) {
+            await prisma.categories.update({
+                where: {
+                    id: categoryID
+                },
+                data: {
+                    contractorId: contractorID
+                }
+            })
+        } else {            
+            const contractorExisist = await prisma.contractor.findFirst({
+                where: {
+                    id: contractorID
+                }
+            })            
+
+            if(contractorExisist.item === 'cleaner' || contractorExisist.item === 'helper' || contractorExisist.item === 'head') {
+                
+               await prisma.categories.create({
+                    data: {
+                        contractorId: contractorID,
+                        menueId: categoryData?.menueId,
+                        itemName: contractorExisist?.item,
+                        comment: ''
+                    }
+                })
+                
+            } else {
+                await prisma.categories.create({
+                    data: {
+                        contractorId: contractorID,
+                        menueId: categoryData?.menueId,
+                        itemName: 'contractor',
+                        comment: ''
+                    }
+                })                
+            }
+        }
+        
+
+        
+        
         return SuccessResponse({
             msg: "updated successfully",
             res,

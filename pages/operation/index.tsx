@@ -12,134 +12,77 @@ import Dialog from '@mui/material/Dialog'
 import { ContractorModel } from '@/components/ContractorModel/ContractorModel'
 import { GetServerSideProps } from 'next'
 import { getSession } from 'next-auth/react'
-import { convertJSONintoExcelFile } from '@/utils/convertJSONintoExcelFile'
 import { OperationMenueTable } from '@/components/operation/OperationMenueTable'
+
+type TContracotr = (Contractor)
+
 const OperationPage = () => {
-    const [startDate, setstartDate] = useState("")
-    const [endDate, setendDate] = useState("")
-    const [contractorNameSearch, setcontractorNameSearch] = useState("")
-    const [searchDepartureDate, setsearchDepartureDate] = useState("")
-    const [disableContractorEdit, serdisableContractorEdit] = useState(true)
-    const [menuesData, setmenuesData] = useState<Menue[]>([])
-    const [menueSearch, setmenueSearch] = useState<string>("")
+    const [disableContractorEdit, setdisableContractorEdit] = useState(true)
     const [contractorDialogeState, setcontractorDialogeState] = useState(false)
-    const getMenueData = async (search = "") => {
-        try {
-            if (search || (startDate && endDate) || searchDepartureDate || contractorNameSearch) {                                
-                const menues = await getMenuesApi({
-                    search: search, startDate: startDate, endDate: endDate,
-                    departureDate: searchDepartureDate,
-                    contractorName: contractorNameSearch
-                })
-                
-                setmenuesData(menues.data.menues)
-            } else {
-                const menues = await getMenuesApi({})
-                setmenuesData(menues.data.menues)
-            }
-        } catch (error: any) {
-            return handleApiErrors(error.message)
-        }
-    }
-    useEffect(() => {
-        getMenueData()
-    }, [])
-    const handleExcelJsonData = async (data: Contractor[]) => {
-        let updatedData = [] as Omit<Contractor, "id" | "documents">[]
-        const prevDate = new Date()
-        prevDate.setDate(prevDate.getDate() - 1)
-        data.forEach((d) => {
-            console.log({ d })
-            updatedData.push({
-                name: String(d.name),
-                item: String(d.item),
-                age: Number(d.age),
-                wage: Number(d.wage),
-                group: String(d.group),
-                assignTillDate: new Date(prevDate),
-                area: String(d.area),
-                address: String(d.address),
-                identitynumber: String(d.identitynumber),
-                phone: String(d.phone)
-            })
-        })
-        try {
 
-            const res = await uploadContractor({
-                contractors: updatedData
-            })
-            alert(res.data.msg)
-        } catch (error: any) {
-            const err = handleApiErrors(error)
-            alert(err)
-        }
-    }
-    const handleFileChange = (_e: React.ChangeEvent<HTMLInputElement>) => {
-        _e.preventDefault();
-        if (_e.target.files) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const data = e.target?.result;
-                const workbook = xlsx.read(data, { type: "array" });
-                const sheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[sheetName];
-                const json = xlsx.utils.sheet_to_json(worksheet);
-                handleExcelJsonData(json as any)
-                _e.target.value = ""
-            };
-            reader.readAsArrayBuffer(_e.target.files[0]);
-        }
-    }
-    const handleConvertJSONToExcel = () => {
-        try {
-            const data = [] as any[]
-            menuesData.forEach(v => {
-                data.push({
-                    ...v,
-                    serviceTime: new Date(v.serviceTime).toLocaleTimeString(),
-                    departureTime: new Date(v.departureTime).toLocaleTimeString(),
-                    functionDate: new Date(v.functionDate).toLocaleDateString(),
-                    departureDate: new Date(v.departureDate).toLocaleDateString()
+        const [formData, setformData] = useState<TContracotr>({ id: '', name: '', item: '', age: null, wage: null, group: '', assignTillDate: null, area: '', phone: '', 
+                                              address: null, identitynumber: '' })
 
-                })
-            })
-            convertJSONintoExcelFile(data, "MENUE DATA")
-        } catch (error: any) {
-            alert(error.message)
-        }
+    const informationForm = () => {
+        return (
+          <div className='grid grid-cols-2 w-[60%] mx-auto gap-5'>
+            <Input required label='Name' name='name' onChange={handleChange} value={formData.name} type="text" />
+            <Input required label='Item' name='item' onChange={handleChange} value={formData.item} type="text"/>
+    
+            <Input required label='Age' name='age' onChange={handleChange} value={formData.age} type="number" />
+            <Input required label='Wage' name='wage' onChange={handleChange} value={formData.wage} type="number" />
+
+            <Input required label='Group' name='group' onChange={handleChange} value={formData.group} type="text" />
+            <Input required label='Assign Till Date' name='assignTillDate' onChange={handleChange} value={formData.assignTillDate} type="date" />
+
+            <Input required label='Area' name='area' onChange={handleChange} value={formData.area} type="text" />
+            <Input required label='Phone' name='phone' onChange={handleChange} value={formData.phone} type="text" />
+    
+            <Input required label='Address' name='address' onChange={handleChange} value={formData.address} type="text" />
+            <Input required label='Identity Number' name='identitynumber' onChange={handleChange} value={formData.identitynumber} type="text" />
+          </div>
+        )
     }
+    
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target
+            setformData({
+                ...formData,
+                [name]: value
+            })
+    }
+
+    const handleSubmitForm = async (e: React.FormEvent) => {
+        e.preventDefault()
+        try {
+        const  contractors = [{ 
+            name: formData.name, 
+            item: formData.item, 
+            age: Number(formData.age), 
+            wage: Number(formData.wage), 
+            group: formData.group, 
+            assignTillDate: new Date(formData.assignTillDate), 
+            area: formData.area, 
+            phone: formData.phone, 
+            address: formData.address, 
+            identitynumber: formData.identitynumber
+        }]
+            
+          await uploadContractor({ contractors: contractors })
+          
+          alert("Contractor uploaded successfully!")
+        } catch (error: any) {
+          const err = handleApiErrors(error)
+          // console.log('selectedItems', error);
+    
+          alert(err)
+        }
+      }
+
     const manuetable = () => {
         return (
             <div className='px-5 space-y-2'>
-                <div className='flex items-center space-x-4'>
-                    <Input label='Start Date' onChange={(e) => { setstartDate(e.target.value) }} type='date' value={startDate} />
-                    <Input label='End Date' onChange={(e) => { setendDate(e.target.value) }} type='date' value={endDate} />
-
-                    <div className='flex items-center space-x-4 mt-6'>
-                        <Input placeholder='Search...' value={menueSearch} onChange={(e) => { setmenueSearch(e.target.value) }} />
-                        <Button title='Search' onClick={() => {
-                            getMenueData(menueSearch)                            
-                        }} />
-                    </div>
-                </div>
-
-                <div className='flex items-center gap-2'>
-                    <Button title='Search' onClick={() => {
-                        getMenueData(menueSearch)
-                    }} />
-                    <Button title='Download' onClick={handleConvertJSONToExcel} />
-                    <Button title='Reset' onClick={() => {
-                        setstartDate("")
-                        setendDate("")
-                        setmenueSearch("")
-                        getMenueData()
-                    }} />
-                </div>
-                <OperationMenueTable menues={menuesData} search={menueSearch} 
-                searchDepartureDate={searchDepartureDate} 
-                contractorNameSearch={contractorNameSearch}
-                startDate={startDate}
-                endDate={endDate} />
+                <OperationMenueTable />
             </div>
         )
     }
@@ -164,6 +107,12 @@ const OperationPage = () => {
             <Header />
             {manuetable()}
             {contractorModals()}
+
+            <h1 className='mb-2 mt-7 text-center font-bold text-lg text-white'>Add new contractor</h1>
+            <form onSubmit={handleSubmitForm} >
+                {informationForm()}
+                <Button title='Submit' type='submit' className='ml-[20%] mt-4 content-center mb-7' />
+            </form>
         </div>
     )
 }

@@ -42,6 +42,7 @@ const intitialData = {
   vehicleNumber: "",
   venue: "",
   words: "",
+  note: "",
   onion: false,
   garlic: false
 } as IMenueForm
@@ -124,6 +125,8 @@ const Order = () => {
         <Input label='Words' name='words' onChange={handleChange} value={formData.words} type="text" />
         <Select required label='Onion' onChange={(e) => { setformData((prev) => ({ ...prev, onion: e.target.value === "Yes" ? true : false })) }} options={[{ content: "No", value: "No" }, { content: "Yes", value: "Yes" }]} />
         <Select required label='Garlic' onChange={(e) => { setformData((prev) => ({ ...prev, garlic: e.target.value === "Yes" ? true : false })) }} options={[{ content: "No", value: "No" }, { content: "Yes", value: "Yes" }]} />
+        <Input label='Note' name='note' onChange={handleChange} value={formData.note} type="text" />
+
       </div>
     )
   }
@@ -300,6 +303,7 @@ const Order = () => {
           vehicleNumber: formData.vehicleNumber,
           venue: formData.venue,
           words: formData.words,
+          note: formData.note,
           id: "",
           onion: formData.onion !== undefined ? formData.onion : null,
           garlic: formData.garlic !== undefined ? formData.garlic : null

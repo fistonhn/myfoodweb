@@ -9,7 +9,7 @@ import { DialogActions } from '@mui/material'
 import { Button } from '../Button/Button'
 import Input from '../Inputs/Input'
 import { updateOperationMenueApi } from '@/providers/apis/operation'
-
+import { convertJSONintoExcelFile } from '@/utils/convertJSONintoExcelFile'
 import Link from 'next/link'
 import { useAppDispatch, useAppSelector } from '@/store'
 import { fetchContractorsThunk, selectContractorsUsingCategoryId } from '@/slices/contractors.slice'
@@ -26,28 +26,25 @@ interface MenueTableProp {
 }
 
 
-const OperationMenueTable = ({ menues, search, searchDepartureDate, contractorNameSearch, startDate, endDate, isWagePageRequest = false }: MenueTableProp) => {
-    const [menuesData, setmenuesData] = useState(menues)    
-
-    // const getMenueData = async () => {
-    //     const menuesUpdate = await getMenuesApi({})
-    //     setmenuesData(menuesUpdate.data.menues)
-    // }
-
-    const getMenueData = async (search = "") => {
+const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTableProp) => {
+    const menueState = useAppSelector(s => s.menue)
+    const [startDate, setstartDate] = useState("")
+    const [endDate, setendDate] = useState("")
+    const [contractorNameSearch, setcontractorNameSearch] = useState("")
+    const [searchDepartureDate, setsearchDepartureDate] = useState("")
+    const [disableContractorEdit, serdisableContractorEdit] = useState(true)
+    const [menuesData, setmenuesData] = useState<Menue[]>([])
+    const [menueSearch, setmenueSearch] = useState<string>("")
+    
+    const getMenueData = async (search: "") => {      
         try {
-            if (search ) {  
-                console.log('this ', search);
-                                              
+            if (search || (startDate && endDate) || searchDepartureDate || contractorNameSearch) {                                
                 const menues = await getMenuesApi({
                     search: search, startDate: startDate, endDate: endDate,
                     departureDate: searchDepartureDate,
                     contractorName: contractorNameSearch
                 })
-
-                console.log('mmmm', menues);
-                
-                
+                console.log('searchccxxmenues', menues);
                 setmenuesData(menues.data.menues)
             } else {
                 const menues = await getMenuesApi({})
@@ -62,126 +59,232 @@ const OperationMenueTable = ({ menues, search, searchDepartureDate, contractorNa
     const cstate = useAppSelector(s => s.contractor)
 
     useEffect(() => {
-        getMenueData()        
-    }, [dispatch])
+        getMenueData()
+    }, [])
+    useEffect(() => {
+        getMenueData()
+    }, [menueState.refetchData])
     
-    const handleShowModal = async (cid: string) => {        
+    const handleShowModal = async (cid: string) => {                
         dispatch(selectContractorsUsingCategoryId({ cid: cid }))
         dispatch(fetchContractorsThunk(cid))
-
-        getMenueData()
     }
 
+    const handleConvertJSONToExcel = () => {
+        try {
+            const data = [] as any[]
+            menuesData.forEach(v => {
+                data.push({
+                    ...v,
+                    serviceTime: new Date(v.serviceTime).toLocaleTimeString(),
+                    departureTime: new Date(v.departureTime).toLocaleTimeString(),
+                    functionDate: new Date(v.functionDate).toLocaleDateString(),
+                    departureDate: new Date(v.departureDate).toLocaleDateString()
+
+                })
+            })
+            convertJSONintoExcelFile(data, "MENUE DATA")
+        } catch (error: any) {
+            alert(error.message)
+        }
+    }
 
     // get all categories from the system
-
-    const categories = []
-
+    const categories: ICategories[] = []
     menuesData?.filter((it)=> it.cancel===false)?.map((item)=> {
         item.Categories?.map((it)=>{
             categories.push(it)
         })
     })
-    
+        
     return (
-        <div className="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
-            {
-                cstate.showUpdateContractorModal &&
-                <GetContractorModal {...getMenueData()}/>
-            }
-            <div className="w-full overflow-x-auto max-h-[650px]">
-                <table className="w-full">
-                    <thead className='sticky top-0'>
-                        <tr className="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600 whitespace-nowrap">
-                            <th className="px-4 py-3 uppercase">guest name</th>
-                            <th className="px-4 py-3 uppercase">Categories</th>
-                            {/* <th className="px-4 py-3 uppercase">function</th> */}
-                            {/* <th className="px-4 py-3 uppercase whitespace-nowrap">name</th> */}
-                            <th className="px-4 py-3 uppercase">function date</th>
-                            <th className="px-4 py-3 uppercase">service time</th>
-                            <th className="px-4 py-3 uppercase">departure date</th>
-                            <th className="px-4 py-3 uppercase">departure time</th>
-                            <th className="px-4 py-3 uppercase">guest mobile number</th>
-                            {/* <th className="px-4 py-3 uppercase">Departure Time</th> */}
-                            {/* <th className="px-4 py-3 uppercase">PAX</th> */}
-                            {/* <th className="px-4 py-3 uppercase">Special Instruction</th> */}
-                            <th className="px-4 py-3 uppercase">Head Name</th>
-                            <th className="px-4 py-3 uppercase">Head Mobile Number</th>
-                            <th className="px-4 py-3 uppercase">Driver Name</th>
-                            <th className="px-4 py-3 uppercase">Vehicle Number</th>
-                            {/* <th className="px-4 py-3 uppercase">words</th> */}
-                            <th className="px-4 py-3 uppercase">cleaner</th>
-                            <th className="px-4 py-3 uppercase">actions</th>
-                            {/* <th className="px-4 py-3 uppercase">booked By</th> */}
-                            {/* <th className="px-4 py-3 uppercase">booker Mobile Number</th> */}
-                        </tr>
-                    </thead>
-                    <tbody className="bg-white whitespace-nowrap">
-                        {
-                            menuesData.filter((it)=> it.cancel===false).map((val, index) => (
-                                <tr className="text-gray-700 even:bg-#D6EEEE odd:bg-blue-100" key={index}>
-                                    <td className="px-4 py-3 border">
-                                        {val.name}
-                                    </td>
-                                    <td className="px-4 py-3 border space-y-4">
-                                        { 
-                                                [...new Map(val.Categories?.map((item: any) => [item['itemName'], item])).values()]?.map((c: any, ci) => {
-                                                return (
-                                                    <div key={ci} className=" bg-gray-100 p-[1px]">
-                                                        <span className='font-bold text-md underline underline-offset-4 mr-4 overflow-y-auto'>{` `}
-                                                            {c.itemName} 
+        <>
+            <div className='flex items-center space-x-4'>
+                    <Input label='Start Date' onChange={(e) => { setstartDate(e.target.value) }} type='date' value={startDate} />
+                    <Input label='End Date' onChange={(e) => { setendDate(e.target.value) }} type='date' value={endDate} />
+                </div>
+                <div className='flex items-center'>
+                    <Input type='date' label='Departure Date' value={searchDepartureDate}
+                        onChange={(e) => { setsearchDepartureDate(e.target.value) }}
+                    />
+                </div>
+                <div className='flex items-center gap-2'>
+                    <Input placeholder='Search...' value={menueSearch} onChange={(e) => { setmenueSearch(e.target.value) }} />
+                    <Button title='Search' onClick={() => {
+                        getMenueData(menueSearch)
+                    }} />
+                    <Button title='Download' onClick={handleConvertJSONToExcel} />
+                    <Button
+                        title='Reset'
+                        onClick={() => {
+                            setsearchDepartureDate("")
+                            setstartDate("")
+                            setendDate("")
+                            setmenueSearch("")
+                            getMenueData()
+                        }}
+                    />
+                </div>
+            <div className="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
+                {
+                    cstate.showUpdateContractorModal &&
+                    <GetContractorModal {...getMenueData()}/>
+                }
+                <div className="w-full overflow-x-auto max-h-[650px]">
+                    <table className="w-full">
+                        <thead className='sticky top-0'>
+                            <tr className="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600 whitespace-nowrap">
+                                <th className="px-4 py-3 uppercase">guest name</th>
+                                <th className="px-4 py-3 uppercase">Categories</th>
+                                <th className="px-4 py-3 uppercase">function date</th>
+                                <th className="px-4 py-3 uppercase">service time</th>
+                                <th className="px-4 py-3 uppercase">departure date</th>
+                                <th className="px-4 py-3 uppercase">departure time</th>
+                                <th className="px-4 py-3 uppercase">guest mobile number</th>
+                                <th className="px-4 py-3 uppercase">Head Name</th>
+                                <th className="px-4 py-3 uppercase">Head Mobile Number</th>
+                                <th className="px-4 py-3 uppercase">Cleaner</th>
+                                <th className="px-4 py-3 uppercase">Driver Name</th>
+                                <th className="px-4 py-3 uppercase">Vehicle Number</th>
+                                <th className="px-4 py-3 uppercase">actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white whitespace-nowrap">
+                            {
+                                menuesData.filter((it)=> it.cancel===false).map((val, index) => (
+                                    <tr className="text-gray-700 even:bg-#D6EEEE odd:bg-blue-100" key={index}>
+                                        <td className="px-4 py-3 border">
+                                            {val.name}
+                                        </td>
+                                        <td className="px-4 py-3 border space-y-4">
+                                            { 
+                                                    [...new Map(val.Categories?.map((item: any) => [item['itemName'], item])).values()]?.filter((item)=>item.itemName !== 'head' && item.itemName !== 'helper' && item.itemName !== 'contractor' && item.itemName !== 'cleaner')?.map((c: any, ci) => {
+                                                    return (
+                                                        <div key={ci} className=" bg-gray-100 p-[1px]">
+                                                            <span className='font-bold text-md underline underline-offset-4 overflow-y-auto'>
+                                                                {c.itemName}
 
-                                                            {((val.Categories.filter((it)=> it.menueId === val.id &&  it.itemName === c.itemName)).length) === 1 ? '' : ' ( ' }
+                                                                {((val.Categories.filter((it)=> it.menueId === val.id &&  it.itemName === c.itemName)).length) === 1 ? '' : ' ( ' }
 
-                                                            {((val.Categories.filter((it)=> it.menueId === val.id &&  it.itemName === c.itemName)).length) === 1 ? '' :
-                                                            ((val.Categories.filter((it)=> it.menueId === val.id &&  it.itemName === c.itemName)).length) }
+                                                                {((val.Categories.filter((it)=> it.menueId === val.id &&  it.itemName === c.itemName)).length) === 1 ? '' :
+                                                                ((val.Categories.filter((it)=> it.menueId === val.id &&  it.itemName === c.itemName)).length) }
 
-                                                            {((val.Categories.filter((it)=> it.menueId === val.id &&  it.itemName === c.itemName)).length) === 1 ? ' ' : ' ) ' }
+                                                                {((val.Categories.filter((it)=> it.menueId === val.id &&  it.itemName === c.itemName)).length) === 1 ? ' ' : ' ) ' }
 
-                                                        </span>
-                                                        <span >
-                                                            
-                                                            {/* CT- {c.contractor?.name} */}
+                                                            </span>
+                                                            <span className='pl-1'>
+                                                                {
+                                                                    val.Categories.filter((it)=> (it.menueId === val.id &&  it.itemName === c.itemName) || (it.menueId === val.id && it.itemName === 'contractor')).map((ctgr, index)=> (
+                                                                        <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2' onClick={() => { handleShowModal(ctgr.id) }} key={index}>
+                                                                            {
+                                                                                ctgr?.contractor?.item !== 'helper' && ctgr?.contractor?.item !== 'head' && ctgr?.contractor?.item !== 'cleaner'? 
+                                                                                `MP- ${ctgr?.contractor?.name}` : ''
+                                                                            }
+                                                                        </span>
+                                                                    ))
+                                                                }
+                                                            </span>
 
-                                                            {(val.Categories.filter((it)=> it.menueId === val.id &&  it.itemName === c.itemName))?.map((ct, index)=>{
-                                                                return(
-                                                                    <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2' 
-                                                                        onClick={() => { handleShowModal(ct.id) }} key={index}>
-                                                                        
-                                                                        {'Ct' + Number(index+1) + '-'} {ct.contractor?.name}</span>
-                                                                )
-                                                            })}
-    
-                                                        </span>
-                                                    </div>
+                                                            <span>
+                                                                {   
+                                                                    val?.Categories.filter((it)=> it.menueId === val.id && (it.itemName === 'helper' || it?.contractor?.item === 'helper')).map((ctgr, index)=> (
+                                                                        // ctgr?.contractor === null || (ctgr.itemName === 'helper' || ctgr?.contractor?.item !== 'helper') ? <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2' onClick={() => { handleShowModal(ctgr.id) }}> Add H</span> :
+                                                                        <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2' onClick={() => { handleShowModal(ctgr.id) }} key={index}>
+                                                                            {   
+                                                                                ctgr?.contractor?.item === 'helper'? 
+                                                                                'HP-' : ''
+                                                                            } 
+                                                                            {ctgr?.contractor?.item === 'helper' ? ctgr?.contractor?.name : ''}
+                                                                        </span>
+                                                                    ))
+                                                                }
+
+                                                            </span>
+                                                        </div>
+                                                    )
+                                                }
                                                 )
                                             }
-                                            )
-                                        }
-                                    </td>
-                                    <td className="px-4 py-3 border">
-                                        {new Date(val.functionDate).toLocaleDateString()}
-                                    </td>
-                                    <td className="px-4 py-3 border">
-                                        {new Date(val.serviceTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
-                                    </td>
-                                    <td className="px-4 py-3 border">
-                                        {new Date(val.departureDate).toLocaleDateString()}
-                                    </td>
-                                    <td className="px-4 py-3 border">
-                                        {new Date(val.departureTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
-                                    </td>
-                                    <td className="px-4 py-3 border">
-                                        {val.mobile}
-                                    </td>
-                                    <EditAbleColumns isWagePageRequest={isWagePageRequest} val={val} />
-                                </tr>
-                            ))
-                        }
-                    </tbody>
-                </table>
+                                        </td>
+                                        <td className="px-4 py-3 border">
+                                            {new Date(val.functionDate).toLocaleDateString()}
+                                        </td>
+                                        <td className="px-4 py-3 border">
+                                            {new Date(val.serviceTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
+                                        </td>
+                                        <td className="px-4 py-3 border">
+                                            {new Date(val.departureDate).toLocaleDateString()}
+                                        </td>
+                                        <td className="px-4 py-3 border">
+                                            {new Date(val.departureTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
+                                        </td>
+                                        <td className="px-4 py-3 border">
+                                            {val.mobile}
+                                        </td>
+                                        <td className="px-4 py-3 border space-y-4">
+                                            { 
+                                                [...new Map(val.Categories?.map((item: any) => [item['itemName'], item])).values()]?.filter((item)=>item.itemName !== 'head' && item.itemName !== 'helper' && item.itemName !== 'contractor' && item.itemName !== 'cleaner')?.map((c: any, ci) => {
+                                                    return (
+                                                        <div key={ci} className=" bg-gray-100 p-[1px]">
+                                                            <span>
+                                                                {
+                                                                    val.Categories.filter((it)=> it.menueId === val.id &&  it.itemName === 'head').map((ctgr, index)=> (
+                                                                        <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2' onClick={() => { handleShowModal(ctgr.id) }} key={index}>
+                                                                            {
+                                                                                ctgr?.contractor?.item === 'head'? 
+                                                                                'Hd-' : ''
+                                                                            } 
+                                                                            {ctgr?.contractor?.item === 'head' ? ctgr?.contractor?.name : ''}
+                                                                        </span>
+                                                                    ))
+                                                                }
+
+                                                            </span>
+                                                        </div>
+                                                    )
+                                                }
+                                                )
+                                            }
+                                        </td>
+                                        <td className="px-4 py-3 border">
+                                            {val.headMobileNumber}
+                                        </td>
+
+                                        <td className="px-4 py-3 border space-y-4">
+                                            { 
+                                                [...new Map(val.Categories?.map((item: any) => [item['itemName'], item])).values()]?.filter((item)=>item.itemName !== 'head' && item.itemName !== 'helper' && item.itemName !== 'contractor' && item.itemName !== 'cleaner')?.map((c: any, ci) => {
+                                                    return (
+                                                        <div key={ci} className=" bg-gray-100 p-[1px]">
+                                                            <span>
+                                                                {
+                                                                    val.Categories.filter((it)=> it.menueId === val.id && it.contractor?.item === 'cleaner').map((ctgr, index)=> (
+                                                                        <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2' onClick={() => { handleShowModal(ctgr.id) }} key={index}>
+                                                                            {
+                                                                                ctgr?.contractor?.item === 'cleaner'? 
+                                                                                'Cl-' : ''
+                                                                            } 
+                                                                            {ctgr?.contractor?.item === 'cleaner' ? ctgr?.contractor?.name : ''}
+                                                                        </span>
+                                                                    ))
+                                                                }
+
+                                                            </span>
+                                                        </div>
+                                                    )
+                                                }
+                                                )
+                                            }
+                                        </td>
+
+                                        <EditAbleColumns isWagePageRequest={isWagePageRequest} val={val} />
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+        </>
     )
 }
 
@@ -204,10 +307,10 @@ const EditAbleColumns = ({ val, isWagePageRequest }: EditAbleColumnsProp) => {
         try {
             await updateOperationMenueApi({
                 data: {
-                    cleaner: data.cleaner,
+                    // cleaner: data.cleaner,
                     driverName: data.driverName,
-                    headMobileNumber: data.headMobileNumber,
-                    headName: data.headName,
+                    // headMobileNumber: data.headMobileNumber,
+                    // headName: data.headName,
                     vehicleNumber: data.vehicleNumber,
                     id: data.id
                 }
@@ -220,7 +323,7 @@ const EditAbleColumns = ({ val, isWagePageRequest }: EditAbleColumnsProp) => {
     }
     return (
         <>
-            <td className="px-4 py-3 border" >
+            {/* <td className="px-4 py-3 border" >
                 {
                     update ?
                         <Input name='headName' value={data.headName} onChange={handleChange} />
@@ -235,7 +338,7 @@ const EditAbleColumns = ({ val, isWagePageRequest }: EditAbleColumnsProp) => {
                         :
                         data.headMobileNumber
                 }
-            </td>
+            </td> */}
             <td className="px-4 py-3 border">
                 {
                     update ?
@@ -252,14 +355,14 @@ const EditAbleColumns = ({ val, isWagePageRequest }: EditAbleColumnsProp) => {
                         data.vehicleNumber
                 }
             </td>
-            <td className="px-4 py-3 border">
+            {/* <td className="px-4 py-3 border">
                 {
                     update ?
                         <Input name='cleaner' value={data.cleaner} onChange={handleChange} />
                         :
                         data.cleaner
                 }
-            </td>
+            </td> */}
             <td className="px-4 py-3 border space-x-3">
                 {
                     isWagePageRequest ?

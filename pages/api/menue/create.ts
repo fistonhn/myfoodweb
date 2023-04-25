@@ -8,15 +8,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         let { formdata, selectedItems } = req.body as ICreateMenueApi
 
-        console.log('selectedItems', selectedItems)
-
         const { id, ...restFormData } = formdata        
 
         const _menue = await prisma.menue.create({
             data: restFormData
         })
 
-        console.log('menue', _menue)
         for (let item of selectedItems) {
             let currentDate = new Date();
             const availableContractors = await prisma.contractor.findMany({
@@ -139,7 +136,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         } else {
             cleaners.push(_menue.cleaner)
         }
-        console.log("cleaners", cleaners)
         for (let i = 0; i < cleaners.length; i++) {
             if (cleaners[i]) {
                 const findCleanerContractor = await prisma.contractor.findFirst({

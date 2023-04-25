@@ -77,7 +77,7 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                             {
                                 tableData.filter(f => (f.itemName !== HEAD_CONST && f.itemName !== CLEANER_CONST)).map((c, ci) => (
                                     <tr className="">
-                                        <td className="px-1 py-2 border-2 border-black w-[19%]">
+                                        <td className="px-1 py-2 border-2 border-black w-[12.5%]">
                                             {ci + 1}
                                         </td>
                                         <td className="px-1 py-2 border-2 border-black ">
@@ -87,7 +87,6 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                                         </td>
                                         <td className="px-1 py-2 border-2 border-black w-[50%]">
                                             {c.contractors.map((cont, i) => `${cont} ${i < c.contractors.length - 1 ? "," : ""}`)}
-
                                         </td>
                                     </tr>
                                 ))
@@ -144,7 +143,7 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                                     {menue.bookedBy}
                                 </td>
                                 <td className="px-1 py-3 border-2 border-black">
-                                    WORDS:-  {menue.words}
+                                    <span>WORDS:-</span> <span className='ml-2'>{menue.words}</span> 
                                 </td>
                             </tr>
                             <tr className="">
@@ -155,22 +154,14 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                                     {menue.bookerMobileNumber}
                                 </td>
                                 <td className="px-1 py-3 border-2 border-black">
-                                    CLEANER:-  {menue.cleaner}
-                                </td>
-                            </tr>
-                            <tr className="">
-                                <td className="px-1 py-3 border-b-2 border-l-2 border-black font-bold">
-                                    NOTE:
-                                </td>
-                                <td className="px-1 py-3 border-b-2 border-black">
-                                    {/* {menue.bookerMobileNumber} */}
-                                </td>
-                                <td className="px-1 py-3 border-b-2 border-r-2 border-black">
-                                    {/* CLEANER:-  {menue.cleaner} */}
+                                    <span>CLEANER:-</span> <span className='ml-2'>{menue.cleaner}</span> 
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                    <div className="row-span-3 px-1 py-3 border-b-2 border-r-2 border-l-2 border-black font-extrabold text-xl">
+                        <span>NOTE:-</span> <span className='ml-2'>{menue.note}</span> 
+                    </div>
                 </div>
             </div>
             <h1 className='text-xl text-center tracking-tight mb-5'>

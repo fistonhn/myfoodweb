@@ -8,7 +8,7 @@ import { handleApiErrors } from '@/utils/handleapierrors'
 import { GetServerSideProps } from 'next'
 import { getSession } from 'next-auth/react'
 import { Button } from '@/components/Button/Button'
-import { Categories, Contractor, ContractorDocs } from '@prisma/client'
+import { Contractor } from '@prisma/client'
 
 type TContracotr = (Contractor)
 

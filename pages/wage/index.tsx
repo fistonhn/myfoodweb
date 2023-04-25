@@ -3,8 +3,6 @@ import { querywageApi } from '@/providers/apis'
 import React, { useState } from 'react'
 import { Menue } from '@prisma/client'
 import { handleApiErrors } from '@/utils/handleapierrors'
-import { Button } from '@/components/Button/Button'
-import Input from '@/components/Inputs/Input'
 import Dialog from '@mui/material/Dialog'
 import { ContractorModel } from '@/components/ContractorModel/ContractorModel'
 import { getSession } from 'next-auth/react'
@@ -29,17 +27,6 @@ const WagePage = () => {
     const manuetable = () => {
         return (
             <div className='px-5 space-y-2'>
-                <div className='flex items-center space-x-3'>
-                    <Input type='date' label='Start Date' onChange={(e) => {
-                        setstartDate(e.target.value)
-                    }} value={startDate} />
-                    <Input type='date' onChange={(e) => {
-                        setendDate(e.target.value)
-                    }} label='End Date' value={endDate} />
-                </div>
-                <div className='flex items-center gap-2'>
-                    <Button title='Search' onClick={() => { getMenueData() }} />
-                </div>
                 <OperationMenueTable isWagePageRequest={true} menues={menuesData} />
             </div>
         )
