@@ -34,7 +34,11 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
     const [searchDepartureDate, setsearchDepartureDate] = useState("")
     const [disableContractorEdit, serdisableContractorEdit] = useState(true)
     const [menuesData, setmenuesData] = useState<Menue[]>([])
-    const [menueSearch, setmenueSearch] = useState<string>("")    
+    const [menueSearch, setmenueSearch] = useState<string>("")  
+    
+    
+
+    console.log('pppppppp', menues)
     
     const getMenueData = async (search: "") => {      
         try {
@@ -151,7 +155,7 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
                         </thead>
                         <tbody className="bg-white whitespace-nowrap">
                             {
-                                menuesData.filter((it)=> it.cancel===false).map((val, index) => (
+                               ( menuesData ? menuesData : menues)?.filter((it)=> it.cancel===false).map((val, index) => (
                                     <tr className="text-gray-700 even:bg-#D6EEEE odd:bg-blue-100" key={index}>
                                         <td className="px-4 py-3 border">
                                             {val.name}

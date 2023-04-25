@@ -17,11 +17,38 @@ import { OperationMenueTable } from '@/components/operation/OperationMenueTable'
 type TContracotr = (Contractor)
 
 const OperationPage = () => {
-    const [disableContractorEdit, setdisableContractorEdit] = useState(true)
-    const [contractorDialogeState, setcontractorDialogeState] = useState(false)
-
         const [formData, setformData] = useState<TContracotr>({ id: '', name: '', item: '', age: null, wage: null, group: '', assignTillDate: null, area: '', phone: '', 
                                               address: null, identitynumber: '' })
+
+        const [startDate, setstartDate] = useState("")
+        const [endDate, setendDate] = useState("")
+        const [contractorNameSearch, setcontractorNameSearch] = useState("")
+        const [searchDepartureDate, setsearchDepartureDate] = useState("")
+        const [disableContractorEdit, serdisableContractorEdit] = useState(true)
+        const [menuesData, setmenuesData] = useState<Menue[]>([])
+        const [menueSearch, setmenueSearch] = useState<string>("")
+        const [contractorDialogeState, setcontractorDialogeState] = useState(false)
+
+        const getMenueData = async (search = "") => {
+            try {
+                if (search || (startDate && endDate) || searchDepartureDate || contractorNameSearch) {
+                    const menues = await getMenuesApi({
+                        search: search, startDate: startDate, endDate: endDate,
+                        departureDate: searchDepartureDate,
+                        contractorName: contractorNameSearch
+                    })
+                    setmenuesData(menues.data.menues)
+                } else {
+                    const menues = await getMenuesApi({})
+                    setmenuesData(menues.data.menues)
+                }
+            } catch (error: any) {
+                return handleApiErrors(error.message)
+            }
+        }
+        useEffect(() => {
+            getMenueData()
+        }, [])
 
     const informationForm = () => {
         return (
@@ -82,7 +109,7 @@ const OperationPage = () => {
     const manuetable = () => {
         return (
             <div className='px-5 space-y-2'>
-                <OperationMenueTable menues={[]} />
+                <OperationMenueTable menues={menuesData} />
             </div>
         )
     }
