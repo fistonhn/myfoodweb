@@ -82,7 +82,7 @@ const OperationPage = () => {
     const manuetable = () => {
         return (
             <div className='px-5 space-y-2'>
-                <OperationMenueTable />
+                <OperationMenueTable menues={[]} />
             </div>
         )
     }
