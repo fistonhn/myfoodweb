@@ -64,17 +64,19 @@ model Menue {
 }
 
 model Categories {
-  id           String      @id @default(auto()) @map("_id") @db.ObjectId
-  menueId      String      @db.ObjectId
-  menue        Menue       @relation(fields: [menueId], references: [id])
-  contractorId String?     @db.ObjectId
-  contractor   Contractor? @relation(fields: [contractorId], references: [id])
-  itemName     String
-  comment      String
-  finalWage    String?     @default("0")
-  minus        String?     @default("0")
-  plus         String?     @default("0")
-  placevalue   String?     @default("0")
+  id                 String      @id @default(auto()) @map("_id") @db.ObjectId
+  menueId            String      @db.ObjectId
+  menue              Menue       @relation(fields: [menueId], references: [id])
+  contractorId       String?     @db.ObjectId
+  contractor         Contractor? @relation(fields: [contractorId], references: [id])
+  contractorName     String     
+  itemName           String
+  comment            String
+  finalWage          String?     @default("0")
+  minus              String?     @default("0")
+  plus               String?     @default("0")
+  placevalue         String?     @default("0")
+  otherCategoryId    String?     @default("0")
 }
 
 model Contractor {

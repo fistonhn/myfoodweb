@@ -15,7 +15,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 statusCode: 400
             })
         }
-        console.log(category)
         const contractors = await prisma.contractor.findMany({
             where: {
                 AND: [

@@ -68,7 +68,7 @@ const TopPrintSection = ({ menue }: { menue: IMenue }) => {
             <div className=''>
               {/*  */}
               <div className='flex '>
-                <div className='w-[25.1%] border-r-2 border-black h-[120px] '>
+                <div className='w-[18%] border-r-2 border-black h-[120px] '>
                   <BoldText>ONION:-</BoldText>
                   <BoldText>GARLIC:-</BoldText>
                 </div>

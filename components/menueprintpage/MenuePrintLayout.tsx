@@ -68,16 +68,16 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                                 className="text-md font-semibold tracking-wide text-left
                             text-gray-900 bg-gray-100 uppercase border-2 border-black"
                             > 
-                                <th className="px-4 py-3 uppercase text-center border-r-2 border-black w-[10%]">S.NO.</th>
+                                <th className="px-4 py-3 uppercase text-center border-r-2 border-black w-[9%]">S.NO.</th>
                                 <th className="px-4 py-3 uppercase text-center border-r-2 border-black">Item name</th>
                                 <th className="px-4 py-3 uppercase text-center">name of staff</th>
                             </tr>
                         </thead>
                         <tbody className="bg-white font-semibold">
                             {
-                                tableData.filter(f => (f.itemName !== HEAD_CONST && f.itemName !== CLEANER_CONST)).map((c, ci) => (
+                                tableData.filter(f => (f.itemName !== HEAD_CONST && f.itemName !== CLEANER_CONST && f.itemName !== 'helper')).map((c, ci) => (
                                     <tr className="">
-                                        <td className="px-1 py-2 border-2 border-black w-[12.5%]">
+                                        <td className="px-1 py-2 border-2 border-black w-[5%]">
                                             {ci + 1}
                                         </td>
                                         <td className="px-1 py-2 border-2 border-black ">
@@ -91,7 +91,18 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                                     </tr>
                                 ))
                             }
-                            <tr className="">
+                            {/* <tr className="">
+                                <td className="px-4 py-3 border-2 border-black">
+
+                                </td>
+                                <td className="px-4 py-3 border-2 border-black">
+
+                                </td>
+                                <td className="px-4 py-3 border-2 border-black">
+
+                                </td>
+                            </tr> */}
+                            {/* <tr className="">
                                 <td className="px-4 py-3 border-2 border-black">
 
                                 </td>
@@ -123,18 +134,7 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                                 <td className="px-4 py-3 border-2 border-black">
 
                                 </td>
-                            </tr>
-                            <tr className="">
-                                <td className="px-4 py-3 border-2 border-black">
-
-                                </td>
-                                <td className="px-4 py-3 border-2 border-black">
-
-                                </td>
-                                <td className="px-4 py-3 border-2 border-black">
-
-                                </td>
-                            </tr>
+                            </tr> */}
                             <tr className="">
                                 <td className="px-1 py-3 border-2 border-black">
                                     BOOKED BY:

@@ -57,7 +57,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                                 contractorId: availableContractors[c].id,
                                 menueId: _menue.id,
                                 itemName: item.item,
-                                comment: item.comment
+                                comment: item.comment,
+                                contractorName: availableContractors[c]?.name,
+
                             }
                         })
                         await prisma.contractor.update({
@@ -73,7 +75,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                             data: {
                                 menueId: _menue.id,
                                 itemName: item.item,
-                                comment: item.comment
+                                comment: item.comment,
+                                contractorName: ''
                             }
                         })
                     }
@@ -121,7 +124,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     contractorId: findHeadName.id,
                     menueId: _menue.id,
                     itemName: findHeadName.item,
-                    comment: ""
+                    comment: "",
+                    contractorName: findHeadName.name
                 }
             })
         }
@@ -180,7 +184,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                             contractorId: findCleanerContractor.id,
                             menueId: _menue.id,
                             itemName: findCleanerContractor.item,
-                            comment: ""
+                            comment: "",
+                            contractorName: findCleanerContractor.name
                         }
                     })
                 }

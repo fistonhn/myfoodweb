@@ -36,10 +36,7 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
     const [menuesData, setmenuesData] = useState<Menue[]>([])
     const [menueSearch, setmenueSearch] = useState<string>("")  
     
-    
-
-    console.log('pppppppp', menues)
-    
+        
     const getMenueData = async (search: "") => {      
         try {
             if (search || (startDate && endDate) || searchDepartureDate || contractorNameSearch) {                                
@@ -96,10 +93,13 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
     // get all categories from the system
     const categories: ICategories[] = []
     menuesData?.filter((it)=> it.cancel===false)?.map((item)=> {
-        item.Categories?.map((it)=>{
+        item.Categories?.map((it: ICategories)=>{
             categories.push(it)
         })
     })
+
+    console.log('pppppppp', menuesData)
+
         
     return (
         <>
@@ -140,6 +140,8 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
                             <tr className="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600 whitespace-nowrap">
                                 <th className="px-4 py-3 uppercase">guest name</th>
                                 <th className="px-4 py-3 uppercase">Categories</th>
+                                <th className="px-4 py-3 uppercase">Helper</th>
+
                                 <th className="px-4 py-3 uppercase">function date</th>
                                 <th className="px-4 py-3 uppercase">service time</th>
                                 <th className="px-4 py-3 uppercase">departure date</th>
@@ -162,52 +164,45 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
                                         </td>
                                         <td className="px-4 py-3 border space-y-4">
                                             { 
-                                                    [...new Map(val.Categories?.map((item: any) => [item['itemName'], item])).values()]?.filter((item)=>item.itemName !== 'head' && item.itemName !== 'helper' && item.itemName !== 'contractor' && item.itemName !== 'cleaner')?.map((c: any, ci) => {
+                                                    [...new Map(val.Categories?.map((item: any) => [item['itemName'], item])).values()]?.filter((item)=>item.itemName !== 'head' && item.itemName !== 'helper' && item.itemName !== 'cleaner' && item.itemName !== 'contractor')?.map((c: any, ci) => {
                                                     return (
-                                                        <div key={ci} className=" bg-gray-100 p-[1px]">
+                                                        <div key={ci} className="bg-gray-100 p-[1px]">
                                                             <span className='font-bold text-md underline underline-offset-4 overflow-y-auto'>
                                                                 {c.itemName}
 
-                                                                {((val.Categories.filter((it)=> it.menueId === val.id &&  it.itemName === c.itemName)).length) === 1 ? '' : ' ( ' }
+                                                                {((val.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === val.id &&  it.itemName === c.itemName)).length) === 1 ? '' : ' ( ' }
 
-                                                                {((val.Categories.filter((it)=> it.menueId === val.id &&  it.itemName === c.itemName)).length) === 1 ? '' :
-                                                                ((val.Categories.filter((it)=> it.menueId === val.id &&  it.itemName === c.itemName)).length) }
+                                                                {((val.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === val.id &&  it.itemName === c.itemName)).length) === 1 ? '' :
+                                                                ((val.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === val.id &&  it.itemName === c.itemName)).length) }
 
-                                                                {((val.Categories.filter((it)=> it.menueId === val.id &&  it.itemName === c.itemName)).length) === 1 ? ' ' : ' ) ' }
+                                                                {((val.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === val.id &&  it.itemName === c.itemName)).length) === 1 ? ' ' : ' ) ' }
 
                                                             </span>
                                                             <span className='pl-1'>
                                                                 {
-                                                                    val.Categories.filter((it)=> (it.menueId === val.id &&  it.itemName === c.itemName) || (it.menueId === val.id && it.itemName === 'contractor')).map((ctgr, index)=> (
+                                                                    val.Categories.filter((it)=> (it.menueId === val.id &&  it.itemName === c.itemName && it?.contractor?.item !== 'helper' && it?.contractor?.item !== 'head' && it?.contractor?.item !== 'cleaner' && it?.itemName !== 'helper')).map((ctgr, index)=> (
                                                                         <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2' onClick={() => { handleShowModal(ctgr.id) }} key={index}>
                                                                             {
-                                                                                ctgr?.contractor?.item !== 'helper' && ctgr?.contractor?.item !== 'head' && ctgr?.contractor?.item !== 'cleaner'? 
-                                                                                `MP- ${ctgr?.contractor?.name}` : ''
+                                                                                 
+                                                                                `MP- ${ctgr?.contractor?.name}`
                                                                             }
                                                                         </span>
                                                                     ))
                                                                 }
                                                             </span>
-
-                                                            <span>
-                                                                {   
-                                                                    val?.Categories.filter((it)=> it.menueId === val.id && (it.itemName === 'helper' || it?.contractor?.item === 'helper')).map((ctgr, index)=> (
-                                                                        // ctgr?.contractor === null || (ctgr.itemName === 'helper' || ctgr?.contractor?.item !== 'helper') ? <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2' onClick={() => { handleShowModal(ctgr.id) }}> Add H</span> :
-                                                                        <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2' onClick={() => { handleShowModal(ctgr.id) }} key={index}>
-                                                                            {   
-                                                                                ctgr?.contractor?.item === 'helper'? 
-                                                                                'HP-' : ''
-                                                                            } 
-                                                                            {ctgr?.contractor?.item === 'helper' ? ctgr?.contractor?.name : ''}
-                                                                        </span>
-                                                                    ))
-                                                                }
-
-                                                            </span>
                                                         </div>
                                                     )
                                                 }
                                                 )
+                                            }
+                                        </td>
+                                        <td className="px-4 py-3 border">
+                                            {   
+                                                val?.Categories.filter((it)=> it.menueId === val.id || (it.itemName === 'helper' || it?.contractor?.item === 'helper')).map((ctgr, index)=> (
+                                                    <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 pr-2 bg-gray-100 p-[1px]' onClick={() => { handleShowModal(ctgr.id) }} key={index}>
+                                                        {ctgr?.contractor?.item === 'helper' ? `H-${ctgr?.contractor?.name}` : ''}
+                                                    </span>
+                                                ))
                                             }
                                         </td>
                                         <td className="px-4 py-3 border">
@@ -225,59 +220,35 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
                                         <td className="px-4 py-3 border">
                                             {val.mobile}
                                         </td>
+
                                         <td className="px-4 py-3 border space-y-4">
                                             { 
-                                                [...new Map(val.Categories?.map((item: any) => [item['itemName'], item])).values()]?.filter((item)=>item.itemName !== 'head' && item.itemName !== 'helper' && item.itemName !== 'contractor' && item.itemName !== 'cleaner')?.map((c: any, ci) => {
-                                                    return (
-                                                        <div key={ci} className=" bg-gray-100 p-[1px]">
-                                                            <span>
-                                                                {
-                                                                    val.Categories.filter((it)=> it.menueId === val.id &&  it.itemName === 'head').map((ctgr, index)=> (
-                                                                        <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2' onClick={() => { handleShowModal(ctgr.id) }} key={index}>
-                                                                            {
-                                                                                ctgr?.contractor?.item === 'head'? 
-                                                                                'Hd-' : ''
-                                                                            } 
-                                                                            {ctgr?.contractor?.item === 'head' ? ctgr?.contractor?.name : ''}
-                                                                        </span>
-                                                                    ))
-                                                                }
-
-                                                            </span>
-                                                        </div>
-                                                    )
-                                                }
-                                                )
+                                                val.Categories.filter((it: { menueId: string; contractor: { item: string }; itemName: string })=> (it.menueId === val.id && it.contractor?.item === 'head' && it.itemName === 'head')).map((ctgr: { id: string; contractor: { name: any } }, index: React.Key | null | undefined)=> (
+                                                    <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2 bg-gray-100 p-[1px]' onClick={() => { handleShowModal(ctgr.id) }} key={index}>
+                                                        { `Hd-${ctgr?.contractor?.name}`}
+                                                    </span>
+                                                ))                  
                                             }
+                                            
                                         </td>
                                         <td className="px-4 py-3 border">
-                                            {val.headMobileNumber}
+                                            { 
+                                                val.Categories.filter((it: { menueId: string; contractor: { item: string }; itemName: string })=> (it.menueId === val.id && it.contractor?.item === 'head' && it.itemName === 'head')).map((ctgr: { id: string; contractor: { name: any } }, index: React.Key | null | undefined)=> (
+                                                    <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2 bg-gray-100 p-[1px]' onClick={() => { handleShowModal(ctgr.id) }} key={index}>
+                                                        {ctgr?.contractor?.phone}
+                                                    </span>
+                                                ))                  
+                                            }
                                         </td>
 
                                         <td className="px-4 py-3 border space-y-4">
                                             { 
-                                                [...new Map(val.Categories?.map((item: any) => [item['itemName'], item])).values()]?.filter((item)=>item.itemName !== 'head' && item.itemName !== 'helper' && item.itemName !== 'contractor' && item.itemName !== 'cleaner')?.map((c: any, ci) => {
-                                                    return (
-                                                        <div key={ci} className=" bg-gray-100 p-[1px]">
-                                                            <span>
-                                                                {
-                                                                    val.Categories.filter((it)=> it.menueId === val.id && it.contractor?.item === 'cleaner').map((ctgr, index)=> (
-                                                                        <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2' onClick={() => { handleShowModal(ctgr.id) }} key={index}>
-                                                                            {
-                                                                                ctgr?.contractor?.item === 'cleaner'? 
-                                                                                'Cl-' : ''
-                                                                            } 
-                                                                            {ctgr?.contractor?.item === 'cleaner' ? ctgr?.contractor?.name : ''}
-                                                                        </span>
-                                                                    ))
-                                                                }
-
-                                                            </span>
-                                                        </div>
-                                                    )
-                                                }
-                                                )
-                                            }
+                                                val.Categories.filter((it: { menueId: string; contractor: { item: string }; itemName: string })=> (it.menueId === val.id && it.contractor?.item === 'cleaner' && it.itemName === 'cleaner')).map((ctgr: { id: string; contractor: { name: any } }, index: React.Key | null | undefined)=> (
+                                                    <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2 bg-gray-100 p-[1px]' onClick={() => { handleShowModal(ctgr.id) }} key={index}>
+                                                        { `Cl-${ctgr?.contractor?.name}`}
+                                                    </span>
+                                                ))                  
+                                            }                 
                                         </td>
 
                                         <EditAbleColumns isWagePageRequest={isWagePageRequest} val={val} />

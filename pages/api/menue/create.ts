@@ -52,13 +52,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 const counterArray = Array(Number(item.counter) ? Number(item.counter) : 1).fill(0)
                 for (let c = 0; c < counterArray.length; c++) {
                     if (c < availableContractors.length) {
-                        console.log("inside my if", availableContractors.length)
+                        console.log("inside my if", availableContractors[c])
                         await prisma.categories.create({
                             data: {
                                 contractorId: availableContractors[c].id,
                                 menueId: _menue.id,
                                 itemName: item.item,
-                                comment: item.comment
+                                comment: item.comment,
+                                contractorName: availableContractors[c]?.name
                             }
                         })
                         await prisma.contractor.update({
@@ -69,12 +70,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                                 assignTillDate: _menue.functionDate
                             }
                         })
+
                     } else {
                         await prisma.categories.create({
                             data: {
                                 menueId: _menue.id,
                                 itemName: item.item,
-                                comment: item.comment
+                                comment: item.comment,
+                                contractorName: ''
                             }
                         })
                     }
@@ -122,7 +125,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     contractorId: findHeadName.id,
                     menueId: _menue.id,
                     itemName: findHeadName.item,
-                    comment: ""
+                    comment: "",
+                    contractorName: findHeadName.name
                 }
             })
         }
@@ -181,7 +185,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                             contractorId: findCleanerContractor.id,
                             menueId: _menue.id,
                             itemName: findCleanerContractor.item,
-                            comment: ""
+                            comment: "",
+                            contractorName: findCleanerContractor?.name
                         }
                     })
                 }
@@ -194,7 +199,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             statusCode: 200
         })
     } catch (error: any) {
-        // console.log(error);
+        console.log(error);
         
         return ErrorResponse({
             msg: error.message,
