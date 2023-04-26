@@ -91,7 +91,7 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                                     </tr>
                                 ))
                             }
-                            {/* <tr className="">
+                            <tr className="">
                                 <td className="px-4 py-3 border-2 border-black">
 
                                 </td>
@@ -101,8 +101,8 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                                 <td className="px-4 py-3 border-2 border-black">
 
                                 </td>
-                            </tr> */}
-                            {/* <tr className="">
+                            </tr>
+                            <tr className="">
                                 <td className="px-4 py-3 border-2 border-black">
 
                                 </td>
@@ -134,7 +134,7 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                                 <td className="px-4 py-3 border-2 border-black">
 
                                 </td>
-                            </tr> */}
+                            </tr>
                             <tr className="">
                                 <td className="px-1 py-3 border-2 border-black">
                                     BOOKED BY:
