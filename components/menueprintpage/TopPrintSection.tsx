@@ -11,6 +11,62 @@ type IMenue = (Menue & {
   })[];
 })
 const TopPrintSection = ({ menue }: { menue: IMenue }) => {
+  const [tableData, settableData] = React.useState<{
+    comment: string[],
+    contractors: string[],
+    itemName: string,
+    phones: string[],
+}[]>
+    ([])
+    console.log('menue', menue)
+
+  function convertCategoriesToResult(categories: (Categories & {
+    contractor: Contractor | null;
+})[]) {
+    const result = [] as {
+        comment: string[],
+        phones: string[],
+        contractors: string[],
+        itemName: string
+    }[]
+    categories.forEach((category) => {
+        const existingCategory = result.find((c) => c.itemName === category.itemName);
+        const { contractor } = category
+        let _conts = []
+        let phones = []        
+
+        if (contractor?.phone) {
+          phones.push(contractor?.phone)
+        }
+        if (contractor?.name) {
+            _conts.push(contractor?.name)
+        }
+        if (existingCategory) {
+            existingCategory.phones.push(category?.contractor?.phone);
+            existingCategory.comment.push(category.comment);
+            existingCategory.contractors = [...existingCategory.contractors, ..._conts]
+        } else {
+            const { itemName, comment } = category;
+            const newCategory = {
+                itemName,
+                comment: [comment],
+                contractors: _conts,
+                phones: phones
+            };
+            result.push(newCategory);
+        }
+    });
+
+    return result;
+}
+
+  React.useEffect(() => {
+    if (menue) {
+        const data = convertCategoriesToResult(menue.Categories)
+        settableData(data)
+    }
+}, [menue])
+  
   return (
     <>
       <div className='flex items-center justify-evenly border-b-2 border-b-black'>
@@ -63,7 +119,7 @@ const TopPrintSection = ({ menue }: { menue: IMenue }) => {
         <div className='grid grid-cols-2 '>
           <div className='border-r-2 border-r-black'>
             <div className='border-b-2 border-b-black p-1 '>
-              <BoldText>Special Instructions:- {menue.specialInstruction}</BoldText>
+              <BoldText className='uppercase'>Special Instructions:- {menue.specialInstruction}</BoldText>
             </div>
             <div className=''>
               {/*  */}
@@ -82,11 +138,27 @@ const TopPrintSection = ({ menue }: { menue: IMenue }) => {
           <div className='p-1  space-y-4 border-r-2 border-r-black'>
             <div className='flex space-x-4'>
               <BoldText>Head Name:- </BoldText>
-              <BoldText>{menue.headName}</BoldText>
+              <BoldText>
+                {
+                  tableData.filter(f => (f.itemName === 'head')).map((c, ci) => (
+                      <td className="pl-1">
+                          {c.contractors?.map((cont, i) => `${cont} ${i < c.contractors.length - 1 ? "," : ""}`)}
+                      </td>
+                  ))
+                }
+              </BoldText>
             </div>
             <div className='flex space-x-4'>
               <BoldText>Mobile Number:- </BoldText>
-              <BoldText>{menue.headMobileNumber}</BoldText>
+              <BoldText>
+                {
+                    tableData.filter(f => (f.itemName === 'head')).map((c, ci) => (
+                        <td className="pl-1">
+                            {c?.phones?.map((cont, i) => `${cont} ${i < c?.phones?.length - 1 ? "," : ""}`)}
+                        </td>
+                    ))
+                }
+              </BoldText>
             </div>
             <div className='flex space-x-4'>
               <BoldText>Driver Name:- </BoldText>

@@ -32,9 +32,12 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
     const [endDate, setendDate] = useState("")
     const [contractorNameSearch, setcontractorNameSearch] = useState("")
     const [searchDepartureDate, setsearchDepartureDate] = useState("")
-    const [disableContractorEdit, serdisableContractorEdit] = useState(true)
+    // const [disableContractorEdit, serdisableContractorEdit] = useState(true)
     const [menuesData, setmenuesData] = useState<Menue[]>([])
     const [menueSearch, setmenueSearch] = useState<string>("")  
+
+    console.log('mm', menuesData);
+    
     
         
     const getMenueData = async (search: "") => {      
@@ -45,15 +48,25 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
                     departureDate: searchDepartureDate,
                     contractorName: contractorNameSearch
                 })
-                console.log('searchccxxmenues', menues);
                 setmenuesData(menues.data.menues)
             } else {
                 const menues = await getMenuesApi({})
                 setmenuesData(menues.data.menues)
+
             }
         } catch (error: any) {
             return handleApiErrors(error.message)
         }
+    }
+
+    const resetMenue = async() => {                  
+        setsearchDepartureDate("")
+        setstartDate("")
+        setendDate("")
+        setmenueSearch("")
+        
+        const menues = await getMenuesApi({})
+        setmenuesData(menues.data.menues)    
     }
 
     const dispatch = useAppDispatch()
@@ -93,14 +106,14 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
     // get all categories from the system
     const categories: ICategories[] = []
     menuesData?.filter((it)=> it.cancel===false)?.map((item)=> {
-        item.Categories?.map((it: ICategories)=>{
+        item?.Categories?.map((it: ICategories)=>{
             categories.push(it)
         })
     })
         
     return (
         <>
-            <div className='flex items-center space-x-4'>
+                <div className='flex items-center space-x-4'>
                     <Input label='Start Date' onChange={(e) => { setstartDate(e.target.value) }} type='date' value={startDate} />
                     <Input label='End Date' onChange={(e) => { setendDate(e.target.value) }} type='date' value={endDate} />
                 </div>
@@ -117,13 +130,7 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
                     <Button title='Download' onClick={handleConvertJSONToExcel} />
                     <Button
                         title='Reset'
-                        onClick={() => {
-                            setsearchDepartureDate("")
-                            setstartDate("")
-                            setendDate("")
-                            setmenueSearch("")
-                            getMenueData()
-                        }}
+                        onClick={() => resetMenue()}
                     />
                 </div>
             <div className="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
@@ -167,12 +174,12 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
                                                             <span className='font-bold text-md underline underline-offset-4 overflow-y-auto'>
                                                                 {c.itemName}
 
-                                                                {((val.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === val.id &&  it.itemName === c.itemName)).length) === 1 ? '' : ' ( ' }
+                                                                {((val.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === val.id &&  it.itemName === c.itemName && it?.otherCategoryId === '0')).length) === 1 ? '' : ' ( ' }
 
-                                                                {((val.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === val.id &&  it.itemName === c.itemName)).length) === 1 ? '' :
-                                                                ((val.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === val.id &&  it.itemName === c.itemName)).length) }
+                                                                {((val.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === val.id &&  it.itemName === c.itemName && it?.otherCategoryId === '0')).length) === 1 ? '' :
+                                                                ((val.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === val.id &&  it.itemName === c.itemName && it?.otherCategoryId === '0')).length) }
 
-                                                                {((val.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === val.id &&  it.itemName === c.itemName)).length) === 1 ? ' ' : ' ) ' }
+                                                                {((val.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === val.id &&  it.itemName === c.itemName && it?.otherCategoryId === '0')).length) === 1 ? ' ' : ' ) ' }
 
                                                             </span>
                                                             <span className='pl-1'>
@@ -338,9 +345,14 @@ const EditAbleColumns = ({ val, isWagePageRequest }: EditAbleColumnsProp) => {
             <td className="px-4 py-3 border space-x-3">
                 {
                     isWagePageRequest ?
-                        <Button title='Edit' onClick={() => {
-                            window.location.href = `/wage/edit/${val.id}`
-                        }} />
+                        <>
+                            <Button title='Edit' onClick={() => {
+                                window.location.href = `/wage/edit/${val.id}`
+                            }} />
+                            <Link href={`/admin/menueprint/${val.id}`}>
+                                <Button title='Print' />
+                            </Link>
+                        </>
                         :
                         <>
                             <Button onClick={() => {

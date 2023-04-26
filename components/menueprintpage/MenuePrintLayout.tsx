@@ -156,13 +156,23 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                                     {menue.bookerMobileNumber}
                                 </td>
                                 <td className="px-1 py-3 border-2 border-black">
-                                    <span>CLEANER:-</span> <span className='ml-2'>{menue.cleaner}</span> 
+                                    <span>CLEANER:-</span> 
+                                    
+                                    <span className='ml-2'>
+                                    {
+                                        tableData.filter(f => (f.itemName === 'cleaner')).map((c, ci) => (
+                                            <td className="pl-1 py-2">
+                                                {c.contractors.map((cont, i) => `${cont} ${i < c.contractors.length - 1 ? "," : ""}`)}
+                                            </td>
+                                        ))
+                                    }
+                                    </span> 
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <div className="row-span-3 px-1 py-3 border-b-2 border-r-2 border-l-2 border-black font-extrabold text-xl">
-                        <span>NOTE:-</span> <span className='ml-2'>{menue.note}</span> 
+                    <div className="row-span-3 px-1 py-3 border-b-2 border-r-2 border-l-2 border-black font-extrabold text-xl text-center">
+                        <span>NOTE:-</span> <span className='ml-2 uppercase'>{menue.note}</span> 
                     </div>
                 </div>
             </div>

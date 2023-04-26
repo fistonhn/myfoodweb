@@ -101,8 +101,6 @@ const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
             window.print()
         }
     }, [printing])
-
-    console.log('menue', menue);
     
     return (
         <div>
@@ -151,7 +149,7 @@ const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
                         </thead>
                         <tbody className="bg-white font-semibold">
                             {
-                                data?.Categories?.filter((item: { contractor: null; })=> item.contractor !== null).map((c, ci) => (
+                                data?.Categories?.sort((a, b) => b.itemName !== 'head' ? -1 : 1)?.filter((item: { contractor: null; })=> item.contractor !== null)?.map((c, ci) => (
                                     <tr className="text-gray-700">
                                         <td className="px-1 py-3 border-2 border-black  text-center">
                                             {ci + 1}
