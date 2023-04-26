@@ -97,9 +97,6 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
             categories.push(it)
         })
     })
-
-    console.log('pppppppp', menuesData)
-
         
     return (
         <>

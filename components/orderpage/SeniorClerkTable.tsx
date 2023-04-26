@@ -27,6 +27,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { getItemsApi } from '@/providers/apis'
 import { createNewCategory, deleteCategory } from '@/providers/apis/category'
+import Link from 'next/link'
 
 interface ICategories extends Categories {
     contractor?: Contractor
@@ -606,13 +607,14 @@ const EditAbleColumns = ({ val }: EditAbleColumnsProp) => {
                 }
             </td>
             <td className="px-4 py-3 border space-x-3">
-                <Button onClick={() => {
-                    setupdate(!update)
-                }} title="Edit" />
+                <Button onClick={() => { setupdate(!update) }} title="Edit" />
                 <Button title="Update" onClick={handleUpdate} disabled={!update} />
                 <Button title='Cancel' onClick={handleCancel} />
                 <Button title='Manage' onClick={()=>handleOpen(data.id)} />
 
+                <Link href={`/admin/menueprint/${data.id}`}>
+                    <Button title='Print' />
+                </Link>
             </td>
          </>
             <Modal

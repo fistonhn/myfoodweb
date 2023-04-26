@@ -12,6 +12,8 @@ type IMenue = (Menue & {
 
 const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
     const [hidePrintButton, sethidePrintButton] = React.useState('block')
+    const [centerImage, setcenterImage] = React.useState('[35%]')
+
     const [tableData, settableData] = React.useState<{
         comment: string[],
         contractors: string[],
@@ -164,13 +166,14 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                     </div>
                 </div>
             </div>
-            <h1 className='text-xl text-center tracking-tight mb-5'>
-                Thank You 👏
+            <h1 className={`text-xl text-center tracking-tight mb-5 pl-${centerImage}`}>
+                <img src='/thankyou.png' className='w-[350px] h-[70px] object-contain content-center' />
             </h1>
             <div className='w-full p-2' style={{ display: hidePrintButton}}>
                 <Button className=' w-full m-auto' title='PRINT' onClick={() => {
                     sethidePrintButton('none')
-                    setTimeout(()=>  (window.print(), sethidePrintButton('block')), 1000);
+                    setcenterImage('[25%]')
+                    setTimeout(()=>  (window.print(), sethidePrintButton('block'), setcenterImage('[35%]')), 1000);
                 }} />
             </div>
         </div>
