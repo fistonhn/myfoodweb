@@ -280,8 +280,9 @@ const Order = () => {
       // 
       const _serviceHourMinute = formData.serviceTime.split(":")
       const _serviceTime = updateDateWithHourAndMinute(new Date(formData.functionDate), Number(_serviceHourMinute[0]), Number(_serviceHourMinute[1]))
-
-      const gg = {
+      
+      const res = await createMenueApi({
+        formdata: {
           bookedBy: formData.bookedBy,
           bookerMobileNumber: formData.bookerMobileNumber,
           bookingId: formData.bookingId,
@@ -297,7 +298,7 @@ const Order = () => {
           name: formData.name,
           PAX: formData.PAX,
           PLATE: formData.PLATE,
-          serviceTime: formData.serviceTime,
+          serviceTime: _serviceTime,
           specialInstruction: formData.specialInstruction,
           vehicleNumber: formData.vehicleNumber,
           venue: formData.venue,
@@ -306,44 +307,12 @@ const Order = () => {
           id: "",
           onion: formData.onion !== undefined ? formData.onion : null,
           garlic: formData.garlic !== undefined ? formData.garlic : null
-      }
-
-      console.log('mmm', gg);
+        },
+        selectedItems: selectedItems
+      })
       
-
-
-      // const res = await createMenueApi({
-      //   formdata: {
-      //     bookedBy: formData.bookedBy,
-      //     bookerMobileNumber: formData.bookerMobileNumber,
-      //     bookingId: formData.bookingId,
-      //     cleaner: formData.cleaner,
-      //     departureDate: new Date(formData.departureDate),
-      //     departureTime: new Date(_departureTime),
-      //     driverName: formData.driverName,
-      //     function: formData.function,
-      //     functionDate: new Date(formData.functionDate),
-      //     headMobileNumber: formData.headMobileNumber,
-      //     headName: formData.headName,
-      //     mobile: formData.mobile,
-      //     name: formData.name,
-      //     PAX: formData.PAX,
-      //     PLATE: formData.PLATE,
-      //     serviceTime: _serviceTime,
-      //     specialInstruction: formData.specialInstruction,
-      //     vehicleNumber: formData.vehicleNumber,
-      //     venue: formData.venue,
-      //     words: formData.words,
-      //     note: formData.note,
-      //     id: "",
-      //     onion: formData.onion !== undefined ? formData.onion : null,
-      //     garlic: formData.garlic !== undefined ? formData.garlic : null
-      //   },
-      //   selectedItems: selectedItems
-      // })
-      
-      // alert("created successfully!")
-      // window.location.href = `/admin/menueprint/${res.data.id}`
+      alert("created successfully!")
+      window.location.href = `/admin/menueprint/${res.data.id}`
     } catch (error: any) {
       const err = handleApiErrors(error)
       // console.log('selectedItems', error);
