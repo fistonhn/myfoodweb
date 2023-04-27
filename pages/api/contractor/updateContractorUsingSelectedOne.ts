@@ -25,20 +25,39 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         })         
         
         if(categoryData?.contractorId === null) {
-            await prisma.categories.update({
-                where: {
-                    id: categoryID
-                },
-                data: {
-                    contractorId: contractorID,
-                    contractorName: contractorExisist?.name
-                }
-            })
-            return SuccessResponse({
-                msg: "updated successfully",
-                res,
-                statusCode: 200
-            })
+            
+            if(contractorExisist.item === 'cleaner' || contractorExisist.item === 'helper' || contractorExisist.item === 'head') {
+                await prisma.categories.create({
+                    data: {
+                        contractorId: contractorID,
+                        menueId: categoryData?.menueId,
+                        itemName: contractorExisist?.item,
+                        contractorName: contractorExisist.name,
+                        otherCategoryId: categoryData?.id,
+                        comment: ''
+                    }
+                }) 
+                return SuccessResponse({
+                    msg: "updated successfully",
+                    res,
+                    statusCode: 200
+                }) 
+            } else {
+                    await prisma.categories.update({
+                        where: {
+                            id: categoryID
+                        },
+                        data: {
+                            contractorId: contractorID,
+                            contractorName: contractorExisist?.name
+                        }
+                    }) 
+                    return SuccessResponse({
+                        msg: "updated successfully",
+                        res,
+                        statusCode: 200
+                    })
+                   } 
         } 
         else { 
             if(contractorExisist.item === 'cleaner' || contractorExisist.item === 'helper' || contractorExisist.item === 'head') {
