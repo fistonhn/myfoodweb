@@ -191,14 +191,16 @@ const UploadMenueExcelFile = () => {
 
             
             
-            try {          
+            try { 
+                setuploading(true)         
                 const res = await createMenueApi({
                   formdata: formData,
                   selectedItems: selectedItems
-                })                
+                }) 
+                setuploading(false)               
                 
-                alert("created successfully!")
-                window.location.href = `/admin/menueprint/${res.data.id}`
+                alert("Menue uploaded successfully.")
+                // window.location.href = `/admin/menueprint/${res.data.id}`
               } catch (error: any) {
                 const err = handleApiErrors(error)
           
