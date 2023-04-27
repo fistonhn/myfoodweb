@@ -29,155 +29,184 @@ const UploadMenueExcelFile = () => {
         return false
     }
     const handleData = async (json: Omit<Menue, "createdAt" | "updatedAt">[]) => {
-        const arrayFormData = [] as { _data: Omit<Menue, "createdAt" | "updatedAt">, cat: IItem[] }[]
-        json.forEach((v) => {
-            // categories
-            const result = handleCategories(v)
-            if (typeof result === "boolean") {
-                return alert("kindly select the items and counters.")
-            }
-            console.log("results==>", result)
+            const nameString = json[1]?.__EMPTY;
+            const name = nameString.replace("NAME:-", "");
+            const functionDateString = json[1]?.__EMPTY_3;
+            const functionDate = functionDateString.replace("Function Date:-", "");
 
-            // categories
-            const formData = { id: "", bookingId: String(uuid()).substring(0, 8) } as Omit<Menue, "createdAt" | "updatedAt">
-            if (!v.departureTime || !v.serviceTime || !v.departureDate || !v.functionDate) {
-                return alert("service time | service date | departureDate| departureTime is required.")
-            }
-            // @ts-ignore
-            const _departureHourMinute = v.departureTime.split(":")
-            const _departureTime = updateDateWithHourAndMinute(new Date(v.departureDate), Number(_departureHourMinute[0]), Number(_departureHourMinute[1]))
+            const mobileString = json[2]?.__EMPTY;
+            const nameMobile = mobileString.replace("MOBILE:-", "");
+            const serviceTimeString = json[2]?.__EMPTY_3;
+            const serviceTime = serviceTimeString.replace("Service Time:-", "");            
 
-            // @ts-ignore
-            const _serviceHourMinute = v.serviceTime.split(":")
-            const _serviceTime = updateDateWithHourAndMinute(new Date(v.functionDate), Number(_serviceHourMinute[0]), Number(_serviceHourMinute[1]))
-            // bookedBy
-            if (v.bookedBy) {
-                formData.bookedBy = v.bookedBy
-            } else {
-                return alert("Booked By is Required.")
+            const venueString = json[3]?.__EMPTY;
+            const venue = venueString.replace("VENUE:-", "");
+            const departureDateString = json[3]?.__EMPTY_3;
+            const departureDate = departureDateString.replace("Departure Date:-", "");            
+
+            const plateString = json[4]?.__EMPTY;
+            const plate = plateString.replace("PLATE:-", "");
+            const depatureTimeString = json[4]?.__EMPTY_3;
+            const departureTime = depatureTimeString.replace("Departure Time:-", "");
+
+            const paxString = json[5]?.__EMPTY;
+            const pax = paxString.replace("PAX:-", "");
+
+            const SpecialInstructionsString = json[6]?.__EMPTY;
+            const SpecialInstructions = SpecialInstructionsString.replace("Special Instructions:-", "");
+            const headNameString = json[6]?.__EMPTY_2;
+            const headName = headNameString.replace("HEAD NAME:-", "");
+
+            const onionString = json[7]?.__EMPTY_1;
+            const onion = onionString.replace("ONION:-", "");
+
+            const mobileNoString = json[7]?.__EMPTY_2;
+            const headMobileNo = mobileNoString.replace("MOBILE NO.:-", "");
+
+            const garlicString = json[8]?.__EMPTY_1;
+            const garlic = garlicString.replace("GARLIC:-", "");
+
+            const driveString = json[9]?.__EMPTY_2;
+            const driveName = driveString.replace("DRIVE NAME:-", "");
+
+            const vehicleString = json[10]?.__EMPTY_2;
+            const vehicleNumber = vehicleString.replace("VEHICLE NO.:-", "");
+
+            const bookBy = json[24]?.__EMPTY_1;
+            const bookMobile = json[25]?.__EMPTY_1;
+            const note = json[26]?.__EMPTY_1;
+            
+            const wordString = json[24]?.__EMPTY_2;
+            const words = wordString.replace("WORDS:-", "");
+
+            const cleanerString = json[25]?.__EMPTY_2;
+            const cleaner = cleanerString.replace("CLEANER:-", "");
+
+            const it1 = json[12]?.__EMPTY_1;
+            const it2 = json[13]?.__EMPTY_1;
+            const it3 = json[14]?.__EMPTY_1;
+            const it4 = json[15]?.__EMPTY_1;
+            const it5 = json[16]?.__EMPTY_1;
+            const it6 = json[17]?.__EMPTY_1;
+            const it7 = json[18]?.__EMPTY_1;
+            const it8 = json[19]?.__EMPTY_1;
+            const it9 = json[20]?.__EMPTY_1;
+            const it10 = json[21]?.__EMPTY_1;
+            const it11 = json[22]?.__EMPTY_1;
+            const it12 = json[23]?.__EMPTY_1;
+
+
+
+            const selectedItems = []
+
+            if(it1 !==undefined) {
+                const item1 = { item: it1, counter: '0', comment: '' }
+                selectedItems.push(item1)
+            } 
+            if(it2 !==undefined) {
+                const item2 = { item: it2, counter: '0', comment: '' }
+                selectedItems.push(item2)
+                
             }
-            // bookerMobileNumber 
-            if (v.bookerMobileNumber) {
-                formData.bookerMobileNumber = v.bookerMobileNumber
-            } else {
-                return alert("bookerMobileNumber is Required.")
+            if(it3 !==undefined) {
+                const item3 = { item: it3, counter: '0', comment: '' }
+                selectedItems.push(item3)
+            } 
+            if(it4 !==undefined) {
+                const item4 = { item: it4, counter: '0', comment: '' }
+                selectedItems.push(item4)
+                
             }
-            // cleaner 
-            if (v.cleaner) {
-                formData.cleaner = v.cleaner
-            } else {
-                return alert("cleaner is Required.")
+            if(it5 !==undefined) {
+                const item5 = { item: it5, counter: '0', comment: '' }
+                selectedItems.push(item5)
+            } 
+            if(it6 !==undefined) {
+                const item6 = { item: it6, counter: '0', comment: '' }
+                selectedItems.push(item6)
+                
             }
-            // departureDate 
-            if (v.departureDate) {
-                formData.departureDate = new Date(v.departureDate)
-            } else {
-                return alert("departureDate is Required.")
+            if(it7 !==undefined) {
+                const item7 = { item: it7, counter: '0', comment: '' }
+                selectedItems.push(item7)
+            } 
+            if(it8 !==undefined) {
+                const item8 = { item: it8, counter: '0', comment: '' }
+                selectedItems.push(item8)
+                
             }
-            // departureTime 
-            if (v.departureTime) {
-                formData.departureTime = _departureTime
-            } else {
-                return alert("departureTime is Required.")
+            if(it9 !==undefined) {
+                const item9 = { item: it9, counter: '0', comment: '' }
+                selectedItems.push(item9)
+            } 
+            if(it10 !==undefined) {
+                const item10 = { item: it10, counter: '0', comment: '' }
+                selectedItems.push(item10)
+                
             }
-            // driverName 
-            if (v.driverName) {
-                formData.driverName = v.driverName
-            } else {
-                return alert("driverName is Required.")
+            if(it11 !==undefined) {
+                const item11 = { item: it11, counter: '0', comment: '' }
+                selectedItems.push(item11)
+            } 
+            if(it12 !==undefined) {
+                const item12 = { item: it12, counter: '0', comment: '' }
+                selectedItems.push(item12)
+                
             }
-            // function 
-            if (v.function) {
-                formData.function = v.function
-            } else {
-                return alert("function is Required.")
+
+            const _departureHourMinute = departureTime.split(":")
+            const _departureTime = updateDateWithHourAndMinute(new Date(departureDate), Number(_departureHourMinute[0]), Number(_departureHourMinute[1]))
+            // 
+            const _serviceHourMinute = serviceTime.split(":")
+            const _serviceTime = updateDateWithHourAndMinute(new Date(functionDate), Number(_serviceHourMinute[0]), Number(_serviceHourMinute[1]))
+                                            
+            const formData = {
+                bookedBy: bookBy,
+                bookerMobileNumber: String(bookMobile),
+                bookingId: String(uuid()).substring(0, 8),
+                cleaner: cleaner,
+                departureDate: new Date(departureDate),
+                departureTime: new Date(_departureTime),
+                driverName: driveName,
+                function: 'breakfast',
+                functionDate: new Date(functionDate),
+                headMobileNumber: String(headMobileNo),
+                headName: headName,
+                mobile: String(nameMobile),
+                name: name,
+                PAX: pax,
+                PLATE: plate,
+                serviceTime: new Date(_serviceTime),
+                specialInstruction: SpecialInstructions,
+                vehicleNumber: String(vehicleNumber),
+                venue: venue,
+                words: words,
+                note: note,
+                id: "",
+                onion: onion === 'yes' ? true : false,
+                garlic: garlic === 'yes' ? true : false
             }
-            // functionDate 
-            if (v.functionDate) {
-                formData.functionDate = new Date(v.functionDate)
-            } else {
-                return alert("functionDate is Required.")
-            }
-            // headMobileNumber 
-            if (v.headMobileNumber) {
-                formData.headMobileNumber = v.headMobileNumber
-            } else {
-                return alert("headMobileNumber is Required.")
-            }
-            // headName 
-            if (v.headName) {
-                formData.headName = v.headName
-            } else {
-                return alert("headName is Required.")
-            }
-            // mobile 
-            if (v.mobile) {
-                formData.mobile = v.mobile
-            } else {
-                return alert("mobile is Required.")
-            }
-            // name 
-            if (v.name) {
-                formData.name = v.name
-            } else {
-                return alert("name is Required.")
-            }
-            // PAX 
-            if (v.PAX) {
-                formData.PAX = v.PAX
-            } else {
-                return alert("PAX is Required.")
-            }
-            // serviceTime 
-            if (v.serviceTime) {
-                formData.serviceTime = _serviceTime
-            } else {
-                return alert("serviceTime is Required.")
-            }
-            // specialInstruction 
-            if (v.specialInstruction) {
-                formData.specialInstruction = v.specialInstruction
-            } else {
-                return alert("specialInstruction is Required.")
-            }
-            // vehicleNumber 
-            if (v.vehicleNumber) {
-                formData.vehicleNumber = v.vehicleNumber
-            } else {
-                return alert("vehicleNumber is Required.")
-            }
-            // venue 
-            if (v.venue) {
-                formData.venue = v.venue
-            } else {
-                return alert("venue is Required.")
-            }
-            // words 
-            if (v.words) {
-                formData.words = v.words
-            } else {
-                return alert("words is Required.")
-            }
-            arrayFormData.push({
-                _data: formData,
-                cat: result
-            })
-        })
-        try {
-            setuploading(true)
-            for (let index = 0; index < arrayFormData.length; index++) {
-                await createMenueApi({
-                    formdata: arrayFormData[index]._data,
-                    selectedItems: arrayFormData[index].cat
-                })
-            }
-            setuploading(false)
-            alert("Menue uploaded successfully.")
-        } catch (error: any) {
-            const err = handleApiErrors(error)
-            alert(err)
-            setuploading(false)
-        }
+
+            console.log('nameee', name);
+
+            
+            
+            try {          
+                const res = await createMenueApi({
+                  formdata: formData,
+                  selectedItems: selectedItems
+                })                
+                
+                alert("created successfully!")
+                window.location.href = `/admin/menueprint/${res.data.id}`
+              } catch (error: any) {
+                const err = handleApiErrors(error)
+          
+                alert(err)
+              }
+                
+
+            
     }
     const handleFileChange = (_e: React.ChangeEvent<HTMLInputElement>) => {
         _e.preventDefault();
@@ -189,7 +218,7 @@ const UploadMenueExcelFile = () => {
                 const sheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[sheetName];
                 const json = xlsx.utils.sheet_to_json(worksheet);
-                console.log({ json })
+                // console.log({ json })
                 handleData(json as any)
                 _e.target.value = ""
             };
