@@ -107,8 +107,8 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                                         <td className="px-1 py-2 border-2 border-black w-[50%]">
                                             {tableData.filter(f => (f.itemName !== HEAD_CONST && f.itemName !== CLEANER_CONST && f.itemName !== 'helper'  && f.itemName === c.itemName)).map((cn, ci) => (
                                                 <td className="px-1 py-2">
-                                                    {/* {cn.contractors.map((cont, i) => `${cont} ${i < cn.contractors.length - 1 ? " ," : " ,"}`)} */}
-                                                    {cn.contractors}
+                                                    {cn.contractors.map((cont, i) => `${cont}, `)}
+                                                    {/* {cn.contractors} */}
                                                 </td>
                                            ))}
 

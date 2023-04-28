@@ -17,7 +17,7 @@ import { OperationMenueTable } from '@/components/operation/OperationMenueTable'
 type TContracotr = (Contractor)
 
 const OperationPage = () => {
-        const [formData, setformData] = useState<TContracotr>({ id: '', name: '', item: '', age: null, wage: null, group: '', assignTillDate: null, area: '', phone: '', 
+        const [formData, setformData] = useState<TContracotr>({ id: '', name: '', item: '', age: null, wage: null, group: '', area: '', phone: '', 
                                               address: null, identitynumber: '' })
 
         const [startDate, setstartDate] = useState("")
@@ -59,8 +59,8 @@ const OperationPage = () => {
             <Input required label='Age' name='age' onChange={handleChange} value={formData.age} type="number" />
             <Input required label='Wage' name='wage' onChange={handleChange} value={formData.wage} type="number" />
 
-            <Input required label='Group' name='group' onChange={handleChange} value={formData.group} type="text" />
-            <Input required label='Assign Till Date' name='assignTillDate' onChange={handleChange} value={formData.assignTillDate} type="date" />
+            <Input label='Group' name='group' onChange={handleChange} value={formData.group} type="text" />
+            {/* <Input required label='Assign Till Date' name='assignTillDate' onChange={handleChange} value={formData.assignTillDate} type="date" /> */}
 
             <Input required label='Area' name='area' onChange={handleChange} value={formData.area} type="text" />
             <Input required label='Phone' name='phone' onChange={handleChange} value={formData.phone} type="text" />
@@ -88,7 +88,6 @@ const OperationPage = () => {
             age: Number(formData.age), 
             wage: Number(formData.wage), 
             group: formData.group, 
-            assignTillDate: new Date(formData.assignTillDate), 
             area: formData.area, 
             phone: formData.phone, 
             address: formData.address, 

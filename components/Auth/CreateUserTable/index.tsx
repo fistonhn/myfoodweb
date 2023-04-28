@@ -77,9 +77,9 @@ const CreateUserTable = () => {
                 </>
             }
             <div className="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
-                <div className="w-full overflow-x-auto">
+                <div className="w-full overflow-x-auto max-h-[650px]">
                     <table className="w-full">
-                        <thead>
+                        <thead className='sticky top-0'>
                             <tr className="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
                                 <th className="px-4 py-3 uppercase">id</th>
                                 <th className="px-4 py-3 uppercase">email</th>

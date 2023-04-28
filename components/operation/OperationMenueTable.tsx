@@ -81,6 +81,9 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
         
         dispatch(selectContractorsUsingCategoryId({ cid: cid, workAssigned: workAssigned }))
         dispatch(fetchContractorsThunk(cid))
+
+        console.log('cid', cid);
+        
     }
 
     const handleConvertJSONToExcel = () => {
@@ -167,7 +170,7 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
                                         </td>
                                         <td className="px-4 py-3 border space-y-4">
                                             { 
-                                                    [...new Map(val.Categories?.map((item: any) => [item['itemName'], item])).values()]?.filter((item)=>item.itemName !== 'head' && item.itemName !== 'helper' && item.itemName !== 'cleaner' && item.itemName !== 'contractor')?.map((c: any, ci) => {
+                                                    [...new Map(val.Categories?.map((item: any) => [item['itemName'], item])).values()]?.filter((item)=>item.itemName !== 'head' && item.itemName !== 'helper' && item.itemName !== 'cleaner')?.map((c: any, ci) => {
                                                     return (
                                                         <div key={ci} className="bg-gray-100 p-[1px]">
                                                             <span className='font-bold text-md underline underline-offset-4 overflow-y-auto'>
@@ -190,7 +193,7 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
                                                             </span>
                                                             <span>
                                                                 {
-                                                                    val.Categories.filter((it)=> (it.menueId === val.id &&  it.itemName === c.itemName && it?.contractor?.item !== 'helper' && it?.contractor?.item !== 'head' && it?.contractor?.item !== 'cleaner' && it?.itemName !== 'helper')).map((ctgr, index)=> (
+                                                                    val.Categories.filter((it)=> (it.menueId === val.id &&  it.itemName === c.itemName && it?.itemName !== 'head' && it?.itemName !== 'cleaner' && it?.itemName !== 'helper')).map((ctgr, index)=> (
                                                                         <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2' onClick={() => { handleShowModal(ctgr.id, 'contractor') }} key={index}>
                                                                             {ctgr?.contractor?.name }
                                                                         </span>
@@ -266,7 +269,7 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
                                         </td>
                                         <td className="px-4 py-3 border">
                                             { 
-                                                val.Categories.filter((it: { menueId: string; contractor: { item: string }; itemName: string })=> (it.menueId === val.id && it.contractor?.item === 'head' && it.itemName === 'head')).map((ctgr: { id: string; contractor: { name: any } }, index: React.Key | null | undefined)=> (
+                                                val.Categories.filter((it: { menueId: string; contractor: { item: string }; itemName: string })=> (it.menueId === val.id && it.itemName === 'head')).map((ctgr: { id: string; contractor: { name: any } }, index: React.Key | null | undefined)=> (
                                                     <span className='font-semi-bold text-semi-lg underline underline-offset-4 px-2 bg-gray-100 p-[1px]' key={index}>
                                                         {ctgr?.contractor?.phone}
                                                     </span>

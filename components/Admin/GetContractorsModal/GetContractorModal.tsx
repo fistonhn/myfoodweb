@@ -1,20 +1,34 @@
 import { useAppDispatch, useAppSelector } from '@/store'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dialog, DialogTitle, DialogContent, DialogActions, Checkbox, CircularProgress } from '@mui/material'
 import { Button } from '@/components/Button/Button'
 import { setSelectedToUpdateUserId, toggleUpdateContractorModal, updateContractorThunk, fetchOtherItemsContractorsThunk } from '@/slices/contractors.slice'
 import { Contractor } from '@prisma/client'
 import { handleApiErrors } from '@/utils/handleapierrors'
 import { removeContractorFromCategoryAPI } from '@/providers/apis'
+import Input from '@/components/Inputs/Input'
 
-const GetContractorModal = (getMenueData) => {
+const GetContractorModal = () => {
+    const [menueSearch, setmenueSearch] = useState("")  
+    const [categoriesFiltered, setcategoriesFiltered] = useState([])  
+
+
     const dispatch = useAppDispatch()
     const contractorState = useAppSelector(s => s.contractor)
+
     const onClose = () => {
         dispatch(toggleUpdateContractorModal())
     }
-    const handleUpdateSelectedContractor = () => {
-        dispatch(updateContractorThunk({ categoryID: contractorState.contractorCategoryID, contractorID: contractorState.selectedToUpdateUserId }))
+    const handleUpdateSelectedContractor = async() => {
+        const update = await dispatch(updateContractorThunk({ categoryID: contractorState.contractorCategoryID, contractorID: contractorState.selectedToUpdateUserId }))
+
+        if(update?.meta?.requestStatus === 'fulfilled') {
+            dispatch(setSelectedToUpdateUserId({ userId: 'null' }))
+
+            setcategoriesFiltered([])
+            setmenueSearch("")
+            handleGetOtherContractors()
+        }
     }
     const handleGetOtherContractors = () => {
         dispatch(fetchOtherItemsContractorsThunk(contractorState.contractorCategoryID))
@@ -32,10 +46,25 @@ const GetContractorModal = (getMenueData) => {
             const err = handleApiErrors(error)
             alert(err)
         }
-    }
+    }    
+
+    const searchMenueData = (e) => {
+        setmenueSearch(e.target.value)
+
+        const filteredct = contractorState?.contractors?.filter(function(it) {
+          return it.name.toLowerCase()?.match((e.target.value).toLowerCase() );
+        });
+        setcategoriesFiltered(filteredct)
+      }
+    
     return (
         <Dialog maxWidth="md" fullWidth onClose={onClose} open={contractorState.showUpdateContractorModal}>
-            <DialogTitle>Edit Contractors</DialogTitle>
+            <div className='flex items-center gap-2'>
+                <DialogTitle>Edit Contractors </DialogTitle>
+                <Input placeholder='Search...' value={menueSearch} onChange={(e) => { searchMenueData(e) }} />
+                <Button title='Reset Search' onClick={() => { setcategoriesFiltered([]), setmenueSearch("") }} />
+            </div>
+            
             {
                 contractorState.loadingContractors ?
                     <div className='flex items-center justify-center'>
@@ -49,14 +78,20 @@ const GetContractorModal = (getMenueData) => {
                         }
                         <div>
                             {
-                                contractorState.contractors.length > 0 ?
-                                    contractorState.contractors.map((c, ci) => (
-                                        <ContractorItem {...c} />
-                                    ))
-                                    :
-                                    <h1 className='text-center fonbold text-red-600 '>No Contractors available</h1>
+                                categoriesFiltered?.length > 0 ? 
 
-                            }
+                                (categoriesFiltered?.map((c, ci) => (
+                                    <ContractorItem {...c} />
+                                ))) : 
+
+
+                                (contractorState?.contractors?.length > 0 ?
+                                 contractorState?.contractors?.map((c, ci) => (
+                                    <ContractorItem {...c} />
+                                 )) :
+                                  <h1 className='text-center fonbold text-red-600 '>No Contractors available</h1>
+                                )
+                            } 
                         </div>
                     </DialogContent>
             }

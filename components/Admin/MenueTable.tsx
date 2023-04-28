@@ -57,22 +57,23 @@ const MenueTable = ({ menues }: MenueTableProp) => {
                 cstate.showUpdateContractorModal &&
                 <GetContractorModal />
             }
-            <div className="w-full overflow-x-auto">
+            <div className="w-full overflow-x-auto max-h-[650px]">
                 <table className="w-full">
-                    <thead>
+                    <thead className='sticky top-0'>
                         <tr className="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600 whitespace-nowrap">
-                            <th className="px-4 py-3 uppercase">booking id</th>
+                            <th className="px-4 py-3 uppercase whitespace-nowrap">guest name</th>
                             <th className="px-4 py-3 uppercase">Categories</th>
                             <th className="px-4 py-3 uppercase">function</th>
-                            <th className="px-4 py-3 uppercase whitespace-nowrap">name</th>
+                            <th className="px-4 py-3 uppercase whitespace-nowrap">booking id</th>
                             <th className="px-4 py-3 uppercase whitespace-nowrap">created at</th>
                             <th className="px-4 py-3 uppercase">function date</th>
-                            <th className="px-4 py-3 uppercase">mobile</th>
+                            <th className="px-4 py-3 uppercase">guest mobile number</th>
                             <th className="px-4 py-3 uppercase">Service Time</th>
                             <th className="px-4 py-3 uppercase">venue</th>
                             <th className="px-4 py-3 uppercase">Departure Date</th>
                             <th className="px-4 py-3 uppercase">Departure Time</th>
                             <th className="px-4 py-3 uppercase">PAX</th>
+                            <th className="px-4 py-3 uppercase">Plate</th>
                             <th className="px-4 py-3 uppercase">Special Instruction</th>
                             <th className="px-4 py-3 uppercase">Head Name</th>
                             <th className="px-4 py-3 uppercase">Head Mobile Number</th>
@@ -82,6 +83,7 @@ const MenueTable = ({ menues }: MenueTableProp) => {
                             <th className="px-4 py-3 uppercase">cleaner</th>
                             <th className="px-4 py-3 uppercase">booked By</th>
                             <th className="px-4 py-3 uppercase">booker Mobile Number</th>
+                            <th className="px-4 py-3 uppercase">note</th>
                             <th className="px-4 py-3 uppercase">Action</th>
                         </tr>
                     </thead>
@@ -90,28 +92,52 @@ const MenueTable = ({ menues }: MenueTableProp) => {
                             menuesData.map((val, index) => (
                                 <tr className="text-gray-700 even:bg-#D6EEEE odd:bg-blue-100" key={index}>
                                     <td className="px-4 py-3 border">
-                                        {val.bookingId}
+                                        {val.name}
                                     </td>
                                     <td className="px-4 py-3 border space-y-4">
-                                        {
-                                            val.Categories?.map((c, ci) => {
+                                            { 
+                                                [...new Map(val.Categories?.map((item: any) => [item['itemName'], item])).values()]?.filter((item)=>item.itemName !== 'head' && item.itemName !== 'helper' && item.itemName !== 'cleaner')?.map((c: any, ci) => {
                                                 return (
-                                                    <div key={ci} className=" grid gap-y-2 bg-gray-100 p-[1px]">
-                                                        <span className='font-bold text-lg underline underline-offset-4'>{` `}Item: {c.itemName}</span>
-                                                        <span onClick={() => { handleShowModal(c.id) }} className='font-bold text-lg underline underline-offset-4 cursor-pointer hover:text-green-500'>Contractor: {c.contractor?.name}</span>
-                                                        <span className='font-bold text-lg underline underline-offset-4'>{` `}Comment: {c.comment}</span>
+                                                    <div key={ci} className="p-[1px]">
+                                                        <span className='font-bold text-md overflow-y-auto'>
+                                                            {c.itemName}
+
+                                                            {((val.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === val.id &&  it.itemName === c.itemName && it?.otherCategoryId === '0')).length) === 1 ? '' : ' ( ' }
+
+                                                            {((val.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === val.id &&  it.itemName === c.itemName && it?.otherCategoryId === '0')).length) === 1 ? '' :
+                                                            ((val.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === val.id &&  it.itemName === c.itemName && it?.otherCategoryId === '0')).length) }
+
+                                                            {((val.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === val.id &&  it.itemName === c.itemName && it?.otherCategoryId === '0')).length) === 1 ? ' ' : ' ) ' }
+
+                                                        </span>
+                                                        
+                                                        {/* <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 pl-3 bg-gray-100 p-[1px]' onClick={() => { handleShowModal(
+                                                            `${[...new Map(val.Categories?.map((item: any) => [item['itemName'], item])).values()]?.filter((item)=> item.menueId === val.id &&  item.itemName === c.itemName && item.itemName !== 'head' && item.itemName !== 'helper' && item.itemName !== 'cleaner' )[0].id}`, 
+                                                            
+                                                            'contractor') }}> 
+                                                            MP:- 
+                                                        </span>
+                                                        <span>
+                                                            {
+                                                                val.Categories.filter((it)=> (it.menueId === val.id &&  it.itemName === c.itemName && it?.itemName !== 'head' && it?.itemName !== 'cleaner' && it?.itemName !== 'helper')).map((ctgr, index)=> (
+                                                                    <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2' onClick={() => { handleShowModal(ctgr.id, 'contractor') }} key={index}>
+                                                                        {ctgr?.contractor?.name }
+                                                                    </span>
+                                                                ))
+                                                            }
+                                                        </span> */}
                                                     </div>
                                                 )
                                             }
-                                            )
-                                        }
+                                                )
+                                            }
                                     </td>
 
                                     <td className="px-4 py-3 border">
                                         {val.function}
                                     </td>
                                     <td className="px-4 py-3 border">
-                                        {val.name}
+                                        {val.bookingId}
                                     </td>
                                     <td className="px-4 py-3 border">
                                         {
@@ -143,13 +169,28 @@ const MenueTable = ({ menues }: MenueTableProp) => {
                                         {val.PAX}
                                     </td>
                                     <td className="px-4 py-3 border">
+                                        {val.PLATE}
+                                    </td>
+                                    <td className="px-4 py-3 border">
                                         {val.specialInstruction}
                                     </td>
                                     <td className="px-4 py-3 border">
-                                        {val.headName}
+                                        { 
+                                            val.Categories.filter((it: { menueId: string; contractor: { item: string }; itemName: string })=> (it.menueId === val.id && it.itemName === 'head')).map((ctgr: { id: string; contractor: { name: any } }, index: React.Key | null | undefined)=> 
+                                            {
+                                                return <span key={`name${index}`}>{ (index ? ', ' : '') + ctgr?.contractor?.name }</span>;
+
+                                            })                  
+                                        }
                                     </td>
                                     <td className="px-4 py-3 border">
-                                        {val.headMobileNumber}
+                                       { 
+                                        val.Categories.filter((it: { menueId: string; contractor: { item: string }; itemName: string })=> (it.menueId === val.id && it.itemName === 'head')).map((ctgr: { id: string; contractor: { name: any } }, index: React.Key | null | undefined)=> 
+                                        {
+                                            return <span key={`phone_${index}`}>{ (index ? ', ' : '') + ctgr?.contractor?.phone }</span>;
+
+                                        })                  
+                                      }
                                     </td>
                                     <td className="px-4 py-3 border">
                                         {val.driverName}
@@ -168,6 +209,9 @@ const MenueTable = ({ menues }: MenueTableProp) => {
                                     </td>
                                     <td className="px-4 py-3 border">
                                         {val.bookerMobileNumber}
+                                    </td>
+                                    <td className="px-4 py-3 border">
+                                        {val.note}
                                     </td>
                                     <td className="px-4 py-3 border">
                                         <Button title='Delete' className=' relative' onClick={()=>handleDeleteBooking(val.id, val.menueId)}>

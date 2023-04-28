@@ -18,7 +18,6 @@ const TopPrintSection = ({ menue }: { menue: IMenue }) => {
     phones: string[],
 }[]>
     ([])
-    console.log('menue', menue)
 
   function convertCategoriesToResult(categories: (Categories & {
     contractor: Contractor | null;

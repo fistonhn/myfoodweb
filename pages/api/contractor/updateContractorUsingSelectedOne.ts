@@ -26,8 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }) 
     
         
-        if(categoryData?.contractorId === null) {
-            
+        if(categoryData?.contractorId === null) {      
             if(workAssigned === 'cleaner' || workAssigned === 'helper' || workAssigned === 'head') {
                 await prisma.categories.create({
                     data: {
@@ -45,31 +44,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     statusCode: 200
                 }) 
             } else {
-
-                if(contractorExisist?.item === 'cleaner' || contractorExisist?.item === 'helper' || contractorExisist?.item === 'head'){
-
-                    return ErrorResponse({
-                        msg: 'You can not add cleaner or helper or head to contractor as MP',
-                        res,
-                        statusCode: 500
-                    })
-                    
-                } else {
-                    await prisma.categories.update({
-                        where: {
-                            id: categoryID
-                        },
-                        data: {
-                            contractorId: contractorID,
-                            contractorName: contractorExisist?.name
-                        }
-                    }) 
-                    return SuccessResponse({
-                        msg: "updated successfully",
-                        res,
-                        statusCode: 200
-                    })
-                }
+               await prisma.categories.update({
+                    where: {
+                        id: categoryID
+                    },
+                    data: {
+                        contractorId: contractorID,
+                        contractorName: contractorExisist?.name
+                    }
+                }) 
+                return SuccessResponse({
+                    msg: "updated successfully",
+                    res,
+                    statusCode: 200
+                })                
             } 
         } 
         else { 
@@ -90,37 +78,26 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     statusCode: 200
                 }) 
             } else {
-
-                if(contractorExisist?.item === 'cleaner' || contractorExisist?.item === 'helper' || contractorExisist?.item === 'head'){
-                    return ErrorResponse({
-                        msg: 'You can not add cleaner or helper or head to contractor as MP',
-                        res,
-                        statusCode: 500
-                    })
-                    
-                } else {                
-                        await prisma.categories.create({
-                            data: {
-                                contractorId: contractorID,
-                                menueId: categoryData?.menueId,
-                                itemName: categoryData?.itemName,
-                                contractorName: contractorExisist?.name,
-                                otherCategoryId: categoryData?.id,
-                                comment: ''
-                            }
-                        }) 
-                        return SuccessResponse({
-                            msg: "updated successfully",
-                            res,
-                            statusCode: 200
-                        })  
-                }       
+               await prisma.categories.create({
+                    data: {
+                        contractorId: contractorID,
+                        menueId: categoryData?.menueId,
+                        itemName: categoryData?.itemName,
+                        contractorName: contractorExisist?.name,
+                        otherCategoryId: categoryData?.id,
+                        comment: ''
+                    }
+                }) 
+                
+                return SuccessResponse({
+                    msg: "updated successfully",
+                    res,
+                    statusCode: 200
+                })        
             }            
         }
         
-    } catch (error: any) {
-        console.log(error);
-        
+    } catch (error: any) {        
         return ErrorResponse({
             msg: error.message,
             res,

@@ -47,42 +47,43 @@ const ContractorModel = ({ allowEdit = true }: contractorModalsProp) => {
                     <Button className='absolute top-1 left-[50%]' title='Update' onClick={handleUpdate} />
 
                 }
-                <table className="w-full">
+                <div className="w-full overflow-x-auto max-h-[450px]">
+                    <table className="w-full">
+                        <thead className='sticky top-0'>
+                            <tr className="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600 whitespace-nowrap">
+                                <th className="px-4 py-3 uppercase">id</th>
+                                <th className="px-4 py-3 uppercase">name</th>
+                                <th className="px-4 py-3 uppercase">item</th>
+                                <th className="px-4 py-3 uppercase ">age</th>
+                                <th className="px-4 py-3 uppercase">wage</th>
+                                <th className="px-4 py-3 uppercase">group</th>
+                                <th className="px-4 py-3 uppercase">area</th>
+                                <th className="px-4 py-3 uppercase">phone</th>
+                                <th className="px-4 py-3 uppercase">address</th>
+                                <th className="px-4 py-3 uppercase">identity number</th>
+                                {/* <th className="px-4 py-3 uppercase">cleaner</th>
+                                <th className="px-4 py-3 uppercase">cleaner wage</th>
+                                <th className="px-4 py-3 uppercase">headname</th>
+                                <th className="px-4 py-3 uppercase">headname wage</th> */}
+                                <th className="px-4 py-3 uppercase">Docs</th>
+                                <th className="px-4 py-3 uppercase">actions</th>
 
-                    <thead>
-                        <tr className="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600 whitespace-nowrap">
-                            <th className="px-4 py-3 uppercase">id</th>
-                            <th className="px-4 py-3 uppercase">name</th>
-                            <th className="px-4 py-3 uppercase">item</th>
-                            <th className="px-4 py-3 uppercase ">age</th>
-                            <th className="px-4 py-3 uppercase">wage</th>
-                            <th className="px-4 py-3 uppercase">group</th>
-                            <th className="px-4 py-3 uppercase">area</th>
-                            <th className="px-4 py-3 uppercase">phone</th>
-                            <th className="px-4 py-3 uppercase">address</th>
-                            <th className="px-4 py-3 uppercase">identity number</th>
-                            {/* <th className="px-4 py-3 uppercase">cleaner</th>
-                            <th className="px-4 py-3 uppercase">cleaner wage</th>
-                            <th className="px-4 py-3 uppercase">headname</th>
-                            <th className="px-4 py-3 uppercase">headname wage</th> */}
-                            <th className="px-4 py-3 uppercase">Docs</th>
-                            <th className="px-4 py-3 uppercase">actions</th>
-
-                        </tr>
-                    </thead>
-                    <tbody className="bg-white whitespace-nowrap">
-                        {
-                            contractors.map((val, index) => (
-                                <tr className="text-gray-700" key={index}>
-                                    <td className="px-4 py-3 border">
-                                        {val.id}
-                                    </td>
-                                    <Item data={val} />
-                                </tr>
-                            ))
-                        }
-                    </tbody>
-                </table>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white whitespace-nowrap">
+                            {
+                                contractors.map((val, index) => (
+                                    <tr className="text-gray-700" key={index}>
+                                        <td className="px-4 py-3 border">
+                                            {val.id}
+                                        </td>
+                                        <Item data={val} />
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     )

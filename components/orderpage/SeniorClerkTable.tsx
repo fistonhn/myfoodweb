@@ -123,8 +123,8 @@ const SeniorClerkTable = ({ menues }: MenueTableProp) => {
                 <UpdateContractorsModal open={updateDialoge} onClose={handleClose} category={selectedCategory} />
             }
             <div className="w-full overflow-x-auto">
-                <table className="w-full">
-                    <thead>
+                <table className="w-full max-h-[650px]">
+                    <thead className='sticky top-0'>
                         <tr className="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600 whitespace-nowrap">
                             <th className="px-4 py-3 uppercase">booking id</th>
                             <th className="px-4 py-3 uppercase">Mobile</th>
