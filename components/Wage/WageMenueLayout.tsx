@@ -19,11 +19,11 @@ type IMenue = (Menue & {
 const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
     const [printing, setprinting] = useState(false)
     const [placesValues, setplacesValues] = useState<{ name: string, value: string }[]>([])
-
-    // const allCategories = menue?.Categoeries?.sort((a, b) => b.itemName !== 'head' ? -1 : 1)
-    const [data, setdata] = useState<IMenue>(menue)
-
-    console.log('menue', menue);
+    const sortedMenue = {
+        Categories: menue?.Categories?.sort((a, b) => b.itemName !== 'head' ? -1 : 1),
+        // ...menue
+    }
+    const [data, setdata] = useState<IMenue>(sortedMenue)
     
     const handleChangeCalculation = (cindex: number, value: string, key: "minus" | "plus" | "placevalue") => {
         const _cat = [...data.Categories].map((c, ci) => ci === cindex ? { ...c, [key]: value } : c)
