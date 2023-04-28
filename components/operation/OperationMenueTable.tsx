@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Menue, Categories, Contractor } from '@prisma/client'
-import Dialoge from '@mui/material/Dialog'
+// import Dialoge from '@mui/material/Dialog'
 import { handleApiErrors } from '@/utils/handleapierrors'
 import { getMenuesApi } from '@/providers/apis'
-import DialogTitle from '@mui/material/DialogTitle'
-import CheckBox from '@mui/material/Checkbox'
-import { DialogActions } from '@mui/material'
+// import DialogTitle from '@mui/material/DialogTitle'
+// import CheckBox from '@mui/material/Checkbox'
+// import { DialogActions } from '@mui/material'
 import { Button } from '../Button/Button'
 import Input from '../Inputs/Input'
 import { updateOperationMenueApi } from '@/providers/apis/operation'
@@ -36,9 +36,7 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
     const [menuesData, setmenuesData] = useState<Menue[]>([])
     const [menueSearch, setmenueSearch] = useState<string>("")  
 
-    console.log('mm', menuesData);
-    
-    
+    // console.log('mm', menuesData);
         
     const getMenueData = async (search: "") => {      
         try {
@@ -79,8 +77,9 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
         getMenueData(menueSearch)
     }, [menueState.refetchData])
     
-    const handleShowModal = async (cid: string) => {                
-        dispatch(selectContractorsUsingCategoryId({ cid: cid }))
+    const handleShowModal = async (cid: string, workAssigned: string) => { 
+        
+        dispatch(selectContractorsUsingCategoryId({ cid: cid, workAssigned: workAssigned }))
         dispatch(fetchContractorsThunk(cid))
     }
 
@@ -182,14 +181,18 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
                                                                 {((val.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === val.id &&  it.itemName === c.itemName && it?.otherCategoryId === '0')).length) === 1 ? ' ' : ' ) ' }
 
                                                             </span>
-                                                            <span className='pl-1'>
+                                                            
+                                                            <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 pl-3 bg-gray-100 p-[1px]' onClick={() => { handleShowModal(
+                                                                `${[...new Map(val.Categories?.map((item: any) => [item['itemName'], item])).values()]?.filter((item)=> item.menueId === val.id &&  item.itemName === c.itemName && item.itemName !== 'head' && item.itemName !== 'helper' && item.itemName !== 'cleaner' )[0].id}`, 
+                                                                
+                                                                'contractor') }}> 
+                                                                MP:- 
+                                                            </span>
+                                                            <span>
                                                                 {
                                                                     val.Categories.filter((it)=> (it.menueId === val.id &&  it.itemName === c.itemName && it?.contractor?.item !== 'helper' && it?.contractor?.item !== 'head' && it?.contractor?.item !== 'cleaner' && it?.itemName !== 'helper')).map((ctgr, index)=> (
-                                                                        <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2' onClick={() => { handleShowModal(ctgr.id) }} key={index}>
-                                                                            {
-                                                                                 
-                                                                                `MP- ${ctgr?.contractor?.name}`
-                                                                            }
+                                                                        <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2' onClick={() => { handleShowModal(ctgr.id, 'contractor') }} key={index}>
+                                                                            {ctgr?.contractor?.name }
                                                                         </span>
                                                                     ))
                                                                 }
@@ -201,12 +204,25 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
                                             }
                                         </td>
                                         <td className="px-4 py-3 border">
-                                            {   
+                                            <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2 bg-gray-100 p-[1px]' onClick={() => { handleShowModal(
+                                                `${[...new Map(val.Categories?.map((item: any) => [item['itemName'], item])).values()]?.filter((item)=>item.itemName !== 'head' && item.itemName !== 'helper' && item.itemName !== 'cleaner' && item.itemName !== 'contractor')[0].id}`, 
+                                                
+                                                'helper') }}> 
+                                                Hp:- 
+                                            </span>
+                                            {/* {   
                                                 val?.Categories.filter((it)=> it.menueId === val.id || (it.itemName === 'helper' || it?.contractor?.item === 'helper')).map((ctgr, index)=> (
-                                                    <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 pr-2 bg-gray-100 p-[1px]' onClick={() => { handleShowModal(ctgr.id) }} key={index}>
-                                                        {ctgr?.contractor?.item === 'helper' ? `H-${ctgr?.contractor?.name}` : ''}
+                                                    <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 pr-2 bg-gray-100 p-[1px]' onClick={() => { handleShowModal(ctgr.id, 'helper') }} key={index}>
+                                                        {ctgr?.contractor?.item === 'helper' ? ctgr?.contractor?.name : ''}
                                                     </span>
                                                 ))
+                                            } */}
+                                            { 
+                                                val.Categories.filter((it: { menueId: string; contractor: { item: string }; itemName: string })=> (it.menueId === val.id && it.itemName === 'helper')).map((ctgr: { id: string; contractor: { name: any } }, index: React.Key | null | undefined)=> (
+                                                    <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2 bg-gray-100 p-[1px]' onClick={() => { handleShowModal(ctgr.id, 'helper') }} key={index}>
+                                                       {ctgr?.contractor?.name}
+                                                    </span>
+                                                ))                  
                                             }
                                         </td>
                                         <td className="px-4 py-3 border">
@@ -226,10 +242,23 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
                                         </td>
 
                                         <td className="px-4 py-3 border space-y-4">
-                                            { 
+                                            {/* { 
                                                 val.Categories.filter((it: { menueId: string; contractor: { item: string }; itemName: string })=> (it.menueId === val.id && it.contractor?.item === 'head' && it.itemName === 'head')).map((ctgr: { id: string; contractor: { name: any } }, index: React.Key | null | undefined)=> (
                                                     <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2 bg-gray-100 p-[1px]' onClick={() => { handleShowModal(ctgr.id) }} key={index}>
                                                         { `Hd-${ctgr?.contractor?.name}`}
+                                                    </span>
+                                                ))                  
+                                            } */}
+                                            <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2 bg-gray-100 p-[1px]' onClick={() => { handleShowModal(
+                                                `${[...new Map(val.Categories?.map((item: any) => [item['itemName'], item])).values()]?.filter((item)=>item.itemName !== 'head' && item.itemName !== 'helper' && item.itemName !== 'cleaner' && item.itemName !== 'contractor')[0].id}`, 
+                                                
+                                                'head') }}> 
+                                                Hd:- 
+                                            </span>
+                                            { 
+                                                val.Categories.filter((it: { menueId: string; contractor: { item: string }; itemName: string })=> (it.menueId === val.id && it.itemName === 'head')).map((ctgr: { id: string; contractor: { name: any } }, index: React.Key | null | undefined)=> (
+                                                    <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2 bg-gray-100 p-[1px]' onClick={() => { handleShowModal(ctgr.id, 'head') }} key={index}>
+                                                       {ctgr?.contractor?.name}
                                                     </span>
                                                 ))                  
                                             }
@@ -238,7 +267,7 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
                                         <td className="px-4 py-3 border">
                                             { 
                                                 val.Categories.filter((it: { menueId: string; contractor: { item: string }; itemName: string })=> (it.menueId === val.id && it.contractor?.item === 'head' && it.itemName === 'head')).map((ctgr: { id: string; contractor: { name: any } }, index: React.Key | null | undefined)=> (
-                                                    <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2 bg-gray-100 p-[1px]' onClick={() => { handleShowModal(ctgr.id) }} key={index}>
+                                                    <span className='font-semi-bold text-semi-lg underline underline-offset-4 px-2 bg-gray-100 p-[1px]' key={index}>
                                                         {ctgr?.contractor?.phone}
                                                     </span>
                                                 ))                  
@@ -246,10 +275,17 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
                                         </td>
 
                                         <td className="px-4 py-3 border space-y-4">
+
+                                            <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2 bg-gray-100 p-[1px]' onClick={() => { handleShowModal(
+                                                `${[...new Map(val.Categories?.map((item: any) => [item['itemName'], item])).values()]?.filter((item)=>item.itemName !== 'head' && item.itemName !== 'helper' && item.itemName !== 'cleaner' && item.itemName !== 'contractor')[0].id}`, 
+                                                
+                                                'cleaner') }}> 
+                                                Cl:- 
+                                            </span>
                                             { 
-                                                val.Categories.filter((it: { menueId: string; contractor: { item: string }; itemName: string })=> (it.menueId === val.id && it.contractor?.item === 'cleaner' && it.itemName === 'cleaner')).map((ctgr: { id: string; contractor: { name: any } }, index: React.Key | null | undefined)=> (
-                                                    <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2 bg-gray-100 p-[1px]' onClick={() => { handleShowModal(ctgr.id) }} key={index}>
-                                                        { `Cl-${ctgr?.contractor?.name}`}
+                                                val.Categories.filter((it: { menueId: string; contractor: { item: string }; itemName: string })=> (it.menueId === val.id && it.itemName === 'cleaner')).map((ctgr: { id: string; contractor: { name: any } }, index: React.Key | null | undefined)=> (
+                                                    <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2 bg-gray-100 p-[1px]' onClick={() => { handleShowModal(ctgr.id, 'cleaner') }} key={index}>
+                                                       {ctgr?.contractor?.name}
                                                     </span>
                                                 ))                  
                                             }                 

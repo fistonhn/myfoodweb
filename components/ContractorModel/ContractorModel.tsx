@@ -161,7 +161,7 @@ interface ItemProp {
 const Item = ({ data }: ItemProp) => {
     const [val, setval] = useState(data)
     const [allowEdit, setallowEdit] = useState(false)
-    const handleChange = (name: string, value: string) => {
+    const handleChange = (name: string, value: any) => {
         setval((prev) => ({
             ...prev,
             [name]: value
@@ -206,7 +206,7 @@ const Item = ({ data }: ItemProp) => {
                 {
                     allowEdit ?
                         <Input className="!w-[200px]" value={val.age} onChange={(e) => {
-                            handleChange("age", e.target.value)
+                            handleChange("age", Number(e.target.value))
                         }} />
                         :
                         val.age
@@ -216,7 +216,7 @@ const Item = ({ data }: ItemProp) => {
                 {
                     allowEdit ?
                         <Input className="!w-[200px]" value={val.wage} onChange={(e) => {
-                            handleChange("wage", e.target.value)
+                            handleChange("wage", Number(e.target.value))
                         }} />
                         :
                         val.wage

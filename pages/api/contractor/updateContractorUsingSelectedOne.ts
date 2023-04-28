@@ -5,10 +5,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 export interface UpdateContractorBySelectedOneDTO {
     contractorID: string
     categoryID: string
+    workAssigned: string
 }
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
-        const { categoryID, contractorID } = req.body as UpdateContractorBySelectedOneDTO
+        const { categoryID, contractorID, workAssigned } = req.body as UpdateContractorBySelectedOneDTO
 
         // find if relationship exisit
         const categoryData = await prisma.categories.findFirst({
@@ -22,16 +23,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             where: {
                 id: contractorID
             }
-        })         
+        }) 
+    
         
         if(categoryData?.contractorId === null) {
             
-            if(contractorExisist.item === 'cleaner' || contractorExisist.item === 'helper' || contractorExisist.item === 'head') {
+            if(workAssigned === 'cleaner' || workAssigned === 'helper' || workAssigned === 'head') {
                 await prisma.categories.create({
                     data: {
                         contractorId: contractorID,
                         menueId: categoryData?.menueId,
-                        itemName: contractorExisist?.item,
+                        itemName: workAssigned,
                         contractorName: contractorExisist.name,
                         otherCategoryId: categoryData?.id,
                         comment: ''
@@ -43,6 +45,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     statusCode: 200
                 }) 
             } else {
+
+                if(contractorExisist?.item === 'cleaner' || contractorExisist?.item === 'helper' || contractorExisist?.item === 'head'){
+
+                    return ErrorResponse({
+                        msg: 'You can not add cleaner or helper or head to contractor as MP',
+                        res,
+                        statusCode: 500
+                    })
+                    
+                } else {
                     await prisma.categories.update({
                         where: {
                             id: categoryID
@@ -57,19 +69,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                         res,
                         statusCode: 200
                     })
-                   } 
+                }
+            } 
         } 
         else { 
-            if(contractorExisist.item === 'cleaner' || contractorExisist.item === 'helper' || contractorExisist.item === 'head') {
+            if(workAssigned !== 'contractor') {                             
                 await prisma.categories.create({
                     data: {
                         contractorId: contractorID,
                         menueId: categoryData?.menueId,
-                        itemName: contractorExisist?.item,
+                        itemName: workAssigned,
                         contractorName: contractorExisist.name,
                         otherCategoryId: categoryData?.id,
                         comment: ''
-                    }
+                        }
                 }) 
                 return SuccessResponse({
                     msg: "updated successfully",
@@ -77,21 +90,31 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     statusCode: 200
                 }) 
             } else {
-                await prisma.categories.create({
-                    data: {
-                        contractorId: contractorID,
-                        menueId: categoryData?.menueId,
-                        itemName: categoryData?.itemName,
-                        contractorName: contractorExisist?.name,
-                        otherCategoryId: categoryData?.id,
-                        comment: ''
-                    }
-                }) 
-                return SuccessResponse({
-                    msg: "updated successfully",
-                    res,
-                    statusCode: 200
-                })         
+
+                if(contractorExisist?.item === 'cleaner' || contractorExisist?.item === 'helper' || contractorExisist?.item === 'head'){
+                    return ErrorResponse({
+                        msg: 'You can not add cleaner or helper or head to contractor as MP',
+                        res,
+                        statusCode: 500
+                    })
+                    
+                } else {                
+                        await prisma.categories.create({
+                            data: {
+                                contractorId: contractorID,
+                                menueId: categoryData?.menueId,
+                                itemName: categoryData?.itemName,
+                                contractorName: contractorExisist?.name,
+                                otherCategoryId: categoryData?.id,
+                                comment: ''
+                            }
+                        }) 
+                        return SuccessResponse({
+                            msg: "updated successfully",
+                            res,
+                            statusCode: 200
+                        })  
+                }       
             }            
         }
         

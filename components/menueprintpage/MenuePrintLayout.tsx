@@ -15,6 +15,7 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
     const [centerImage, setcenterImage] = React.useState('35%')
 
     const [tableData, settableData] = React.useState<{
+        otherCategoryId: string;
         comment: string[],
         contractors: string[],
         itemName: string
@@ -27,24 +28,31 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
         const result = [] as {
             comment: string[],
             contractors: string[],
-            itemName: string
+            itemName: string,
+            otherCategoryId: String
         }[]
         categories.forEach((category) => {
-            const existingCategory = result.find((c) => c.itemName === category.itemName);
+            const existingCategory = result.find((c) => c.itemName === category.itemName && category?.otherCategoryId === '0');
             const { contractor } = category
             let _conts = []
             if (contractor?.name) {
                 _conts.push(contractor?.name)
             }
             if (existingCategory) {
-                existingCategory.comment.push(category.comment);
+                console.log('existingCategory', existingCategory);
+
+                // if(existingCategory?.otherCategoryId === '0'){
+                    existingCategory.comment.push(category.comment);
+                // }
+                
                 existingCategory.contractors = [...existingCategory.contractors, ..._conts]
             } else {
-                const { itemName, comment } = category;
+                const { itemName, comment, otherCategoryId } = category;
                 const newCategory = {
                     itemName,
                     comment: [comment],
                     contractors: _conts,
+                    otherCategoryId: otherCategoryId
                 };
                 result.push(newCategory);
             }
@@ -59,6 +67,9 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
             settableData(data)
         }
     }, [menue])
+    
+    console.log('tabledata', tableData);
+    
     return (
         <div className='border-2 border-black m-2'>
             <TopPrintSection menue={menue} />
@@ -77,18 +88,30 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                         </thead>
                         <tbody className="bg-white font-semibold">
                             {
-                                tableData.filter(f => (f.itemName !== HEAD_CONST && f.itemName !== CLEANER_CONST && f.itemName !== 'helper')).map((c, ci) => (
+                                [...new Map(tableData?.map((item: any) => [item['itemName'], item])).values()].filter(f => (f.itemName !== HEAD_CONST && f.itemName !== CLEANER_CONST && f.itemName !== 'helper' )).map((c, ci) => (
                                     <tr className="">
                                         <td className="px-1 py-2 border-2 border-black w-[5%]">
                                             {ci + 1}
                                         </td>
                                         <td className="px-1 py-2 border-2 border-black ">
                                             <div className=''>
-                                                {c.itemName} {c.comment.length === 1 ? '' : '(' } {c.comment.length === 1 ? '' : c.comment.length} {c.comment.length === 1 ? '' : ')' } {c.comment[0] ? '-' : ''} <span className='text-sm'>{ c.comment[0]} </span>
+                                                {c.itemName}  {c.comment[0] ? '-' : ''} <span className='text-sm'>{ c.comment[0]} </span>
+                                                {((menue.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === menue.id &&  it.itemName === c.itemName && it?.otherCategoryId === '0')).length) === 1 ? '' : ' ( ' }
+
+                                                {((menue.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === menue.id &&  it.itemName === c.itemName && it?.otherCategoryId === '0')).length) === 1 ? '' :
+                                                ((menue.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === menue.id &&  it.itemName === c.itemName && it?.otherCategoryId === '0')).length) }
+
+                                                {((menue.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === menue.id &&  it.itemName === c.itemName && it?.otherCategoryId === '0')).length) === 1 ? ' ' : ' ) ' }
                                             </div>
                                         </td>
                                         <td className="px-1 py-2 border-2 border-black w-[50%]">
-                                            {c.contractors.map((cont, i) => `${cont} ${i < c.contractors.length - 1 ? "," : ""}`)}
+                                            {tableData.filter(f => (f.itemName !== HEAD_CONST && f.itemName !== CLEANER_CONST && f.itemName !== 'helper'  && f.itemName === c.itemName)).map((cn, ci) => (
+                                                <td className="px-1 py-2">
+                                                    {/* {cn.contractors.map((cont, i) => `${cont} ${i < cn.contractors.length - 1 ? " ," : " ,"}`)} */}
+                                                    {cn.contractors}
+                                                </td>
+                                           ))}
+
                                         </td>
                                     </tr>
                                 ))

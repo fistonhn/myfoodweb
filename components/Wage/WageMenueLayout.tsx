@@ -19,7 +19,12 @@ type IMenue = (Menue & {
 const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
     const [printing, setprinting] = useState(false)
     const [placesValues, setplacesValues] = useState<{ name: string, value: string }[]>([])
+
+    // const allCategories = menue?.Categoeries?.sort((a, b) => b.itemName !== 'head' ? -1 : 1)
     const [data, setdata] = useState<IMenue>(menue)
+
+    console.log('menue', menue);
+    
     const handleChangeCalculation = (cindex: number, value: string, key: "minus" | "plus" | "placevalue") => {
         const _cat = [...data.Categories].map((c, ci) => ci === cindex ? { ...c, [key]: value } : c)
         setdata((prev) => ({ ...prev, Categories: _cat }))
@@ -149,7 +154,7 @@ const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
                         </thead>
                         <tbody className="bg-white font-semibold">
                             {
-                                data?.Categories?.sort((a, b) => b.itemName !== 'head' ? -1 : 1)?.filter((item: { contractor: null; })=> item.contractor !== null)?.map((c, ci) => (
+                                data?.Categories?.filter((item: { contractor: null; })=> item.contractor !== null)?.map((c, ci) => (
                                     <tr className="text-gray-700">
                                         <td className="px-1 py-3 border-2 border-black  text-center">
                                             {ci + 1}

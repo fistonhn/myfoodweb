@@ -13,6 +13,7 @@ interface ContractorsSlice {
     loadingContractors: boolean
     selectedToUpdateUserId: string
     updatedSuccessfullyMessage: string
+    workAssigned: string
 }
 
 // Define the initial state using that type
@@ -22,7 +23,8 @@ const initialState: ContractorsSlice = {
     contractors: [],
     loadingContractors: false,
     selectedToUpdateUserId: "",
-    updatedSuccessfullyMessage: ""
+    updatedSuccessfullyMessage: "",
+    workAssigned: ""
 
 }
 export const fetchContractorsThunk = createAsyncThunk(
@@ -42,7 +44,9 @@ export const fetchOtherItemsContractorsThunk = createAsyncThunk(
 export const updateContractorThunk = createAsyncThunk(
     "contractor/update",
     async (body: UpdateContractorBySelectedOneDTO, thunkAPI) => {
-        const response = await updateContractorUsingSelectedOneApi(body)
+        const workAssigned = thunkAPI.getState()?.contractor?.workAssigned
+        
+        const response = await updateContractorUsingSelectedOneApi({categoryID: body.categoryID, contractorID: body.contractorID, workAssigned: workAssigned})
         thunkAPI.dispatch(toggleAdminFetchMenuesData())
     }
 )
@@ -56,8 +60,9 @@ export const contractorSlice = createSlice({
             }
             state.showUpdateContractorModal = !state.showUpdateContractorModal
         },
-        selectContractorsUsingCategoryId: (state, action: PayloadAction<{ cid: string }>) => {
+        selectContractorsUsingCategoryId: (state, action: PayloadAction<{ cid: string, workAssigned: string }>) => {            
             state.contractorCategoryID = action.payload.cid
+            state.workAssigned = action.payload.workAssigned
             state.showUpdateContractorModal = true
         },
         setSelectedToUpdateUserId: (state, action: PayloadAction<{ userId: string }>) => {
