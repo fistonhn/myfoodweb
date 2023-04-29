@@ -19,12 +19,13 @@ type IMenue = (Menue & {
 const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
     const [printing, setprinting] = useState(false)
     const [placesValues, setplacesValues] = useState<{ name: string, value: string }[]>([])
-    const sortedMenue = {
-        Categories: menue?.Categories?.sort((a, b) => b.itemName !== 'head' ? -1 : 1),
-        // ...menue
+
+    const allCategories = {
+        Categories: menue?.Categories?.filter((item)=> item.contractor !== null)?.sort((a, b) => b.itemName !== 'head' ? -1 : 1)
     }
-    const [data, setdata] = useState<IMenue>(sortedMenue)
-    
+    console.log('allCategories', allCategories);
+
+    const [data, setdata] = useState<IMenue>(allCategories)
     const handleChangeCalculation = (cindex: number, value: string, key: "minus" | "plus" | "placevalue") => {
         const _cat = [...data.Categories].map((c, ci) => ci === cindex ? { ...c, [key]: value } : c)
         setdata((prev) => ({ ...prev, Categories: _cat }))
@@ -106,7 +107,6 @@ const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
             window.print()
         }
     }, [printing])
-    
     return (
         <div>
             {
@@ -154,7 +154,7 @@ const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
                         </thead>
                         <tbody className="bg-white font-semibold">
                             {
-                                data?.Categories?.filter((item: { contractor: null; })=> item.contractor !== null)?.map((c, ci) => (
+                                data.Categories.map((c, ci) => (
                                     <tr className="text-gray-700">
                                         <td className="px-1 py-3 border-2 border-black  text-center">
                                             {ci + 1}
@@ -194,9 +194,9 @@ const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
                                                         !printing ?
                                                             <Input type='number' onChange={(e) => {
                                                                 handleChangeCalculation(ci, e.target.value, "plus")
-                                                            }} className='!w-[100px] ' value={c.plus !== null ? c.plus : "0"} />
+                                                            }} className='!w-[100px] ' value={c.plus !== null ? c.plus : "1"} />
                                                             :
-                                                            c.plus !== null ? c.plus : "0"
+                                                            c.plus !== null ? c.plus : "1"
                                                     }
                                                 </td>
                                                 <td className="px-4 py-3  text-center">

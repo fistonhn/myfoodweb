@@ -74,7 +74,7 @@ model Categories {
   comment            String
   finalWage          String?     @default("0")
   minus              String?     @default("0")
-  plus               String?     @default("0")
+  plus               String?     @default("1")
   placevalue         String?     @default("0")
   otherCategoryId    String?     @default("0")
 }

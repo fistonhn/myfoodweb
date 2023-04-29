@@ -11,7 +11,7 @@ import Input from '@/components/Inputs/Input'
 const GetContractorModal = () => {
     const [menueSearch, setmenueSearch] = useState("")  
     const [categoriesFiltered, setcategoriesFiltered] = useState([])  
-
+    const [disableButton, setdisableButton] = useState(false)  
 
     const dispatch = useAppDispatch()
     const contractorState = useAppSelector(s => s.contractor)
@@ -20,14 +20,21 @@ const GetContractorModal = () => {
         dispatch(toggleUpdateContractorModal())
     }
     const handleUpdateSelectedContractor = async() => {
+        setdisableButton(true)
         const update = await dispatch(updateContractorThunk({ categoryID: contractorState.contractorCategoryID, contractorID: contractorState.selectedToUpdateUserId }))
 
         if(update?.meta?.requestStatus === 'fulfilled') {
             dispatch(setSelectedToUpdateUserId({ userId: 'null' }))
-
             setcategoriesFiltered([])
             setmenueSearch("")
             handleGetOtherContractors()
+            setdisableButton(false)
+        } else {
+            dispatch(setSelectedToUpdateUserId({ userId: 'null' }))
+            setcategoriesFiltered([])
+            setmenueSearch("")
+            handleGetOtherContractors()
+            setdisableButton(false)
         }
     }
     const handleGetOtherContractors = () => {
@@ -104,7 +111,7 @@ const GetContractorModal = () => {
                         dispatch(toggleUpdateContractorModal())
                     }}
                 />
-                <Button onClick={handleUpdateSelectedContractor} title='UPDATE' />
+                <Button disabled={disableButton} onClick={handleUpdateSelectedContractor} title='UPDATE' />
             </DialogActions>
         </Dialog>
     )
