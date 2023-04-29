@@ -9,7 +9,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         
         await prisma.categories.deleteMany({
             where: {
-                menueId: selId.menueId,
+                menueId: selId.id,
             },
           })
                 

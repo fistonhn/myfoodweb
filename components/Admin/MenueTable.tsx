@@ -42,6 +42,11 @@ const MenueTable = ({ menues }: MenueTableProp) => {
     }, [])
 
     const handleDeleteBooking = async (id: any, menueId: any) => {
+
+        console.log(id, menueId);
+
+        console.log('menues', menues);
+        
         const selId = {
             id: id,
             menueId: menueId

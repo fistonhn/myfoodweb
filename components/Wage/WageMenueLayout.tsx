@@ -169,9 +169,9 @@ const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
                                             <div className='w-full'>
                                                 {
                                                     !printing ?
-                                                        <Input className='!w-[100px] ' type='number' value={c.placevalue !== null ? c.placevalue : "0"} />
+                                                        <Input className='!w-[100px] ' type='number' value={c.placevalue !== null ? c.placevalue : "1"} />
                                                         :
-                                                        c.placevalue !== null ? c.placevalue : "0"
+                                                        c.placevalue !== null ? c.placevalue : "1"
                                                 }
                                             </div>
                                             <div className='flex items-center space-x-3 mt-4'>
@@ -194,9 +194,9 @@ const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
                                                         !printing ?
                                                             <Input type='number' onChange={(e) => {
                                                                 handleChangeCalculation(ci, e.target.value, "plus")
-                                                            }} className='!w-[100px] ' value={c.plus !== null ? c.plus : "1"} />
+                                                            }} className='!w-[100px] ' value={c.plus !== null ? c.plus : "0"} />
                                                             :
-                                                            c.plus !== null ? c.plus : "1"
+                                                            c.plus !== null ? c.plus : "0"
                                                     }
                                                 </td>
                                                 <td className="px-4 py-3  text-center">
