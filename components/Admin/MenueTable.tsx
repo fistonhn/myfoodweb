@@ -41,12 +41,7 @@ const MenueTable = ({ menues }: MenueTableProp) => {
         getMenueData()
     }, [])
 
-    const handleDeleteBooking = async (id: any, menueId: any) => {
-
-        console.log(id, menueId);
-
-        console.log('menues', menues);
-        
+    const handleDeleteBooking = async (id: any, menueId: any) => {        
         const selId = {
             id: id,
             menueId: menueId
@@ -104,7 +99,7 @@ const MenueTable = ({ menues }: MenueTableProp) => {
                                                 [...new Map(val.Categories?.map((item: any) => [item['itemName'], item])).values()]?.filter((item)=>item.itemName !== 'head' && item.itemName !== 'helper' && item.itemName !== 'cleaner')?.map((c: any, ci) => {
                                                 return (
                                                     <div key={ci} className="p-[1px]">
-                                                        <span className='font-bold text-md overflow-y-auto'>
+                                                        <span className='font-bold text-md overflow-y-auto pr-2'>
                                                             {c.itemName}
 
                                                             {((val.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === val.id &&  it.itemName === c.itemName && it?.otherCategoryId === '0')).length) === 1 ? '' : ' ( ' }
@@ -115,22 +110,17 @@ const MenueTable = ({ menues }: MenueTableProp) => {
                                                             {((val.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === val.id &&  it.itemName === c.itemName && it?.otherCategoryId === '0')).length) === 1 ? ' ' : ' ) ' }
 
                                                         </span>
-                                                        
-                                                        {/* <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 pl-3 bg-gray-100 p-[1px]' onClick={() => { handleShowModal(
-                                                            `${[...new Map(val.Categories?.map((item: any) => [item['itemName'], item])).values()]?.filter((item)=> item.menueId === val.id &&  item.itemName === c.itemName && item.itemName !== 'head' && item.itemName !== 'helper' && item.itemName !== 'cleaner' )[0].id}`, 
-                                                            
-                                                            'contractor') }}> 
-                                                            MP:- 
-                                                        </span>
                                                         <span>
-                                                            {
-                                                                val.Categories.filter((it)=> (it.menueId === val.id &&  it.itemName === c.itemName && it?.itemName !== 'head' && it?.itemName !== 'cleaner' && it?.itemName !== 'helper')).map((ctgr, index)=> (
-                                                                    <span className='font-semi-bold text-semi-lg underline underline-offset-4 cursor-pointer hover:text-green-500 px-2' onClick={() => { handleShowModal(ctgr.id, 'contractor') }} key={index}>
-                                                                        {ctgr?.contractor?.name }
-                                                                    </span>
-                                                                ))
+                                                            { 
+                                                                val.Categories.filter((it)=> (it.menueId === val.id &&  it.itemName === c.itemName && it?.itemName !== 'head' && it?.itemName !== 'cleaner' && it?.itemName !== 'helper')).map((ctgr, index)=> 
+                                                                {
+                                                                    return <span key={`ctname${index}`}>{ (index ? ', ' : '') + ctgr?.contractor?.name }</span>;
+
+                                                                })                  
                                                             }
-                                                        </span> */}
+                                                        </span>
+
+                                                        
                                                     </div>
                                                 )
                                             }
@@ -181,7 +171,7 @@ const MenueTable = ({ menues }: MenueTableProp) => {
                                     </td>
                                     <td className="px-4 py-3 border">
                                         { 
-                                            val.Categories.filter((it: { menueId: string; contractor: { item: string }; itemName: string })=> (it.menueId === val.id && it.itemName === 'head')).map((ctgr: { id: string; contractor: { name: any } }, index: React.Key | null | undefined)=> 
+                                            val.Categories.filter((it)=> (it.menueId === val.id && it.itemName === 'head')).map((ctgr, index)=> 
                                             {
                                                 return <span key={`name${index}`}>{ (index ? ', ' : '') + ctgr?.contractor?.name }</span>;
 
@@ -190,7 +180,7 @@ const MenueTable = ({ menues }: MenueTableProp) => {
                                     </td>
                                     <td className="px-4 py-3 border">
                                        { 
-                                        val.Categories.filter((it: { menueId: string; contractor: { item: string }; itemName: string })=> (it.menueId === val.id && it.itemName === 'head')).map((ctgr: { id: string; contractor: { name: any } }, index: React.Key | null | undefined)=> 
+                                        val.Categories.filter((it)=> (it.menueId === val.id && it.itemName === 'head')).map((ctgr, index) => 
                                         {
                                             return <span key={`phone_${index}`}>{ (index ? ', ' : '') + ctgr?.contractor?.phone }</span>;
 
@@ -207,7 +197,13 @@ const MenueTable = ({ menues }: MenueTableProp) => {
                                         {val.words}
                                     </td>
                                     <td className="px-4 py-3 border">
-                                        {val.cleaner}
+                                      { 
+                                        val.Categories.filter((it )=> (it.menueId === val.id && it.itemName === 'cleaner')).map((ctgr, index)=> 
+                                        {
+                                            return <span key={`cl_${index}`}>{ (index ? ', ' : '') + ctgr?.contractor?.name }</span>;
+
+                                        })                  
+                                      }
                                     </td>
                                     <td className="px-4 py-3 border">
                                         {val.bookedBy}

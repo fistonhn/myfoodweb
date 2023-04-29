@@ -4,6 +4,37 @@ import { Button } from '../Button/Button';
 import { TopPrintSection } from './TopPrintSection';
 import { CLEANER_CONST, HEAD_CONST } from '@/constants/globalconstants';
 
+const numbersToWords = {
+    0: "Zero",
+    1: "One",
+    2: "Two",
+    3: "Three",
+    4: "Four",
+    5: "Five",
+    6: "Six",
+    7: "Seven",
+    8: "Eight",
+    9: "Nine",
+    10: "Ten",
+    11: "Eleven",
+    12: "Twelve",
+    13: "Thirteen",
+    14: "Fourteen",
+    15: "Fifteen",
+    16: "Sixteen",
+    17: "Seventeen",
+    18: "Eighteen",
+    19: "Nineteen",
+    20: "Twenty",
+    30: "Thirty",
+    40: "Forty",
+    50: "Fifty",
+    60: "Sixty",
+    70: "Seventy",
+    80: "Eighty",
+    90: "Ninety",
+};
+
 type IMenue = (Menue & {
     Categories: (Categories & {
         contractor: Contractor | null;
@@ -67,9 +98,38 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
             settableData(data)
         }
     }, [menue])
-    
-    console.log('tabledata', tableData);
-    
+  
+  const allStaffMembers = menue.Categories?.filter((item)=> item.contractor !== null).length
+
+  function convertNumberToWords(number: any) {
+    if (number in numbersToWords) return numbersToWords[number];
+  
+    let words = "";
+  
+    if (number >= 100) {
+      words += convertNumberToWords(Math.floor(number / 100)) + " hundred";
+  
+      number %= 100;
+    }
+  
+    if (number > 0) {
+      if (words !== "") words += " and ";
+  
+      if (number < 20) words += numbersToWords[number];
+      else {
+        words += numbersToWords[Math.floor(number / 10) * 10];
+  
+        if (number % 10 > 0) {
+          words += "-" + numbersToWords[number % 10];
+        }
+      }
+    }
+  
+    return words;
+  }
+  
+  const totalStaffInWord = convertNumberToWords(allStaffMembers);
+      
     return (
         <div className='border-2 border-black m-2'>
             <TopPrintSection menue={menue} />
@@ -168,7 +228,7 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                                     {menue.bookedBy}
                                 </td>
                                 <td className="px-1 py-3 border-2 border-black">
-                                    <span>WORDS:-</span> <span className='ml-2'>{menue.words}</span> 
+                                    <span>WORDS:-</span> <span className='ml-2'>{totalStaffInWord}</span> 
                                 </td>
                             </tr>
                             <tr className="">
@@ -185,7 +245,7 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                                     {
                                         tableData.filter(f => (f.itemName === 'cleaner')).map((c, ci) => (
                                             <td className="pl-1 py-2">
-                                                {c.contractors.map((cont, i) => `${cont} ${i < c.contractors.length - 1 ? "," : ""}`)}
+                                                {c.contractors.map((cont, i) => `${cont} ${i < c.contractors.length - 1 ? "," : ","}`)}
                                             </td>
                                         ))
                                     }

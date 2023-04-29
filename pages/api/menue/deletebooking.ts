@@ -24,9 +24,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             res,
             statusCode: 200
         })
-    } catch (error: any) {
-        console.log(error.message);
-        
+    } catch (error: any) {        
         return ErrorResponse({
             msg: error.message,
             res,
