@@ -19,6 +19,7 @@ type IMenue = (Menue & {
 const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
     const [printing, setprinting] = useState(false)
     const [placesValues, setplacesValues] = useState<{ name: string, value: string }[]>([])
+    const [centerImage, setcenterImage] = React.useState('35%')
 
     const allCategories = {
         Categories: menue?.Categories?.filter((item)=> item.contractor !== null)?.sort((a, b) => b.itemName !== 'head' ? -1 : 1)
@@ -249,8 +250,8 @@ const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
                     </table>
                 </div>
                 <h1 className='text-end font-semibold text-lg p-3 underline underline-offset-4'>Total payable amount : {getFinalTotal()}</h1>
-                <h1 className='text-xl text-center tracking-tight mb-10'>
-                    Thank You 👏
+                <h1 className='text-xl text-center tracking-tight mb-5' style={{ paddingLeft: centerImage}}>
+                    <img src='/thankyou.png' className='w-[350px] h-[70px] object-contain content-center' />
                 </h1>
             </div>
             {
@@ -258,7 +259,10 @@ const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
                 <div className='w-full p-2'>
                     <Button className=' w-full m-auto' title='UPDATE' onClick={handleUpdateCategories} />
                     <Button className='mt-4 w-full m-auto' title='PRINT' onClick={async () => {
+                        setcenterImage('25%')
                         setprinting(true)
+                        setTimeout(()=>  (setcenterImage('35%')), 1000);
+
                     }} />
                 </div>
             }

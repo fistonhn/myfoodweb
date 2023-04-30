@@ -82,6 +82,8 @@ model Categories {
 model Contractor {
   id             String           @id @default(auto()) @map("_id") @db.ObjectId
   name           String
+  status         String           @default("active")
+  reActiveDate   DateTime?        @default(now())
   item           String
   age            Int
   wage           Int

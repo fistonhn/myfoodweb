@@ -3,6 +3,7 @@ import { Categories, Contractor, ContractorDocs } from '@prisma/client'
 import { handleApiErrors } from '@/utils/handleapierrors'
 import { getAllContractorsApi, updateContractorAPi, uploadContractor, uploadDocApi } from '@/providers/apis'
 import Input from '../Inputs/Input'
+import { Select } from '@/components/Select'
 import { Button } from '../Button/Button'
 interface contractorModalsProp {
     allowEdit?: boolean
@@ -66,6 +67,8 @@ const ContractorModel = ({ allowEdit = true }: contractorModalsProp) => {
                                 <th className="px-4 py-3 uppercase">headname</th>
                                 <th className="px-4 py-3 uppercase">headname wage</th> */}
                                 <th className="px-4 py-3 uppercase">Docs</th>
+                                <th className="px-4 py-3 uppercase">reactivedate</th>
+                                <th className="px-4 py-3 uppercase">status</th>
                                 <th className="px-4 py-3 uppercase">actions</th>
 
                             </tr>
@@ -170,6 +173,7 @@ const Item = ({ data }: ItemProp) => {
     }
     const handleUpdateContractor = async () => {
         try {
+            
             await updateContractorAPi({
                 data: val
             })
@@ -326,6 +330,26 @@ const Item = ({ data }: ItemProp) => {
                             <DocItem key={di} doc={d} />
                         )
                     })
+                }
+            </td>
+            <td className="px-4 py-3 border">
+            {
+                    allowEdit ?
+                        <Input className="!w-[200px]" value={val?.reActiveDate ? val.reActiveDate  : ""} onChange={(e) => {
+                            handleChange("reActiveDate", e.target.value)
+                        }} type="date"/>
+                        :
+                        new Date(val.reActiveDate).toLocaleString() 
+                }
+            </td> 
+            <td className="px-4 py-3 border">
+                {
+                    allowEdit ?
+                        <Select className="!w-[120px]" value={val?.status ? val.status: ""} onChange={(e) => {
+                            handleChange("status", e.target.value)
+                        }} options={[{ content: "active", value: "active" }, { content: "inactive", value: "inactive" }]}/>
+                        :
+                        val.status
                 }
             </td>
             {

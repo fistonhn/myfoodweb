@@ -25,17 +25,17 @@ const GetContractorModal = () => {
 
         if(update?.meta?.requestStatus === 'fulfilled') {
             dispatch(setSelectedToUpdateUserId({ userId: 'null' }))
+            
             setcategoriesFiltered([])
             setmenueSearch("")
-            handleGetOtherContractors()
             setdisableButton(false)
         } else {
             dispatch(setSelectedToUpdateUserId({ userId: 'null' }))
             setcategoriesFiltered([])
             setmenueSearch("")
-            handleGetOtherContractors()
             setdisableButton(false)
         }
+        setdisableButton(false)
     }
     const handleGetOtherContractors = () => {
         dispatch(fetchOtherItemsContractorsThunk(contractorState.contractorCategoryID))
