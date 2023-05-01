@@ -29,6 +29,8 @@ const UploadMenueExcelFile = () => {
         return false
     }
     const handleData = async (json: Omit<Menue, "createdAt" | "updatedAt">[]) => {
+        console.log('json', json);
+        
             const nameString = json[1]?.__EMPTY;
             const name = nameString.replace("NAME:-", "");
             const functionDateString = json[1]?.__EMPTY_3;
@@ -40,60 +42,68 @@ const UploadMenueExcelFile = () => {
             const serviceTime = serviceTimeString.replace("Service Time:-", "");            
 
             const venueString = json[3]?.__EMPTY;
-            const venue = venueString.replace("VENUE:-", "");
+            const venueString2 = json[4]?.__EMPTY;
+
+            let venue = venueString.replace("VENUE:-", "")
+
+            if(venueString2 !== undefined){ venue = venueString.replace("VENUE:-", "") + venueString2 } 
+
             const departureDateString = json[3]?.__EMPTY_3;
             const departureDate = departureDateString.replace("Departure Date:-", "");            
 
-            const plateString = json[4]?.__EMPTY;
+            const plateString = json[5]?.__EMPTY;
             const plate = plateString.replace("PLATE:-", "");
-            const depatureTimeString = json[4]?.__EMPTY_3;
+            const depatureTimeString = json[5]?.__EMPTY_3;
             const departureTime = depatureTimeString.replace("Departure Time:-", "");
 
-            const paxString = json[5]?.__EMPTY;
+            const paxString = json[6]?.__EMPTY;
             const pax = paxString.replace("PAX:-", "");
 
-            const SpecialInstructionsString = json[6]?.__EMPTY;
+            const SpecialInstructionsString = json[7]?.__EMPTY;
             const SpecialInstructions = SpecialInstructionsString.replace("Special Instructions:-", "");
-            const headNameString = json[6]?.__EMPTY_2;
-            const headName = headNameString.replace("HEAD NAME:-", "");
+            const headNameString = json[7]?.__EMPTY_2;
+            const headName = headNameString?.replace("HEAD NAME:-", "");
 
-            const onionString = json[7]?.__EMPTY_1;
+            const onionString = json[8]?.__EMPTY_1;
             const onion = onionString.replace("ONION:-", "");
 
-            const mobileNoString = json[7]?.__EMPTY_2;
+            const mobileNoString = json[8]?.__EMPTY_2;
             const headMobileNo = mobileNoString.replace("MOBILE NO.:-", "");
 
-            const garlicString = json[8]?.__EMPTY_1;
+            const garlicString = json[9]?.__EMPTY_1;
             const garlic = garlicString.replace("GARLIC:-", "");
 
-            const driveString = json[9]?.__EMPTY_2;
+            const driveString = json[10]?.__EMPTY_2;
             const driveName = driveString.replace("DRIVE NAME:-", "");
 
-            const vehicleString = json[10]?.__EMPTY_2;
+            const vehicleString = json[11]?.__EMPTY_2;
             const vehicleNumber = vehicleString.replace("VEHICLE NO.:-", "");
 
-            const bookBy = json[24]?.__EMPTY_1;
-            const bookMobile = json[25]?.__EMPTY_1;
-            const note = json[26]?.__EMPTY_1;
+            const note = json[28]?.__EMPTY_1;
+            const bookBy = json[29]?.__EMPTY_1;
+            const bookMobile = json[30]?.__EMPTY_1;
             
-            const wordString = json[24]?.__EMPTY_2;
+            const wordString = json[29]?.__EMPTY_2;
             const words = wordString.replace("WORDS:-", "");
 
-            const cleanerString = json[25]?.__EMPTY_2;
+            const cleanerString = json[30]?.__EMPTY_2;
             const cleaner = cleanerString.replace("CLEANER:-", "");
 
-            const it1 = json[12]?.__EMPTY_1;
-            const it2 = json[13]?.__EMPTY_1;
-            const it3 = json[14]?.__EMPTY_1;
-            const it4 = json[15]?.__EMPTY_1;
-            const it5 = json[16]?.__EMPTY_1;
-            const it6 = json[17]?.__EMPTY_1;
-            const it7 = json[18]?.__EMPTY_1;
-            const it8 = json[19]?.__EMPTY_1;
-            const it9 = json[20]?.__EMPTY_1;
-            const it10 = json[21]?.__EMPTY_1;
-            const it11 = json[22]?.__EMPTY_1;
-            const it12 = json[23]?.__EMPTY_1;
+            const it1 = json[13]?.__EMPTY_1;
+            const it2 = json[14]?.__EMPTY_1;
+            const it3 = json[15]?.__EMPTY_1;
+            const it4 = json[16]?.__EMPTY_1;
+            const it5 = json[17]?.__EMPTY_1;
+            const it6 = json[18]?.__EMPTY_1;
+            const it7 = json[19]?.__EMPTY_1;
+            const it8 = json[20]?.__EMPTY_1;
+            const it9 = json[21]?.__EMPTY_1;
+            const it10 = json[22]?.__EMPTY_1;
+            const it11 = json[23]?.__EMPTY_1;
+            const it12 = json[24]?.__EMPTY_1;
+            const it13 = json[25]?.__EMPTY_1;
+            const it14 = json[26]?.__EMPTY_1;
+            const it15 = json[27]?.__EMPTY_1;
 
 
 
@@ -153,6 +163,20 @@ const UploadMenueExcelFile = () => {
                 selectedItems.push(item12)
                 
             }
+            if(it13 !==undefined) {
+                const item13 = { item: it13, counter: '0', comment: '' }
+                selectedItems.push(item13)
+                
+            }
+            if(it14 !==undefined) {
+                const item14 = { item: it14, counter: '0', comment: '' }
+                selectedItems.push(item14)
+            } 
+            if(it15 !==undefined) {
+                const item15 = { item: it15, counter: '0', comment: '' }
+                selectedItems.push(item15)
+                
+            }
 
             const _departureHourMinute = departureTime.split(":")
             const _departureTime = updateDateWithHourAndMinute(new Date(departureDate), Number(_departureHourMinute[0]), Number(_departureHourMinute[1]))
@@ -187,7 +211,7 @@ const UploadMenueExcelFile = () => {
                 garlic: garlic === 'yes' ? true : false
             }
 
-            console.log('nameee', name);
+            console.log('nameee', formData);
 
             
             
@@ -200,7 +224,7 @@ const UploadMenueExcelFile = () => {
                 setuploading(false)               
                 
                 alert("Menue uploaded successfully.")
-                // window.location.href = `/admin/menueprint/${res.data.id}`
+                window.location.href = `/admin/menueprint/${res.data.id}`
               } catch (error: any) {
                 const err = handleApiErrors(error)
           
