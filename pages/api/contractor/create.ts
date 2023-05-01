@@ -26,13 +26,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             }
 
 
-            // remove this
-            await prisma.contractor.updateMany({
-                data: {
-                    status: 'active',
-                    reActiveDate:  new Date()
-                },
-              })
+            // script to update whole contractor table this
+            // await prisma.contractor.updateMany({
+            //     data: {
+            //         status: 'active',
+            //         reActiveDate:  new Date()
+            //     },
+            //   })
 
             await prisma.contractor.create({
                 data: contractor

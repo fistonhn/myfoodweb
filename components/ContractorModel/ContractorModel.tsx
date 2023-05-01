@@ -173,12 +173,17 @@ const Item = ({ data }: ItemProp) => {
     }
     const handleUpdateContractor = async () => {
         try {
-            
+            const upData = {
+                ...val,
+                reActiveDate: new Date(val.reActiveDate),
+            }
+
             await updateContractorAPi({
-                data: val
+                data: upData
             })
             alert("Contractor updated successfully.")
             setallowEdit(false)
+            
         } catch (error: any) {
             const err = handleApiErrors(error)
             alert(err)
@@ -336,10 +341,10 @@ const Item = ({ data }: ItemProp) => {
             {
                     allowEdit ?
                         <Input className="!w-[200px]" value={val?.reActiveDate ? val.reActiveDate  : ""} onChange={(e) => {
-                            handleChange("reActiveDate", e.target.value)
+                            handleChange("reActiveDate", (e.target.value))
                         }} type="date"/>
                         :
-                        new Date(val.reActiveDate).toLocaleString() 
+                        new Date(val.reActiveDate).toLocaleDateString() 
                 }
             </td> 
             <td className="px-4 py-3 border">
