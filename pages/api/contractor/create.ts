@@ -24,6 +24,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     statusCode: 400
                 })
             }
+
+
+            // remove this
+            await prisma.contractor.updateMany({
+                data: {
+                    status: 'active',
+                    reActiveDate:  new Date()
+                },
+              })
+
             await prisma.contractor.create({
                 data: contractor
             })

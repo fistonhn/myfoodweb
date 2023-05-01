@@ -91,7 +91,9 @@ const OperationPage = () => {
             area: formData.area, 
             phone: formData.phone, 
             address: formData.address, 
-            identitynumber: formData.identitynumber
+            identitynumber: formData.identitynumber,
+            status: 'active',
+            reActiveDate: new Date()
         }]
             
           await uploadContractor({ contractors: contractors })
