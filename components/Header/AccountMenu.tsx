@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
@@ -36,7 +36,6 @@ export default function AccountMenu() {
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
-    getAdminData()
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -49,10 +48,14 @@ export default function AccountMenu() {
     const expiredDate =  userData.data.user.expiryDate;
     
     const today = new Date()
-    const diff = Math.floor((Date.parse(expiredDate) - Date.parse(today)) / 86400000);
+    const diff = Math.floor((Date.parse(expiredDate) - (today)) / 86400000);
 
     setleftDate(diff);
   }
+
+  useEffect(() => {
+    getAdminData()
+}, [])
   
   return (
     <React.Fragment>
@@ -108,7 +111,8 @@ export default function AccountMenu() {
         <MenuItem onClick={handleClose}>
           <ListItemIcon onClick={()=> setOpenModel(true)}>
             <img src='/diploma.png' className='w-[80px] h-[80px] object-contain' />
-            <div className="px-4 text-black text-lg font-semibold" >{`${leftDate} Left Days`}</div>
+
+            { leftDate === null ? '' : <div className="px-4 text-black text-lg font-semibold" >{`${leftDate} Left Days`}</div> }
           </ListItemIcon>
         </MenuItem>
         <Divider />

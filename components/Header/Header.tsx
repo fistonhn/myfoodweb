@@ -55,9 +55,17 @@ const Header = ({ onlyLogo, className }: IHeader) => {
                             }} className='text-white hover:text-primary font-bold'>Operation</h1>
 
                             {/* <h1 className=' font-bold text-white hover:text-primary' onClick={() => { signOut() }}>logout</h1> */}
-                            <h1>
+                            {
+                                session?.user.role === "admin" &&
+                              <h1>
                                 <AccountMenu />
-                            </h1>
+                              </h1>
+                            }
+                            {
+                                session?.user.role !== "admin" &&
+                                <h1 className=' font-bold text-white hover:text-primary' onClick={() => { signOut() }}>logout</h1>
+                            }
+                            
                         </>
                     }
                 </div>
