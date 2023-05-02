@@ -112,7 +112,12 @@ export default function AccountMenu() {
           <ListItemIcon onClick={()=> setOpenModel(true)}>
             <img src='/diploma.png' className='w-[80px] h-[80px] object-contain' />
 
-            { leftDate === null ? '' : <div className="px-4 text-black text-lg font-semibold" >{`${leftDate} Left Days`}</div> }
+            <div>
+              { leftDate === null ? '' : <div className="px-4 text-black text-xl font-bold" >LICENCE</div> }
+              { leftDate === null ? '' : <div className="px-4 text-warning text-lg font-semibold" >{`${leftDate} Left Days`}</div> }
+            </div>
+
+            
           </ListItemIcon>
         </MenuItem>
         <Divider />
