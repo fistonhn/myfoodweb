@@ -8,7 +8,7 @@ import { axios } from '../axios'
 interface ICreateUser {
     email: string
     password: string,
-    role: User["role"]
+    role: any
 }
 export const createUserApi = async (data: ICreateUser) => {
     return axios.post('/user/createusers', data)

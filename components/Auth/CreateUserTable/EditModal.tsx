@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react'
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Button } from '@/components/Button/Button';
 import Input from '@/components/Inputs/Input';
 import { resetUserApi } from '@/providers/apis';
 import { handleApiErrors } from '@/utils/handleapierrors';
 import { User } from '@prisma/client';
-import { usersType } from '@/constants/globalconstants';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';

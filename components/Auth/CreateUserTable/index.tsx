@@ -92,7 +92,7 @@ const CreateUserTable = () => {
                         </thead>
                         <tbody className="bg-white ">
                             {
-                                data.map((item, index) => (
+                                data?.map((item, index) => (
                                     <tr key={index} className="text-gray-700">
                                         <td className="px-4 py-3 border">
                                             {index + 1}
@@ -104,7 +104,7 @@ const CreateUserTable = () => {
                                             {item.password}
                                         </td>
                                         <td className="px-4 py-3 border whitespace-nowrap">
-                                            {item.role?.map((cont, i) => `${
+                                            {item?.role?.map((cont: { role: any; }, i: number) => `${
                                                 
                                                 cont.role === 'admin' ? 'Admin' :                                              
                                                 cont.role === 'bookingclerk' ? 'Booking Manager' : 
@@ -143,7 +143,7 @@ const CreateUserTable = () => {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const session = await getSession(ctx)
 
-    const searchAdminRole = session?.user.role?.filter((rl: any)=> rl.role==='admin')?.map((it: any)=> it.role)[0]
+    const searchAdminRole = session?.user?.role?.filter((rl: any)=> rl.role==='admin')?.map((it: any)=> it.role)[0]
 
     if (!session || searchAdminRole !== "admin") {
         return {
