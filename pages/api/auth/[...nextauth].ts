@@ -14,14 +14,16 @@ export const authOptions: AuthOptions = {
                     email: string,
                     password: string
                 }
-                console.log({ email, password })
+                // console.log({ email, password })
                 const dbuser = await prisma.user.findFirst({
                     where: {
                         email: email
+                    },
+                    include: {
+                        role: {}
                     }
                 })
 
-                console.log({ dbuser })
                 if (!dbuser || dbuser?.password !== password) {
                     throw Error("Incorrect Credentials")
                     return null
@@ -46,7 +48,7 @@ export const authOptions: AuthOptions = {
             return token
         },
         async session({ session, token, user }) {
-            // console.log(session, token, user)
+            // console.log(session)
             // console.log('userin session', session);
             // session.user.role = user.role;
             if (token) {

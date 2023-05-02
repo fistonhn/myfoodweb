@@ -6,7 +6,7 @@ import { GetServerSideProps } from 'next'
 import { Header } from '@/components/Header/Header'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import Radio from '@mui/material/Radio'
+import Checkbox from '@mui/material/Checkbox'
 import { createUserApi } from '@/providers/apis'
 import { CreateUserTable } from '@/components/Auth/CreateUserTable'
 import { Session } from 'next-auth'
@@ -24,6 +24,12 @@ const intitalData: IInitialData = {
 }
 const CreateUsers = () => {
     const [formdata, setformdata] = useState(intitalData)
+
+    const [booking, setbooking] = useState(null)
+    const [operation, setoperation] = useState(null)
+    const [wage, setwage] = useState(null)
+    const [senior, setsenior] = useState(null)
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         setformdata((prev) => ({
@@ -34,12 +40,21 @@ const CreateUsers = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         try {
+
+            const roles: any[] = []
+
+            if(booking) {roles.push(booking)}
+            if(operation) {roles.push(operation)}
+            if(wage) {roles.push(wage)}
+            if(senior) {roles.push(senior)}
+            
             const res = await createUserApi({
                 password: formdata.password,
-                role: formdata.type,
+                role: roles,
                 email: formdata.username
             })
-            alert(res.data.msg)
+            alert(res.data.msg)            
+
         } catch (error: any) {
             if (error?.response?.data?.msg) {
                 alert(error?.response?.data?.msg)
@@ -48,6 +63,7 @@ const CreateUsers = () => {
             }
         }
     }
+    
     return (
         <div style={{
             backgroundImage: `url("/bg3.jpg")`,
@@ -71,15 +87,14 @@ const CreateUsers = () => {
                         name="row-radio-buttons-group"
                         value={formdata.type}
                         // @ts-ignore
-                        onChange={(_, value) => { setformdata({ ...formdata, type: value }) }}
                         className="grid"
                     >
-                        <FormControlLabel value={usersType.bookingclerk} control={<Radio />} label="Booking Manager" />
-                        <FormControlLabel value={usersType.operationclerk} control={<Radio />} label="Operation Manager" />
-                        <FormControlLabel value={usersType.seniorclerk} control={<Radio />} label="Senior Manager" />
-                        <FormControlLabel value={usersType.wageclerk} control={<Radio />} label="Wage Manager" />
+                        <FormControlLabel value={booking} control={<Checkbox onChange={(e :any) => { setbooking(usersType.bookingclerk) }} />} label="Booking Manager" />
+                        <FormControlLabel value={operation} control={<Checkbox onChange={(e :any) => { setoperation(usersType.operationclerk) }}/>} label="Operation Manager" />
+                        <FormControlLabel value={senior} control={<Checkbox onChange={() => { setsenior(usersType.seniorclerk) }}/>} label="Senior Manager" />
+                        <FormControlLabel value={wage} control={<Checkbox onChange={() => { setwage(usersType.wageclerk) }}/>} label="Wage Manager" />
                     </RadioGroup>
-                    <Button title='Submit' type='submit' />
+                    <Button title='Submit' type='submit' /> 
                 </form>
             </div>
             <div className='my-14 w-[60%] mx-auto'>
@@ -95,7 +110,9 @@ export default CreateUsers
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const session = await getSession(ctx)
-    if (!session || session.user.role !== "admin") {
+    const searchAdminRole = session?.user.role?.filter((rl: any)=> rl.role==='admin')?.map((it: any)=> it.role)[0]
+
+    if (!session || searchAdminRole !== "admin") {
         return {
             redirect: {
                 destination: "/",

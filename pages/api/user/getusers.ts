@@ -9,11 +9,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         // "wagers"
         // const users = await UserModel.find({ $or: [{ role: "wagers" }, { role: "bookers" }] })
         const users = await prisma.user.findMany({
-            where: {
-                NOT: [{
-                    role: "admin"
-                }]
+            include: {
+                role: {}
             }
+            // where: {
+            //     NOT: [{
+            //         role: "admin"
+            //     }]
+            // }
         })
         return SuccessResponse({
             msg: { users },

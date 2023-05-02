@@ -48,7 +48,10 @@ export default WagePage
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const session = await getSession(ctx)
 
-    if (!session || (session.user.role !== "admin" && session.user.role !== "wageclerk")) {
+    const searchUserRole = session?.user.role?.filter((rl: any)=> rl.role === 'wageclerk')?.map((it: any)=> it.role)[0]
+    const searchAdminRole = session?.user.role?.filter((rl: any)=> rl.role === 'admin')?.map((it: any)=> it.role)[0]
+
+    if (!session || searchAdminRole !== "admin" && searchUserRole !== "wageclerk") {
         return {
             redirect: {
                 destination: "/",

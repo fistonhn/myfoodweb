@@ -11,8 +11,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             password: string,
             role: User["role"]
         }
-        // await dbConnect()
-        // const alreadyExist = await UserModel.findOne({ email: username })
         const alreadyExist = await prisma.user.findFirst({
             where: {
                 email: email
@@ -25,19 +23,26 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 statusCode: 400
             })
         }
-        // await UserModel.create({
-        //     email: username,
-        //     name: username,
-        //     password: password,
-        //     role: type,
-        // })
-        await prisma.user.create({
+
+        const newUser = await prisma.user.create({
             data: {
                 email: email,
                 password: password,
-                role: role
+                // role: role
             }
         })
+
+        if(role.length > 0) {
+            role?.forEach( async(rl: any)=> {                
+                await prisma.roles.create({
+                    data: {
+                        userId: newUser.id,
+                        role: rl
+                    }
+                })
+            })
+        }
+        
         return SuccessResponse({
             msg: "User Created Successfully",
             res: res,

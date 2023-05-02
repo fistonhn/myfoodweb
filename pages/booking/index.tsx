@@ -100,12 +100,15 @@ const BookingClerk = () => {
 export default BookingClerk
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const user = await getSession(ctx)
-    if (!user || user.user.role !== "bookingclerk") {
+    const session = await getSession(ctx)
+    const searchUserRole = session?.user.role?.filter((rl: any)=> rl.role === 'bookingclerk')?.map((it: any)=> it.role)[0]
+    const searchAdminRole = session?.user.role?.filter((rl: any)=> rl.role === 'admin')?.map((it: any)=> it.role)[0]
+
+    if (!session || searchAdminRole !== "admin" && searchUserRole !== "bookingclerk") {
         return {
             redirect: {
                 destination: "/",
-                permanent: false
+                permanent: false,
             }
         }
     }

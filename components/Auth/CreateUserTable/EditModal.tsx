@@ -10,6 +10,25 @@ import { resetUserApi } from '@/providers/apis';
 import { handleApiErrors } from '@/utils/handleapierrors';
 import { User } from '@prisma/client';
 import { usersType } from '@/constants/globalconstants';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import ListItemText from '@mui/material/ListItemText';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
 interface IDeleteModal {
     open: boolean,
     setopen: () => void
@@ -37,12 +56,14 @@ const options: IOption[] = [{
     content: "Wage Clerk"
 },
 ]
+
 const EditModal = ({ open, setopen, user }: IDeleteModal) => {
     const [userData, setuserData] = useState(user)
+    const [newRole, setnewRole] = React.useState<string[]>([]);
+
     useEffect(() => {
         setuserData(user)
     }, [user])
-    console.log(userData)
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
         const { value, name } = e.target
         setuserData({
@@ -50,14 +71,24 @@ const EditModal = ({ open, setopen, user }: IDeleteModal) => {
             [name]: value
         })
     }
+
+    const handleChangeSelect = (event: SelectChangeEvent<typeof newRole>) => {
+        const {
+          target: { value },
+        } = event;
+        setnewRole(
+          typeof value === 'string' ? value.split(',') : value,
+        );
+      };
+
     const handleUpdate = async () => {
         if (!userData.id || !userData.email || !userData.password || !userData.role) {
             return alert("Kindly Fill All The Fields OR Try Again Later.")
         }
-        try {
+        try {            
             const res = await resetUserApi({
                 password: userData.password,
-                role: userData.role,
+                role: newRole,
                 email: userData.email,
                 id: userData.id
             })
@@ -77,13 +108,26 @@ const EditModal = ({ open, setopen, user }: IDeleteModal) => {
                 <div className='space-y-3'>
                     <Input name='email' onChange={handleChange} value={userData?.email} />
                     <Input name='password' onChange={handleChange} value={userData?.password} />
-                    <select name='role' onChange={handleChange} value={userData?.role} className="shadow-md w-full border border-gray-300 rounded-md focus:border-primary p-2 outline-none">
-                        {
-                            options.map((val, index) => (
-                                <option key={index} value={val.value}>{val.content}</option>
-                            ))
-                        }
-                    </select>
+                    <FormControl sx={{ m: 1, width: 550 }}>
+                        <InputLabel id="demo-multiple-checkbox-label">List of Roles</InputLabel>
+                        <Select
+                        labelId="demo-multiple-checkbox-label"
+                        id="demo-multiple-checkbox"
+                        multiple
+                        value={newRole}
+                        onChange={handleChangeSelect}
+                        input={<OutlinedInput label="List of Roles" />}
+                        renderValue={(selected) => selected.join(', ')}
+                        MenuProps={MenuProps}
+                        >
+                        {options.map((name) => (
+                            <MenuItem key={name.value} value={name.value}>
+                            <Checkbox checked={newRole.indexOf(name.value) > -1} />
+                            <ListItemText primary={name.content} />
+                            </MenuItem>
+                        ))}
+                        </Select>
+                    </FormControl>
                 </div>
             </DialogContent>
             <DialogActions>

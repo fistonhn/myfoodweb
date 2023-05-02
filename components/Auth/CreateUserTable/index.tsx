@@ -8,6 +8,9 @@ import IconButton from '@mui/material/IconButton';
 import { DeleteModal } from './Modal'
 import { EditModal } from './EditModal';
 import { User } from '@prisma/client';
+import { getSession } from 'next-auth/react';
+import { GetServerSideProps } from 'next';
+
 const CreateUserTable = () => {
 
     const [selectedItem, setselectedItem] = useState<User>()
@@ -16,7 +19,7 @@ const CreateUserTable = () => {
     const [updateModalState, setupdateModalState] = useState(false)
     const getUserData = async () => {
         try {
-            const res = await getUsersApi({})
+            const res = await getUsersApi({})            
             setdata(res.data.users)
         } catch (error: any) {
             alert(handleApiErrors(error))
@@ -60,7 +63,6 @@ const CreateUserTable = () => {
     const handleUpdateModalClose = () => {
         setupdateModalState(!updateModalState)
     }
-    console.log("selected item", selectedItem)
     return (
         <>
             {
@@ -70,7 +72,7 @@ const CreateUserTable = () => {
                         id: selectedItem.id,
                         email: selectedItem.email,
                         password: selectedItem.password,
-                        role: selectedItem.role,
+                        role: selectedItem.role
 
                     }} open={updateModalState} setopen={handleUpdateModalClose} />
                     <DeleteModal handleDelete={handleDelete} open={deleteModal} setopen={handleDeleteModalClose} />
@@ -93,7 +95,7 @@ const CreateUserTable = () => {
                                 data.map((item, index) => (
                                     <tr key={index} className="text-gray-700">
                                         <td className="px-4 py-3 border">
-                                            {item.id}
+                                            {index + 1}
                                         </td>
                                         <td className="px-4 py-3 border">
                                             {item.email}
@@ -101,11 +103,16 @@ const CreateUserTable = () => {
                                         <td className="px-4 py-3 border">
                                             {item.password}
                                         </td>
-                                        <td className="px-4 py-3 border">
-                                            {item.role === 'bookingclerk' ? 'Booking Manager' : ''}
-                                            {item.role === 'operationclerk' ? 'Operation Manager' : ''}
-                                            {item.role === 'seniorclerk' ? 'Senior Manager' : ''}
-                                            {item.role === 'wageclerk' ? 'Wage Manager' : ''}
+                                        <td className="px-4 py-3 border whitespace-nowrap">
+                                            {item.role?.map((cont, i) => `${
+                                                
+                                                cont.role === 'admin' ? 'Admin' :                                              
+                                                cont.role === 'bookingclerk' ? 'Booking Manager' : 
+                                                cont.role === 'operationclerk' ? 'Operation Manager' : 
+                                                cont.role === 'seniorclerk' ? 'Senior Manager' : 
+                                                cont.role === 'wageclerk' ? 'Wage Manager' : 'No role'
+                                            
+                                            } ${i < item.role.length - 1 ? "," : ""}`)}
 
                                         </td>
                                         <td className="px-4 py-3 border">
@@ -131,6 +138,24 @@ const CreateUserTable = () => {
             </div>
         </>
     )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const session = await getSession(ctx)
+
+    const searchAdminRole = session?.user.role?.filter((rl: any)=> rl.role==='admin')?.map((it: any)=> it.role)[0]
+
+    if (!session || searchAdminRole !== "admin") {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false,
+            }
+        }
+    }
+    return {
+        props: {}
+    }
 }
 
 export { CreateUserTable }

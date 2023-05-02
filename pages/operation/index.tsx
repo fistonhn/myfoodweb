@@ -1,11 +1,9 @@
 import { Header } from '@/components/Header/Header'
-import { getMenuesApi, IUploadContractorApi, uploadContractor } from '@/providers/apis'
+import { getMenuesApi, uploadContractor } from '@/providers/apis'
 import React, { useEffect, useState } from 'react'
 import { Menue } from '@prisma/client'
 import { handleApiErrors } from '@/utils/handleapierrors'
-import { MenueTable } from '@/components/Admin/MenueTable'
 import { Button } from '@/components/Button/Button'
-import * as  xlsx from 'xlsx'
 import { Contractor } from "@prisma/client"
 import Input from '@/components/Inputs/Input'
 import Dialog from '@mui/material/Dialog'
@@ -151,7 +149,10 @@ export default OperationPage
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const session = await getSession(ctx)
 
-    if (!session || (session.user.role !== "admin" && session.user.role !== "operationclerk")) {
+    const searchUserRole = session?.user.role?.filter((rl: any)=> rl.role === 'operationclerk')?.map((it: any)=> it.role)[0]
+    const searchAdminRole = session?.user.role?.filter((rl: any)=> rl.role === 'admin')?.map((it: any)=> it.role)[0]
+
+    if (!session || searchAdminRole !== "admin" && searchUserRole !== "operationclerk") {
         return {
             redirect: {
                 destination: "/",

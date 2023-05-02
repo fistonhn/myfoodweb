@@ -10,6 +10,8 @@ interface IHeader {
 const Header = ({ onlyLogo, className }: IHeader) => {
     const { data: session } = useSession()
 
+    const searchAdminRole = session?.user.role?.filter((rl: any)=> rl.role==='admin')?.map((it: any)=> it.role)[0]
+
     return (
         <div className={className}>
             <div className='flex items-center justify-evenly cursor-pointer uppercase '>
@@ -19,18 +21,18 @@ const Header = ({ onlyLogo, className }: IHeader) => {
                         <>
                             <h1 onClick={() => {
                                 window.location.href = "/"
-                            }} className='text-white hover:text-primary font-bold'>Home</h1>
+                            }} className='text-white hover:text-primary font-bold cursor-pointer'>Home</h1>
 
                             <h1 onClick={() => {
                                 window.location.href = "/admin/createusers"
-                            }} className='text-white hover:text-primary font-bold'>Create Roles</h1>
+                            }} className='text-white hover:text-primary font-bold cursor-pointer'>Create Roles</h1>
 
                             <h1 onClick={() => {
                                 window.location.href = "/admin/report"
-                            }} className='text-white hover:text-primary font-bold'>Report</h1>
+                            }} className='text-white hover:text-primary font-bold cursor-pointer'>Report</h1>
                             <h1 onClick={() => {
                                 window.location.href = "/booking"
-                            }} className='text-white hover:text-primary font-bold'>Bookings</h1>
+                            }} className='text-white hover:text-primary font-bold cursor-pointer'>Bookings</h1>
                         </>
                     }
                 </div>
@@ -42,28 +44,27 @@ const Header = ({ onlyLogo, className }: IHeader) => {
                         !onlyLogo &&
                         <>
                             {
-                                session?.user.role === "admin" &&
+                                searchAdminRole === "admin" &&
                                 <h1 onClick={() => {
                                     window.location.href = "/admin/adminpage"
-                                }} className='text-white hover:text-primary font-bold'>Admin</h1>
+                                }} className='text-white hover:text-primary font-bold cursor-pointer'>Admin</h1>
                             }
                             <h1 onClick={() => {
                                 window.location.href = "/wage"
-                            }} className='text-white hover:text-primary font-bold'>Wage Page</h1>
+                            }} className='text-white hover:text-primary font-bold cursor-pointer'>Wage Page</h1>
                             <h1 onClick={() => {
                                 window.location.href = "/operation"
-                            }} className='text-white hover:text-primary font-bold'>Operation</h1>
+                            }} className='text-white hover:text-primary font-bold cursor-pointer'>Operation</h1>
 
-                            {/* <h1 className=' font-bold text-white hover:text-primary' onClick={() => { signOut() }}>logout</h1> */}
                             {
-                                session?.user.role === "admin" &&
+                                searchAdminRole === "admin" &&
                               <h1>
                                 <AccountMenu />
                               </h1>
                             }
                             {
-                                session?.user.role !== "admin" &&
-                                <h1 className=' font-bold text-white hover:text-primary' onClick={() => { signOut() }}>logout</h1>
+                                searchAdminRole !== "admin" &&
+                                <h1 className=' font-bold text-white hover:text-primary cursor-pointer' onClick={() => { signOut() }}>logout</h1>
                             }
                             
                         </>

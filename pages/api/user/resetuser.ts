@@ -11,7 +11,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             role: User["role"],
             id: string
         }
-        console.log({ email, password, role, id })
         const isExists = await prisma.user.findUnique({
             where: {
                 id: id
@@ -31,9 +30,27 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             data: {
                 email: email,
                 password: password,
-                role: role
+                // role: role
             }
         })
+
+        if(role.length > 0) {
+            await prisma.roles.deleteMany({
+                where: {
+                    userId: id,
+                }
+            })
+            
+            role?.forEach( async(rl: any)=> {                
+                await prisma.roles.create({
+                    data: {
+                        userId: id,
+                        role: rl
+                    }
+                })
+            })
+        }
+        
         return SuccessResponse({
             msg: "User Updated Successfully.",
             res: res,

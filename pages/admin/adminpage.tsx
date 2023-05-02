@@ -185,7 +185,9 @@ export default AdminPage
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const session = await getSession(ctx)
-    if (!session || session.user.role !== "admin") {
+    const searchAdminRole = session?.user.role?.filter((rl: any)=> rl.role==='admin')?.map((it: any)=> it.role)[0]
+
+    if (!session || searchAdminRole !== "admin") {
         return {
             redirect: {
                 destination: "/",
