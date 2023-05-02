@@ -18,6 +18,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 id: id
             }
         })
+
+        await prisma.roles.deleteMany({
+            where: {
+                userId: id,
+            }
+        })
+        
         return SuccessResponse({
             res,
             msg: "User Deleted Successfully.",

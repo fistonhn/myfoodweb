@@ -15,8 +15,6 @@ import { updateDateWithHourAndMinute } from '@/utils/updateDateWithHoursAndMinut
 import { GetServerSideProps } from 'next'
 import { getSession, useSession } from 'next-auth/react'
 import { v4 as uuid } from 'uuid'
-import { Autocomplete } from '@mui/material'
-import TextField from '@mui/material/TextField'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CloseIcon from '@mui/icons-material/Close';
 import { SeniorClerkEdit } from '@/components/orderpage/SeniorClerkEdit'
