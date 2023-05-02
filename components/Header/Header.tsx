@@ -2,6 +2,7 @@ import { GetServerSideProps } from 'next'
 import { getSession, signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import React from 'react'
+import AccountMenu from './AccountMenu'
 interface IHeader {
     onlyLogo?: boolean
     className?: string
@@ -52,9 +53,11 @@ const Header = ({ onlyLogo, className }: IHeader) => {
                             <h1 onClick={() => {
                                 window.location.href = "/operation"
                             }} className='text-white hover:text-primary font-bold'>Operation</h1>
-                            <h1 className=' font-bold text-white hover:text-primary' onClick={() => {
-                                signOut()
-                            }}>logout</h1>
+
+                            {/* <h1 className=' font-bold text-white hover:text-primary' onClick={() => { signOut() }}>logout</h1> */}
+                            <h1>
+                                <AccountMenu />
+                            </h1>
                         </>
                     }
                 </div>

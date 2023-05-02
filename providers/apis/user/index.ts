@@ -19,6 +19,11 @@ interface IGetUsers {
 export const getUsersApi = async (data: IGetUsers) => {
     return axios.post('/user/getusers', data)
 }
+
+export const getUserApi = async (data: IGetUsers) => {
+    return axios.post('/user/getuser', data)
+}
+
 interface IResetUser {
     id: string,
     email: string,
