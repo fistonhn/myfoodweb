@@ -7,7 +7,7 @@ import { Header } from '@/components/Header/Header'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import { createUserApi } from '@/providers/apis'
+import { createUserApi, getUserApi } from '@/providers/apis'
 import { CreateUserTable } from '@/components/Auth/CreateUserTable'
 import { Session } from 'next-auth'
 import { usersType } from '@/constants/globalconstants'
@@ -111,7 +111,9 @@ export default CreateUsers
 export const getServerSideProps = async (ctx: GetSessionParams | undefined) => {
     try {
         const session = await getSession(ctx)
-        const searchAdminRole = session?.user.role?.filter((rl: any)=> rl.role==='admin')?.map((it: any)=> it.role)[0]
+        const fetchUserData = await getUserApi({email: session?.user.email})
+    
+        const searchAdminRole = fetchUserData?.data?.user.role?.filter((rl: any)=> rl.role==='admin')?.map((it: any)=> it.role)[0]
 
         if (!session || searchAdminRole !== "admin") {
             return {

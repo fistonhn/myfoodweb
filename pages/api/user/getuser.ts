@@ -8,13 +8,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             email: any
         }
 
-        // script to update whole users table this
-        // await prisma.user.updateMany({
-        //     data: {
-        //         expiryDate:  new Date()
-        //     },
-        //   })
-
         const user = await prisma.user.findFirst({
             where: { email: email },
         })
