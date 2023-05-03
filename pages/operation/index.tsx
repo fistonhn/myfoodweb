@@ -1,5 +1,5 @@
 import { Header } from '@/components/Header/Header'
-import { getMenuesApi, uploadContractor } from '@/providers/apis'
+import { getMenuesApi, uploadContractor, getUserApi } from '@/providers/apis'
 import React, { useEffect, useState } from 'react'
 import { Menue } from '@prisma/client'
 import { handleApiErrors } from '@/utils/handleapierrors'
@@ -146,21 +146,22 @@ const OperationPage = () => {
 export default OperationPage
 
 
-// export const getServerSideProps: GetServerSideProps = async (ctx) => {
-//     const session = await getSession(ctx)
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const session = await getSession(ctx)
+    const fetchUserData = await getUserApi({email: session?.user.email})
 
-//     const searchUserRole = session?.user.role?.filter((rl: any)=> rl.role === 'operationclerk')?.map((it: any)=> it.role)[0]
-//     const searchAdminRole = session?.user.role?.filter((rl: any)=> rl.role === 'admin')?.map((it: any)=> it.role)[0]
+    const searchUserRole = fetchUserData?.data?.user.role?.filter((rl: any)=> rl.role === 'operationclerk')?.map((it: any)=> it.role)[0]
+    const searchAdminRole = fetchUserData?.data?.user.role?.filter((rl: any)=> rl.role === 'admin')?.map((it: any)=> it.role)[0]
 
-//     if (!session || searchAdminRole !== "admin" && searchUserRole !== "operationclerk") {
-//         return {
-//             redirect: {
-//                 destination: "/",
-//                 permanent: false,
-//             }
-//         }
-//     }
-//     return {
-//         props: {}
-//     }
-// }
+    if (!session || searchAdminRole !== "admin" && searchUserRole !== "operationclerk") {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false,
+            }
+        }
+    }
+    return {
+        props: {}
+    }
+}

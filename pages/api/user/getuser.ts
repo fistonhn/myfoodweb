@@ -9,6 +9,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
 
         const user = await prisma.user.findFirst({
+            include: {
+                role: {}
+            },
             where: { email: email },
         })
         

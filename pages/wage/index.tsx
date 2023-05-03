@@ -1,4 +1,6 @@
 import { Header } from '@/components/Header/Header'
+import { getUserApi } from '@/providers/apis'
+
 import React, { useState } from 'react'
 import { Menue } from '@prisma/client'
 import Dialog from '@mui/material/Dialog'
@@ -45,23 +47,24 @@ const WagePage = () => {
 
 export default WagePage
 
-// export const getServerSideProps: GetServerSideProps = async (ctx) => {
-//     const session = await getSession(ctx)
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const session = await getSession(ctx)
+    const fetchUserData = await getUserApi({email: session?.user.email})
 
-//     const searchUserRole = session?.user.role?.filter((rl: any)=> rl.role === 'wageclerk')?.map((it: any)=> it.role)[0]
-//     const searchAdminRole = session?.user.role?.filter((rl: any)=> rl.role === 'admin')?.map((it: any)=> it.role)[0]
+    const searchUserRole = fetchUserData?.data?.user.role?.filter((rl: any)=> rl.role === 'wageclerk')?.map((it: any)=> it.role)[0]
+    const searchAdminRole = fetchUserData?.data?.user.role?.filter((rl: any)=> rl.role === 'admin')?.map((it: any)=> it.role)[0]
 
-//     if (!session || searchAdminRole !== "admin" && searchUserRole !== "wageclerk") {
-//         return {
-//             redirect: {
-//                 destination: "/",
-//                 permanent: false,
-//             }
-//         }
-//     }
-//     return {
-//         props: {}
-//     }
-// }
+    if (!session || searchAdminRole !== "admin" && searchUserRole !== "wageclerk") {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false,
+            }
+        }
+    }
+    return {
+        props: {}
+    }
+}
 
 

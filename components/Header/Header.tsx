@@ -10,8 +10,7 @@ interface IHeader {
 const Header = ({ onlyLogo, className }: IHeader) => {
     const { data: session } = useSession()
 
-    const searchAdminRole = 'dd'
-    // session?.user.role?.filter((rl: any)=> rl.role==='admin')?.map((it: any)=> it.role)[0]
+    const searchAdminRole = session?.user.role?.filter((rl: any)=> rl.role==='admin')?.map((it: any)=> it.role)[0]
 
     return (
         <div className={className}>

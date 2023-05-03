@@ -1,4 +1,4 @@
-import { deleteUserApi, getUsersApi } from '@/providers/apis'
+import { deleteUserApi, getUsersApi, getUserApi } from '@/providers/apis'
 import { handleApiErrors } from '@/utils/handleapierrors'
 import React, { useEffect, useState } from 'react'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -140,21 +140,22 @@ const CreateUserTable = () => {
     )
 }
 
-// export const getServerSideProps: GetServerSideProps = async (ctx) => {
-//     const session = await getSession(ctx)
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const session = await getSession(ctx)
+    const fetchUserData = await getUserApi({email: session?.user.email})
 
-//     const searchAdminRole = session?.user?.role?.filter((rl: any)=> rl.role === 'admin')?.map((it: any)=> it.role)[0]
-//     if (!session || searchAdminRole !== "admin") {
-//         return {
-//             redirect: {
-//                 destination: "/",
-//                 permanent: false,
-//             }
-//         }
-//     }
-//     return {
-//         props: {}
-//     }
-// }
+    const searchAdminRole = fetchUserData?.data?.user?.role?.filter((rl: any)=> rl.role === 'admin')?.map((it: any)=> it.role)[0]
+    if (!session || searchAdminRole !== "admin") {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false,
+            }
+        }
+    }
+    return {
+        props: {}
+    }
+}
 
 export { CreateUserTable }

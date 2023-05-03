@@ -1,5 +1,5 @@
 import { Header } from '@/components/Header/Header'
-import { getMenuesApi, IUploadContractorApi, uploadContractor } from '@/providers/apis'
+import { getMenuesApi, getUserApi, uploadContractor } from '@/providers/apis'
 import React, { useEffect, useState } from 'react'
 import { Menue } from '@prisma/client'
 import { handleApiErrors } from '@/utils/handleapierrors'
@@ -183,20 +183,22 @@ const AdminPage = () => {
 
 export default AdminPage
 
-// export const getServerSideProps: GetServerSideProps = async (ctx) => {
-//     const session = await getSession(ctx)
-//     const searchAdminRole = session?.user.role?.filter((rl: any)=> rl.role==='admin')?.map((it: any)=> it.role)[0]
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const session = await getSession(ctx)
+    const fetchUserData = await getUserApi({email: session?.user.email})
 
-//     if (!session || searchAdminRole !== "admin") {
-//         return {
-//             redirect: {
-//                 destination: "/",
-//                 permanent: false,
-//             }
-//         }
-//     }
-//     return {
-//         props: {}
-//     }
-// }
+    const searchAdminRole = fetchUserData?.data?.user.role?.filter((rl: any)=> rl.role==='admin')?.map((it: any)=> it.role)[0]
+
+    if (!session || searchAdminRole !== "admin") {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false,
+            }
+        }
+    }
+    return {
+        props: {}
+    }
+}
 
