@@ -1,7 +1,7 @@
 import { Button } from '@/components/Button/Button'
 import Input from '@/components/Inputs/Input'
 import React, { useState } from 'react'
-import { getSession, signIn } from 'next-auth/react'
+import { getSession, GetSessionParams, signIn } from 'next-auth/react'
 import { GetServerSideProps } from 'next'
 import { Header } from '@/components/Header/Header'
 import RadioGroup from '@mui/material/RadioGroup'
@@ -108,19 +108,23 @@ const CreateUsers = () => {
 export default CreateUsers
 
 
-// export const getServerSideProps: GetServerSideProps = async (ctx) => {
-//     const session = await getSession(ctx)
-//     const searchAdminRole = session?.user.role?.filter((rl: any)=> rl.role==='admin')?.map((it: any)=> it.role)[0]
+export const getServerSideProps = async (ctx: GetSessionParams | undefined) => {
+    try {
+        const session = await getSession(ctx)
+        const searchAdminRole = session?.user.role?.filter((rl: any)=> rl.role==='admin')?.map((it: any)=> it.role)[0]
 
-//     if (!session || searchAdminRole !== "admin") {
-//         return {
-//             redirect: {
-//                 destination: "/",
-//                 permanent: false,
-//             }
-//         }
-//     }
-//     return {
-//         props: {}
-//     }
-// }
+        if (!session || searchAdminRole !== "admin") {
+            return {
+                redirect: {
+                    destination: "/",
+                    permanent: false,
+                }
+            }
+        }
+        return {
+            props: {}
+        }
+    } catch (error: any) {
+        alert(error)
+      }
+}
