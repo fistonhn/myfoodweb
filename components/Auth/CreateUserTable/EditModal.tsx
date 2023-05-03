@@ -55,7 +55,7 @@ const options: IOption[] = [{
 },
 ]
 
-const EditModal = ({ open, setopen, user }: IDeleteModal) => {
+const EditModal = ({ open, setopen, user }) => {
     const [userData, setuserData] = useState(user)
     const [newRole, setnewRole] = React.useState<string[]>([]);
 

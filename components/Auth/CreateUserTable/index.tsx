@@ -140,22 +140,21 @@ const CreateUserTable = () => {
     )
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const session = await getSession(ctx)
+// export const getServerSideProps: GetServerSideProps = async (ctx) => {
+//     const session = await getSession(ctx)
 
-    const searchAdminRole = session?.user?.role?.filter((rl: any)=> rl.role==='admin')?.map((it: any)=> it.role)[0]
-
-    if (!session || searchAdminRole !== "admin") {
-        return {
-            redirect: {
-                destination: "/",
-                permanent: false,
-            }
-        }
-    }
-    return {
-        props: {}
-    }
-}
+//     const searchAdminRole = session?.user?.role?.filter((rl: any)=> rl.role === 'admin')?.map((it: any)=> it.role)[0]
+//     if (!session || searchAdminRole !== "admin") {
+//         return {
+//             redirect: {
+//                 destination: "/",
+//                 permanent: false,
+//             }
+//         }
+//     }
+//     return {
+//         props: {}
+//     }
+// }
 
 export { CreateUserTable }
