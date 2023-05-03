@@ -5,7 +5,7 @@ import { UploadMenueExcelFile } from '@/components/orderpage/UploadMenueExcelFil
 import Input from '@/components/Inputs/Input'
 import { uploadContractor } from '@/providers/apis'
 import { handleApiErrors } from '@/utils/handleapierrors'
-import { GetServerSideProps } from 'next'
+// import { GetServerSideProps } from 'next'
 import { getSession } from 'next-auth/react'
 import { Button } from '@/components/Button/Button'
 import { Contractor } from '@prisma/client'
