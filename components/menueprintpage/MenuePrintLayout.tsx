@@ -44,6 +44,7 @@ type IMenue = (Menue & {
 const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
     const [hidePrintButton, sethidePrintButton] = React.useState('block')
     const [centerImage, setcenterImage] = React.useState('35%')
+    const [sms, setsms] = React.useState('13px')
 
     const [tableData, settableData] = React.useState<{
         otherCategoryId: string;
@@ -132,10 +133,10 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
       
     return (
         <div className='border-2 border-black m-2'>
-            <TopPrintSection menue={menue} />
-            <div className="w-full mb-8 overflow-hidden rounded-lg shadow-lg bg-white">
+            <TopPrintSection menue={menue} sms={sms} />
+            <div className="w-full mt-[-20px] mb-8 overflow-hidden rounded-lg shadow-lg bg-white">
                 <div className="w-full overflow-x-auto">
-                    <table className="w-full">
+                    <table className="w-full" style={{ fontSize: sms }}>
                         <thead>
                             <tr
                                 className="text-md font-semibold tracking-wide text-left
@@ -150,10 +151,10 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                             {
                                 [...new Map(tableData?.map((item: any) => [item['itemName'], item])).values()].filter(f => (f.itemName !== HEAD_CONST && f.itemName !== CLEANER_CONST && f.itemName !== 'helper' )).map((c, ci) => (
                                     <tr className="">
-                                        <td className="px-1 py-2 border-2 border-black w-[5%]">
+                                        <td className="px-1 border-2 border-black w-[5%]">
                                             {ci + 1}
                                         </td>
-                                        <td className="px-1 py-2 border-2 border-black ">
+                                        <td className="px-1 border-2 border-black ">
                                             <div className=''>
                                                 {c.itemName}  {c.comment[0] ? '-' : ''} <span className='text-sm'>{ c.comment[0]} </span>
                                                 {((menue.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === menue.id &&  it.itemName === c.itemName && it?.otherCategoryId === '0')).length) === 1 ? '' : ' ( ' }
@@ -164,9 +165,9 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                                                 {((menue.Categories.filter((it: { menueId: string; itemName: any })=> it.menueId === menue.id &&  it.itemName === c.itemName && it?.otherCategoryId === '0')).length) === 1 ? ' ' : ' ) ' }
                                             </div>
                                         </td>
-                                        <td className="px-1 py-2 border-2 border-black w-[50%]">
+                                        <td className="px-1 border-2 border-black w-[50%]">
                                             {tableData.filter(f => (f.itemName !== HEAD_CONST && f.itemName !== CLEANER_CONST && f.itemName !== 'helper'  && f.itemName === c.itemName)).map((cn, ci) => (
-                                                <td className="px-1 py-2">
+                                                <td className="px-1">
                                                     {cn.contractors.map((cont, i) => `${cont}, `)}
                                                     {/* {cn.contractors} */}
                                                 </td>
@@ -254,19 +255,20 @@ const MenuePrintLayout = ({ menue }: { menue: IMenue }) => {
                             </tr>
                         </tbody>
                     </table>
-                    <div className="row-span-3 px-1 py-3 border-b-2 border-r-2 border-l-2 border-black font-extrabold text-xl text-center">
+                    <div style={{ fontSize: sms }} className="row-span-3 px-1 py-3 border-b-2 border-r-2 border-l-2 border-black font-extrabold text-xl text-center">
                         <span>NOTE:-</span> <span className='ml-2 uppercase'>{menue.note}</span> 
                     </div>
                 </div>
             </div>
-            <h1 className='text-xl text-center tracking-tight mb-5' style={{ paddingLeft: centerImage}}>
+            <h1 className='text-xl text-center tracking-tight mb-2' style={{ paddingLeft: centerImage}}>
                 <img src='/thankyou.png' className='w-[350px] h-[70px] object-contain content-center' />
             </h1>
             <div className='w-full p-2' style={{ display: hidePrintButton}}>
                 <Button className=' w-full m-auto' title='PRINT' onClick={() => {
                     sethidePrintButton('none')
                     setcenterImage('25%')
-                    setTimeout(()=>  (window.print(), sethidePrintButton('block'), setcenterImage('35%')), 1000);
+                    setsms('11px')
+                    setTimeout(()=>  (window.print(), sethidePrintButton('block'), setcenterImage('35%'), setsms('inherit')), 1000);
                 }} />
             </div>
         </div>

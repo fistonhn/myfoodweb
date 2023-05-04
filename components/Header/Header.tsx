@@ -70,11 +70,11 @@ const Header = ({ onlyLogo, className }: IHeader) => {
                             }} className='text-white hover:text-primary font-bold cursor-pointer'>Operation</h1>
 
                             {
-                                userData === "admin" ?
+                                // userData === "admin" ?
                               <h1>
                                 <AccountMenu />
-                              </h1> : 
-                                <h1 className=' font-bold text-white hover:text-primary cursor-pointer' onClick={() => { signOut() }}>logout</h1>
+                              </h1> 
+                                // <h1 className=' font-bold text-white hover:text-primary cursor-pointer' onClick={() => { signOut() }}>logout</h1>
                             }
                             {/* {
                                 userData !== "admin" &&

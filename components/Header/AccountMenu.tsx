@@ -34,6 +34,9 @@ export default function AccountMenu() {
   const [OpenModel, setOpenModel] = React.useState(false);
   const [leftDate, setleftDate] = React.useState(null);
 
+  const [OpenLicenseModel, setOpenLicenseModel] = React.useState(false);
+
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -44,15 +47,20 @@ export default function AccountMenu() {
   const getAdminData = async(ctx: GetSessionParams | undefined)=> {
     const session = await getSession(ctx)
 
-    const userData = await getUserApi({email: session?.user.email})
+    const userData = await getUserApi({email: 'admin@gmail.com'})
     const expiredDate =  userData.data.user.expiryDate;
     
     const today = new Date()
     const diff = Math.floor((Date.parse(expiredDate) - (today)) / 86400000);
 
+    if(diff < 0){
+      setOpenLicenseModel(true)
+    } else {
+      setOpenLicenseModel(false)
+    }
+
     setleftDate(diff);
   }
-
   useEffect(() => {
     getAdminData()
 }, [])
@@ -152,6 +160,24 @@ export default function AccountMenu() {
               With expertise in Digital, Engineering and Cloud, we deliver solutions that fulfill the traditional, 
               transformational and future needs of clients.
             </Typography>
+          </Box>
+        </Modal>
+        <Modal
+          open={OpenLicenseModel}
+          // onClose={()=> setOpenLicenseModel(false)}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              License has expired please renew
+            </Typography>
+            {/* <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              We believe innovation and collective knowledge can transform all our futures with greater purpose.
+              To amplify human potential and create the next opportunity for people, businesses and communities.
+              With expertise in Digital, Engineering and Cloud, we deliver solutions that fulfill the traditional, 
+              transformational and future needs of clients.
+            </Typography> */}
           </Box>
         </Modal>
       </div>

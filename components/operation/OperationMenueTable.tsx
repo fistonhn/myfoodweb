@@ -229,13 +229,13 @@ const OperationMenueTable = ({ menues, isWagePageRequest = false }: MenueTablePr
                                             }
                                         </td>
                                         <td className="px-4 py-3 border">
-                                            {new Date(val.functionDate).toLocaleDateString()}
+                                            {new Date(val.functionDate).toLocaleDateString('en-GB')}
                                         </td>
                                         <td className="px-4 py-3 border">
                                             {new Date(val.serviceTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
                                         </td>
                                         <td className="px-4 py-3 border">
-                                            {new Date(val.departureDate).toLocaleDateString()}
+                                            {new Date(val.departureDate).toLocaleDateString('en-GB')}
                                         </td>
                                         <td className="px-4 py-3 border">
                                             {new Date(val.departureTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}

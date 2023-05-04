@@ -137,13 +137,13 @@ const MenueTable = ({ menues }: MenueTableProp) => {
                                     <td className="px-4 py-3 border">
                                         {
                                             val.createdAt ?
-                                                `${new Date(val.createdAt).toLocaleDateString()}`
+                                                `${new Date(val.createdAt).toLocaleDateString('en-GB')}`
                                                 :
                                                 "null"
                                         }
                                     </td>
                                     <td className="px-4 py-3 border">
-                                        {new Date(val.functionDate).toLocaleDateString()}
+                                        {new Date(val.functionDate).toLocaleDateString('en-GB')}
                                     </td>
                                     <td className="px-4 py-3 border">
                                         {val.mobile}
@@ -155,7 +155,7 @@ const MenueTable = ({ menues }: MenueTableProp) => {
                                         {val.venue}
                                     </td>
                                     <td className="px-4 py-3 border">
-                                        {new Date(val.departureDate).toLocaleDateString()}
+                                        {new Date(val.departureDate).toLocaleDateString('en-GB')}
                                     </td>
                                     <td className="px-4 py-3 border">
                                         {new Date(val.departureTime).toTimeString()}

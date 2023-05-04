@@ -20,11 +20,11 @@ const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
     const [printing, setprinting] = useState(false)
     const [placesValues, setplacesValues] = useState<{ name: string, value: string }[]>([])
     const [centerImage, setcenterImage] = React.useState('35%')
+    const [sms, setsms] = React.useState('13px')
 
     const allCategories = {
         Categories: menue?.Categories?.filter((item)=> item.contractor !== null)?.sort((a, b) => b.itemName !== 'head' ? -1 : 1)
     }
-    console.log('allCategories', allCategories);
 
     const [data, setdata] = useState<IMenue>(allCategories)
     const handleChangeCalculation = (cindex: number, value: string, key: "minus" | "plus" | "placevalue") => {
@@ -114,7 +114,7 @@ const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
                 !printing &&
                 <Header className='bg-sky-500' />
             }
-            <TopPrintSection menue={menue} />
+            <TopPrintSection menue={menue} sms={sms}/>
             {
                 !printing &&
                 <div className='p-4 bg-gray-100'>
@@ -134,21 +134,21 @@ const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
             }
             <div className="w-full mb-8 overflow-hidden bg-white">
                 <div className="w-full overflow-x-auto">
-                    <table className="w-full">
+                    <table className="w-full" style={{ fontSize: sms }}>
                         <thead>
                             <tr className="text-md font-semibold tracking-wide text-left text-gray-900 uppercase border-b border-2 border-black">
-                                <th className="px-4 py-3 uppercase  border-2 border-black  text-center">s.no</th>
-                                <th className="px-4 py-3 uppercase  border-2 border-black  text-center">NAME OF staff</th>
-                                <th className="px-4 py-3 uppercase  border-2 border-black  text-center">wage</th>
-                                <th className="px-4 py-3 uppercase  border-2 border-black  text-center">value of place</th>
-                                <th className="px-4 py-3 uppercase  border-2 border-black  text-center">
+                                <th className="px-4 py-1 uppercase  border-2 border-black  text-center">s.no</th>
+                                <th className="px-4 py-1 uppercase  border-2 border-black  text-center">NAME OF staff</th>
+                                <th className="px-4 py-1 uppercase  border-2 border-black  text-center">wage</th>
+                                <th className="px-4 py-1 uppercase  border-2 border-black  text-center">value of place</th>
+                                <th className="px-4 py-1 uppercase  border-2 border-black  text-center">
                                     Bonus
                                     <tr className='flex justify-between text-md font-semibold tracking-wide text-left text-gray-900  uppercase '>
-                                        <th className='px-4 py-3 uppercase text-center'>+</th>
-                                        <th className='px-4 py-3 uppercase text-center'>-</th>
+                                        <th className='px-4 py-1 uppercase text-center'>+</th>
+                                        <th className='px-4 py-1 uppercase text-center'>-</th>
                                     </tr>
                                 </th>
-                                <th className="px-4 py-3 uppercase text-center">
+                                <th className="px-4 py-1 uppercase text-center">
                                     TOTAL
                                 </th>
                             </tr>
@@ -157,16 +157,16 @@ const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
                             {
                                 data.Categories.map((c, ci) => (
                                     <tr className="text-gray-700">
-                                        <td className="px-1 py-3 border-2 border-black  text-center">
+                                        <td className="px-1 py-1 border-2 border-black  text-center">
                                             {ci + 1}
                                         </td>
-                                        <td className="px-1 py-3 border-2 border-black  ">
+                                        <td className="px-1 py-1 border-2 border-black  ">
                                             {c.contractor?.name}
                                         </td>
-                                        <td className="px-1 py-3 border-2 border-black  text-center">
+                                        <td className="px-1 py-1 border-2 border-black  text-center">
                                             {c.contractor?.wage ? c.contractor.wage : "0"}
                                         </td>
-                                        <td className="px-1 py-3 border-2 border-black  text-center ">
+                                        <td className="px-1 py-1 border-2 border-black  text-center ">
                                             <div className='w-full'>
                                                 {
                                                     !printing ?
@@ -188,9 +188,9 @@ const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
                                                 }
                                             </div>
                                         </td>
-                                        <td className="px-4 py-3 border-2 border-black  text-center">
+                                        <td className="px-4 py-1 border-2 border-black  text-center">
                                             <tr className="text-gray-700 flex justify-between">
-                                                <td className="px-4 py-3  text-center">
+                                                <td className="px-4 py-1  text-center">
                                                     {
                                                         !printing ?
                                                             <Input type='number' onChange={(e) => {
@@ -200,7 +200,7 @@ const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
                                                             c.plus !== null ? c.plus : "0"
                                                     }
                                                 </td>
-                                                <td className="px-4 py-3  text-center">
+                                                <td className="px-4 py-1  text-center">
                                                     {
                                                         !printing ?
                                                             <Input type='number' onChange={(e) => {
@@ -213,36 +213,36 @@ const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
                                                 </td>
                                             </tr>
                                         </td>
-                                        <td className="px-4 py-3 border-2 border-black  text-center">
+                                        <td className="px-4 py-1 border-2 border-black  text-center">
                                             {((Number(c.contractor?.wage) * Number(c.placevalue))) + Number(c.plus) - Number(c.minus)}
                                         </td>
                                     </tr>
                                 ))
                             }
                             <tr className="text-gray-700 font-bold">
-                                <td className="px-4 py-3 border-2 border-black  text-center">
+                                <td className="px-4 py-1 border-2 border-black  text-center">
 
                                 </td>
-                                <td className="px-1 py-3 border-2 border-black  font-bold">
+                                <td className="px-1 py-1 border-2 border-black  font-bold">
                                     Total value:
                                 </td>
-                                <td className="px-4 py-3 border-2 border-black  text-center">
+                                <td className="px-4 py-1 border-2 border-black  text-center">
                                     {getTotalwages()}
                                 </td>
-                                <td className="px-4 py-3 border-2 border-black  text-center">
+                                <td className="px-4 py-1 border-2 border-black  text-center">
 
                                 </td>
-                                <td className="px-4 py-3 border-2 border-black  text-center">
+                                <td className="px-4 py-1 border-2 border-black  text-center">
                                     <tr className="text-gray-700 flex justify-between">
-                                        <td className="px-4 py-3  text-center">
+                                        <td className="px-4 py-1  text-center">
                                             {getPluses()}
                                         </td>
-                                        <td className="px-4 py-3  text-center">
+                                        <td className="px-4 py-1  text-center">
                                             {getMinuses()}
                                         </td>
                                     </tr>
                                 </td>
-                                <td className="px-4 py-3 border-2 border-black  text-center">
+                                <td className="px-4 py-1 border-2 border-black  text-center">
                                     {getFinalTotal()}
                                 </td>
                             </tr>
@@ -260,8 +260,9 @@ const WageMenueLayout = ({ menue }: { menue: IMenue }) => {
                     <Button className=' w-full m-auto' title='UPDATE' onClick={handleUpdateCategories} />
                     <Button className='mt-4 w-full m-auto' title='PRINT' onClick={async () => {
                         setcenterImage('25%')
+                        setsms('11px')
                         setprinting(true)
-                        setTimeout(()=>  (setcenterImage('35%')), 1000);
+                        setTimeout(()=>  (setcenterImage('35%'), setsms('inherit'), setprinting(false)), 1000);
 
                     }} />
                 </div>

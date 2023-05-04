@@ -10,7 +10,7 @@ type IMenue = (Menue & {
     contractor: Contractor | null;
   })[];
 })
-const TopPrintSection = ({ menue }: { menue: IMenue }) => {
+const TopPrintSection = ({ menue, sms }: { menue: IMenue, sms: any }) => {
   const [tableData, settableData] = React.useState<{
     comment: string[],
     contractors: string[],
@@ -67,7 +67,7 @@ const TopPrintSection = ({ menue }: { menue: IMenue }) => {
 }, [menue])
   
   return (
-    <>
+    <div style={{ fontSize: sms}}>
       <div className='flex items-center justify-evenly border-b-2 border-b-black'>
         <BoldText className='!text-xl' >Function Prospectus</BoldText>
         <BoldText className='!text-xl'>{`${(menue.function[0]).toUpperCase()}${(menue.function).slice(1)}`}</BoldText>
@@ -92,11 +92,11 @@ const TopPrintSection = ({ menue }: { menue: IMenue }) => {
           <BoldText>{menue.PLATE ? 'Plate:- ' + menue.PLATE : ''}</BoldText> <BoldText className='mx-3'>{menue.PAX ? 'Pax:- ' + menue.PAX : ''}</BoldText>
           </div>
         </div>
-        <div className='border-r-2'>
+        <div className='border-r-2 border-black'>
           <div className='p-1  space-y-3'>
             <div className='flex items-center space-x-4'>
               <BoldText>Function Date:- </BoldText>
-              <BoldText>{new Date(menue.functionDate).toLocaleDateString()}</BoldText>
+              <BoldText>{new Date(menue.functionDate).toLocaleDateString('en-GB')}</BoldText>
             </div>
             <div className='flex items-center space-x-4'>
               <BoldText>Service Time:- </BoldText>
@@ -104,7 +104,7 @@ const TopPrintSection = ({ menue }: { menue: IMenue }) => {
             </div>
             <div className='flex items-center space-x-4'>
               <BoldText>Departure Date:- </BoldText>
-              <BoldText>{new Date(menue.departureDate).toLocaleDateString()}</BoldText>
+              <BoldText>{new Date(menue.departureDate).toLocaleDateString('en-GB')}</BoldText>
             </div>
             <div className='flex items-center space-x-4'>
               <BoldText>Departure Time:- </BoldText>
@@ -134,8 +134,8 @@ const TopPrintSection = ({ menue }: { menue: IMenue }) => {
               </div>
             </div>
           </div>
-          <div className='p-1  space-y-4 border-r-2 border-r-black'>
-            <div className='flex space-x-4'>
+          <div className='p-1  space-y-2 border-r-2 border-r-black'>
+            <div className='flex space-x-2'>
               <BoldText>Head Name:- </BoldText>
               <BoldText>
                 {
@@ -147,7 +147,7 @@ const TopPrintSection = ({ menue }: { menue: IMenue }) => {
                 }
               </BoldText>
             </div>
-            <div className='flex space-x-4'>
+            <div className='flex space-x-2'>
               <BoldText>Mobile Number:- </BoldText>
               <BoldText>
                 {
@@ -159,18 +159,18 @@ const TopPrintSection = ({ menue }: { menue: IMenue }) => {
                 }
               </BoldText>
             </div>
-            <div className='flex space-x-4'>
+            <div className='flex space-x-2'>
               <BoldText>Driver Name:- </BoldText>
               <BoldText>{menue.driverName}</BoldText>
             </div>
-            <div className='flex space-x-4'>
+            <div className='flex space-x-2'>
               <BoldText>Vehicle Number:- </BoldText>
               <BoldText>{menue.vehicleNumber}</BoldText>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

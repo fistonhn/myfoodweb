@@ -578,7 +578,7 @@ const EditAbleColumns = ({ val }: EditAbleColumnsProp) => {
                     update ?
                         <Input type='date' name='functionDate' value={typeof data.functionDate === "string" ? data.functionDate : ISODateIntoLocalDate(data.functionDate)} onChange={handleChange} />
                         :
-                        new Date(data.functionDate).toLocaleDateString()
+                        new Date(data.functionDate).toLocaleDateString('en-GB')
                 }
             </td>
             <td className="px-4 py-3 border">
@@ -595,7 +595,7 @@ const EditAbleColumns = ({ val }: EditAbleColumnsProp) => {
                     update ?
                         <Input type='date' name='departureDate' value={data.departureDate} onChange={handleChange} />
                         :
-                        new Date(data.departureDate).toLocaleDateString()
+                        new Date(data.departureDate)?.toLocaleDateString('en-GB')
                 }
             </td>
             <td className="px-4 py-3 border">
