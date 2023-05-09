@@ -29,65 +29,76 @@ const UploadMenueExcelFile = () => {
         return false
     }
     const handleData = async (json: Omit<Menue, "createdAt" | "updatedAt">[]) => {
-        console.log('json', json);
+        // console.log('json', json);
         
             const nameString = json[1]?.__EMPTY;
-            const name = nameString.replace("NAME:-", "");
-            const functionDateString = json[1]?.__EMPTY_3;
-            const functionDate = functionDateString.replace("Function Date:-", "");
+            if(nameString?.replace(/\s/g, '') === 'NAME:-') return alert('Name is required!')
+            const name = nameString?.replace("NAME:-", "");
+
+            const functionDateString = json[1]?.__EMPTY_3;            
+            if(functionDateString?.replace(/\s/g, '') === 'FunctionDate:-') return alert('Function Date is required!')
+            const functionDate = functionDateString?.replace("Function Date:-", "");
 
             const mobileString = json[2]?.__EMPTY;
-            const nameMobile = mobileString.replace("MOBILE:-", "");
+            if(mobileString?.replace(/\s/g, '') === 'MOBILE:-') return alert('Mobile is required!')
+            const nameMobile = mobileString?.replace("MOBILE:-", "");
+
             const serviceTimeString = json[2]?.__EMPTY_3;
-            const serviceTime = serviceTimeString.replace("Service Time:-", "");            
+            if(serviceTimeString?.replace(/\s/g, '') === 'ServiceTime:-') return alert('Service Time is required!')
+            const serviceTime = serviceTimeString?.replace("Service Time:-", "");            
 
             const venueString = json[3]?.__EMPTY;
             const venueString2 = json[4]?.__EMPTY;
-
-            let venue = venueString.replace("VENUE:-", "")
-
-            if(venueString2 !== undefined){ venue = venueString.replace("VENUE:-", "") + venueString2 } 
+            if(venueString?.replace(/\s/g, '') === 'VENUE:-') return alert('Venue is required!')
+            let venue = venueString?.replace("VENUE:-", "")
+            if(venueString2 !== undefined){ venue = venueString?.replace("VENUE:-", "") + venueString2 } 
 
             const departureDateString = json[3]?.__EMPTY_3;
-            const departureDate = departureDateString.replace("Departure Date:-", "");            
+            if(departureDateString?.replace(/\s/g, '') === 'DepartureDate:-') return alert('Departure Date is required!')
+            const departureDate = departureDateString?.replace("Departure Date:-", "");            
 
             const plateString = json[5]?.__EMPTY;
-            const plate = plateString.replace("PLATE:-", "");
+            const plate = plateString?.replace("PLATE:-", "");
+
             const depatureTimeString = json[5]?.__EMPTY_3;
-            const departureTime = depatureTimeString.replace("Departure Time:-", "");
+            if(depatureTimeString?.replace(/\s/g, '') === 'DepartureTime:-') return alert('Departure Time is required!')
+            const departureTime = depatureTimeString?.replace("Departure Time:-", "");
 
             const paxString = json[6]?.__EMPTY;
-            const pax = paxString.replace("PAX:-", "");
+            const pax = paxString?.replace("PAX:-", "");
 
             const SpecialInstructionsString = json[7]?.__EMPTY;
-            const SpecialInstructions = SpecialInstructionsString.replace("Special Instructions:-", "");
+            const SpecialInstructions = SpecialInstructionsString?.replace("Special Instructions:-", "");
             const headNameString = json[7]?.__EMPTY_2;
             const headName = headNameString?.replace("HEAD NAME:-", "");
 
             const onionString = json[8]?.__EMPTY_1;
-            const onion = onionString.replace("ONION:-", "");
+            const onion = onionString?.replace("ONION:-", "");
 
             const mobileNoString = json[8]?.__EMPTY_2;
-            const headMobileNo = mobileNoString.replace("MOBILE NO.:-", "");
+            const headMobileNo = mobileNoString?.replace("MOBILE NO.:-", "");
 
             const garlicString = json[9]?.__EMPTY_1;
-            const garlic = garlicString.replace("GARLIC:-", "");
+            const garlic = garlicString?.replace("GARLIC:-", "");
 
             const driveString = json[10]?.__EMPTY_2;
-            const driveName = driveString.replace("DRIVE NAME:-", "");
+            const driveName = driveString?.replace("DRIVE NAME:-", "");
 
             const vehicleString = json[11]?.__EMPTY_2;
-            const vehicleNumber = vehicleString.replace("VEHICLE NO.:-", "");
+            const vehicleNumber = vehicleString?.replace("VEHICLE NO.:-", "");
 
             const note = json[28]?.__EMPTY_1;
             const bookBy = json[29]?.__EMPTY_1;
+            if(bookBy === undefined) return alert('"Booked By" is required!')
+
             const bookMobile = json[30]?.__EMPTY_1;
+            if(bookMobile === undefined) return alert('"book Mobile" is required!')
             
             const wordString = json[29]?.__EMPTY_2;
-            const words = wordString.replace("WORDS:-", "");
+            const words = wordString?.replace("WORDS:-", "");
 
             const cleanerString = json[30]?.__EMPTY_2;
-            const cleaner = cleanerString.replace("CLEANER:-", "");
+            const cleaner = cleanerString?.replace("CLEANER:-", "");
 
             const it1 = json[13]?.__EMPTY_1;
             const it2 = json[14]?.__EMPTY_1;
@@ -210,10 +221,6 @@ const UploadMenueExcelFile = () => {
                 onion: onion === 'yes' ? true : false,
                 garlic: garlic === 'yes' ? true : false
             }
-
-            console.log('nameee', formData);
-
-            
             
             try { 
                 setuploading(true)         
